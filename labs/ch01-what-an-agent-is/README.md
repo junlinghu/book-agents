@@ -2,7 +2,7 @@
 
 One chat completion. No tools. The model plays the Hearth Lane Café concierge and answers a return-and-shipping question it cannot look up.
 
-Chapter: `chapters/ch01-what-an-agent-is/README.md`
+Chapter: [Ch 1. What an agent is (builders' cut)](../../chapters/ch01-what-an-agent-is/README.md)
 
 ## Goal
 
