@@ -14,18 +14,18 @@ A **hosted API**, here Groq or OpenRouter, means someone else’s machines. Both
 
 ```mermaid
 flowchart TD
-  Q[Same question and harness]
-  Where{Where do the weights run}
-  Local[Local weights on your machine]
-  Hosted[Hosted API off your machine]
-  Trace[Keep the tool log and stop tag]
-  Judge[Attribute differences to the model]
-  Q --> Where
-  Where --> Local
-  Where --> Hosted
-  Local --> Trace
-  Hosted --> Trace
-  Trace --> Judge
+  sameQ["Same question and harness"]
+  whereQ{"Where do the weights run"}
+  localRun["Local weights on your machine"]
+  hostedRun["Hosted API off your machine"]
+  keepTrace["Keep the tool log and stop tag"]
+  judgeDiff["Attribute differences to the model"]
+  sameQ --> whereQ
+  whereQ --> localRun
+  whereQ --> hostedRun
+  localRun --> keepTrace
+  hostedRun --> keepTrace
+  keepTrace --> judgeDiff
 ```
 
 *Figure 3.1. A fair comparison holds the harness fixed and changes only where the weights run.*
@@ -96,19 +96,19 @@ Hold sampling fixed during that comparison. Temperature 0.2 keeps policy wording
 
 ```mermaid
 flowchart TD
-  Miss[A run looks wrong]
-  Log{What does the trace show}
-  Model[Model factor]
-  Read[Read the tool error]
-  Feedback[Feedback factor]
-  Stop[The stop worked]
-  Config[Check server key or model name]
-  Miss --> Log
-  Log -->|no tool call| Model
-  Log -->|tool error| Read
-  Log -->|right file wrong sentence| Feedback
-  Log -->|max steps or repeated call| Stop
-  Log -->|connection or auth failure| Config
+  badRun["A run looks wrong"]
+  traceQ{"What does the trace show"}
+  modelFactor["Model factor"]
+  readError["Read the tool error"]
+  feedbackFactor["Feedback factor"]
+  stopWorked["The stop worked"]
+  checkConfig["Check server key or model name"]
+  badRun --> traceQ
+  traceQ -->|no tool call| modelFactor
+  traceQ -->|tool error| readError
+  traceQ -->|right file wrong sentence| feedbackFactor
+  traceQ -->|max steps or repeated call| stopWorked
+  traceQ -->|connection or auth failure| checkConfig
 ```
 
 *Figure 3.2. A bad run goes to the model, to feedback, or to configuration.*
