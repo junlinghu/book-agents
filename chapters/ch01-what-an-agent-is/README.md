@@ -1,73 +1,67 @@
 # Chapter 1: What an Agent Is
 
-Products that answer in natural language are spreading quickly, and the word *agent* is now applied to programs that do not work the same way. A chat window, a fixed pipeline, and a model that chooses its own next step can each return a paragraph about a shop policy. They do not share the same control, the same failures, or the same cost to operate. Whether you are building the system or deciding whether a team should build it, it helps to know which of the three you have.
+An agent is a model inside a loop: it chooses the next action from a set you defined, sees the result, and chooses again, until a stop condition you also defined. A chatbot is one model call that returns text and then stops. A workflow is a procedure whose branches you wrote before the question arrived. This chapter separates those three designs and states the product equation used for the rest of the book: **Model × Harness × Feedback loop**. The running example is a desktop concierge for a fictional café. The same customer question behaves differently under each design, and the lab makes the ungrounded case visible by running one completion with no tools.
 
-This chapter defines those three programs—chatbot, workflow, and agent—and introduces the product equation carried through the rest of this book: **Model × Harness × Feedback loop**. A brief running example, a desktop concierge for a fictional neighborhood café, shows how the same question behaves under each design. The lab that follows runs the concierge as a single completion with no tools, so an ungrounded answer is visible before any further machinery is added.
+## Chatbots, Workflows, and Agents
 
-## What Are Chatbots, Workflows, and Agents?
+Three programs can each print a paragraph about a return. The distinction that matters, in a design review as much as in an implementation, is who picks the next step.
 
-Three programs can each print a paragraph about a return. They are different programs. The distinction that matters, in a design review as much as in the code, is who picks the next step.
+A **chatbot** sends messages and receives text. The program then ends. Any state is the transcript you choose to keep. A poor answer remains on the screen. The shop’s files, inventory, and payments stay untouched, because the program was never given a way to reach them. If the paragraph says that returns last thirty days and that pastries ship nationwide, that number is a prior the model brought from other shops. The customer heard confidence. The shop’s own rules were never consulted.
 
-A **chatbot** is one model call. You send messages, and you receive text. The program then ends. Any state is the transcript you choose to keep. A poor answer remains on the screen. The shop’s files, inventory, and payments stay untouched, because the program was never given a way to reach them. If the paragraph says that returns are allowed for thirty days and that pastries ship nationwide, that number is a prior the model brought from other shops. The customer heard confidence. The shop’s own rules were never consulted.
+A **workflow** is control flow written in advance. A classifier, a template, a database query, and a final model call may all be steps, and the order of those steps is still yours. You can draw the branches before today’s question arrives. When the question concerns the return window, the workflow opens the policy and then asks the model to answer from that text. Your code chooses the file. The model may still write the sentences.
 
-A **workflow** is control flow you wrote in advance. A classifier, a template, a database query, and a final model call may all be steps, and the order of those steps is still yours. You can draw the branches before today’s question arrives. When the question is what the return window is, the workflow opens `policy.md` and then asks the model to answer from that text. Your code chooses the file. The model may still write the sentences.
+An **agent** places the model inside a loop. The model proposes an action from a set you defined. Your code — the **harness** — performs the action and records the observation. The model sees that observation and may propose again, until a stop condition you defined. For the same return question, the model may read the policy, the FAQ, both, or a path that does not exist and then recover from the error. You wrote the tool, its schema, and the rule that ends the loop. The particular sequence is left to the model, inside those bounds.
 
-An **agent** is a model inside a loop. The model may choose the next action from a set you defined, see the result, and choose again, until a stop condition you also defined. The model proposes. Your code—the **harness**—performs the action and records the observation. For the same return question, the model may call `read_file` on `policy.md`, on `faq.md`, on both, or on a path that does not exist and then recover from the error. You did not write that branch. You wrote the tool, its schema, and the rule that ends the loop.
+- **Chatbot.** No one picks a next step: one call, then stop. The model sees the messages you sent. In advance, the picture is a single arrow from question to paragraph.
+- **Workflow.** Your code picks the next step. The model sees whatever the current step passes in. In advance, the picture is a flowchart with named branches.
+- **Agent.** The model picks the next step, inside bounds you set, and may use the tools you registered, one call at a time. In advance, the picture is a loop, plus the allowed tools and the stop rules.
 
-| | Who picks the next step | What the model may touch | What you can draw in advance |
-|---|---|---|---|
-| Chatbot | No one. One call, then stop. | The messages you sent. | A single arrow, from question to paragraph. |
-| Workflow | Your code. | Whatever the current step passes in. | A flowchart with named branches. |
-| Agent | The model, inside bounds you set. | The tools you registered, one call at a time. | A loop, plus the allowed tools and the stop rules. |
+The café concierge makes the difference concrete. A customer asks whether an opened bag of coffee can be returned, and whether a cardamom bun can be shipped to another state.
 
-The Local Shop Concierge, described later in this chapter, makes the difference concrete. Suppose a customer asks whether an opened bag of coffee can be returned, and whether a cardamom bun can be shipped to another state.
+Under the chatbot in this chapter, the answer comes from the model’s weights and from the system prompt. No file has been opened. A stated return window is a prior. It is a shop rule only when the shop’s own text says so, and this program has not seen that text.
 
-Under the Chapter 1 chatbot, the answer comes from the model’s weights and from the system prompt. No file has been opened. A stated return window is a prior. It is a shop rule only if the shop’s own text says so, and this program has not seen that text.
+A workflow for this exact question is short. Read the policy, then make one completion whose prompt contains that file. The result can be correct, because you already know which document matters.
 
-A workflow for this exact question is short: read `policy.md`, then make one completion whose prompt contains that file. The result can be correct, because you already know which file matters.
+An agent earns its place when a new branch for every combination of facts would become a second program. A question about a nut allergy and about Saturday bike delivery for a twenty-dollar order may need the FAQ and the policy, in an order that depends on what the first file said. Chapter 2 builds that loop. This chapter runs the chatbot on purpose, so the ungrounded answer is visible first.
 
-An agent earns its place when you do not want a new branch for every combination of facts. A question about a nut allergy and about Saturday bike delivery for a $20 order may need `faq.md` and `policy.md`, in an order that depends on what the first file said. The loop is how you avoid writing an `if` for every pairing. Chapter 2 builds that loop. This chapter runs the chatbot on purpose, so you can see the ungrounded answer first.
-
-## What Determines Agent Quality?
+## Agent Quality
 
 Treat agent quality as a product of three factors a team can change separately:
 
 **Agent quality = Model × Harness × Feedback loop**
 
-The word *product* is a design reminder. A factor near zero dominates the result. Use it to choose the next edit. This book does not ask you to multiply the factors in a spreadsheet.
+*Product*, here, is a design reminder. A factor near zero dominates the result, and the equation is how you choose the next edit.
 
-The **model** is the weights behind the completion. It determines how well instructions are followed, whether a tool call arrives as a `tool_calls` object, how long a context is accepted, and how readily a specific number is invented. In this book you select the model with `MODEL` in `.env`. You do not train it here.
+The **model** is the weights behind the completion. It determines how well instructions are followed, whether a requested action arrives as a structured tool call, how long a context is accepted, and how readily a specific number is invented. In this book you select the model. Training it is outside the scope.
 
-The **harness** is everything you write around the model: the system prompt, the tool list, argument schemas, the code that actually reads a file, path checks, stop conditions, temperature, the token limit, and the actions the process must refuse. Chapters 1–3 keep the harness small. Later chapters add memory, skills, permissions, and confirmations. Those additions are still harness. A new vendor name does not create a new category.
+The **harness** is everything written around the model: the system prompt, the tool list, argument schemas, the code that actually reads a file, path checks, stop conditions, sampling limits, and the actions the process must refuse. Chapters 1–3 keep the harness small. Later chapters add memory, skills, permissions, and confirmations. Those additions remain harness. A new vendor name does not create a new category.
 
-The **feedback loop** is the path from a wrong answer to a change. In these early chapters that path is a person. You read the reply, write down the miss, and decide whether the next edit is a prompt, a tool, or a different model. Later, the feedback loop may be a checker, a fixture, a trace, or a metric. The job is the same. Something other than the drafting model has to be able to say that the answer failed.
+The **feedback loop** is the path from a wrong answer to a change. In these early chapters that path is a person. You read the reply, record the miss, and decide whether the next edit is a prompt, a tool, or a different model. Later, the feedback loop may be a checker, a saved case, a trace, or a metric. The job stays the same. Something other than the drafting model has to be able to say that the answer failed.
 
-- A model near zero returns prose and never a `tool_calls` object. The loop in Chapter 2 then has nothing to execute. A clearer prompt cannot read the disk by itself.
-- A harness near zero is this chapter. A strong model still cannot open `policy.md`. It will answer anyway, because a chat completion is trained to answer.
-- Feedback near zero leaves a paragraph that sounds finished. The invented return window is never recorded, and the next edit lands on whichever factor is most convenient to change. You then have no way to tell whether the edit mattered.
+- A model near zero returns prose and never a tool call. The loop in Chapter 2 then has nothing to execute. A clearer prompt cannot read the disk by itself.
+- A harness near zero is this chapter. A strong model still cannot open the policy. It answers anyway, because a chat completion is trained to answer.
+- Feedback near zero leaves a finished-sounding paragraph. The invented return window goes unrecorded, and the next edit lands on whichever factor is easiest to touch. There is then no way to tell whether the edit mattered.
 
 The same customer question can call for three different repairs.
 
-| What you observed | Factor to move | What you change |
-|---|---|---|
-| The reply states a return window the program could not have looked up | Harness | Give the model a `read_file` tool and require a path citation (Chapter 2) |
-| The tool exists, and this model never calls it | Model | Point `.env` at a model that emits tool calls (Chapter 3) |
-| The tool ran, the file was right, and the reply still drops the citation | Feedback | Record the miss now. A checker that rejects uncited claims comes later in this book |
+- The reply states a return window the program could not have looked up. Move the **harness**: give the model a tool that reads the policy, and require a path citation. That is Chapter 2.
+- The tool exists, and this model never calls it. Move the **model**: select one that emits tool calls. That is Chapter 3.
+- The tool ran, the file was right, and the reply still drops the citation. Move **feedback**: record the miss now. A checker that rejects uncited claims comes later in the book.
 
-For a product decision, move the factor that is actually near zero. A larger model does not repair a program that still cannot see the shop. A new tool does not repair a process in which no one is reading the answers.
+Move the factor that is actually near zero. A larger model, aimed at a program that still cannot see the shop, leaves that failure in place. A new tool, added where no one reads the answers, leaves that failure in place.
 
-Before a dashboard exists, one transcript is enough to score, if you can answer four questions about it:
+Before a dashboard exists, one transcript is enough to score, once four questions about it have answers.
 
 - **Grounding.** Did the answer name a shop fact the program could actually have seen?
 - **Citation.** Did it point at a document, or only sound sure?
 - **Action boundary.** Did it offer to refund, ship, or email, when the product has no such action?
-- **Which factor moved.** If the notes omit whether you edited the prompt, the tools, or the model, the next demo is only a new anecdote.
+- **Which factor moved.** If the notes omit whether the prompt, the tools, or the model changed, the next demonstration is only a new anecdote.
 
-Quote the sentence. A stated return window is an observation. The word “hallucination,” used alone, is only a label for it.
+Quote the sentence. A stated return window is an observation. The word “hallucination,” used alone, only names that observation.
 
 ## When an Agent Is the Wrong Tool
 
-An agent is the wrong tool when you can already name the steps, when a single draft is the whole task, or when a wrong action is expensive and you have no gate in front of it.
+An agent is the wrong tool when the steps can already be named, when a single draft is the whole task, or when a wrong action is expensive and nothing stands in front of it.
 
 ```mermaid
 flowchart TD
@@ -82,77 +76,65 @@ flowchart TD
   Ready -->|Yes| Loop["A bounded loop can earn its place."]
 ```
 
-*Figure 1.1: Choosing among a workflow, one completion, and an agent. The test is whether the next step depends on an observation, and whether a wrong action has a gate.*
+*Figure 1.1. Choosing among a workflow, one completion, and an agent.*
 
-Use a **workflow** when you can write the branch before you see the input. Printing today’s hours from `faq.md` on a door sign is a file read. A model in a loop adds a way to skip the file, which is a new failure on a task that did not need one. Packing coffee orders under $40 with a $6 shipping line is arithmetic together with the policy file. Code should own that calculation.
+Use a **workflow** when the branch can be written before the input is seen. Printing today’s hours from the FAQ onto a door sign is a file read. A model in a loop adds a way to skip the file, which is a new failure on a task that did not need one. Packing coffee orders under $40 with a six-dollar shipping line is arithmetic together with the policy. Code should own that calculation.
 
-Use **one completion** when the task is a draft and nothing is looked up or changed. Rewriting a cardamom-bun description so that it fits on a tent card is a chatbot-shaped job. The success test is that a paragraph exists, and a person can see the card. Tools would add steps without a fact to check.
+Use **one completion** when the task is a draft and nothing is looked up or changed. Rewriting a cardamom-bun description so that it fits on a tent card is that job. Success means a paragraph exists and a person can see the card. Tools would add steps without a fact to check.
 
-Use an **agent** when the next action depends on the last observation, and writing every branch in advance becomes a second program you will not maintain. The concierge question that might need the policy, the FAQ, both, or a follow-up read after an error string is that case. You still bound the loop: one tool, a documents directory, and a step cap.
+Use an **agent** when the next action depends on the last observation, and writing every branch in advance becomes a program you will not maintain. The concierge question that might need the policy, the FAQ, both, or a follow-up read after an error is that case. Bound the loop anyway: one tool, a documents directory, and a step cap.
 
-Leave the agent out when the action spends money, sends mail, or deletes a row, until the harness includes a confirmation step. This book introduces autonomy tiers in a later chapter. Chapters 1–3 do not. The labs only read files and print text. If a reply offers to refund a customer, the process has no refund function. Treat the offer as a failure mode: the voice promised work the system cannot perform.
+Leave the agent out when the action spends money, sends mail, or deletes a record, until the harness includes a confirmation step. Later chapters introduce autonomy tiers. Chapters 1–3 do not. The labs read files and print text. A reply that offers a refund is a sentence; the process has no refund function. Treat the offer as a failure mode: the voice promised work the system cannot perform.
 
-A messy domain, by itself, is a weak reason to add an agent. Sometimes the mess is a policy you have not written down. Write `policy.md` first. Then decide whether the reader of that file should be a function or a model.
+A messy domain, by itself, is a weak reason to add an agent. Sometimes the mess is a policy that has not been written down. Write the policy first. Then decide whether the reader of that file should be a function or a model.
 
-## A Running Example: The Local Shop Concierge
+## The Local Shop Concierge
 
-The product that runs through this book is a **Local Shop Concierge** for Hearth Lane Café, a fictional neighborhood shop at 12 Hearth Lane, North Mill. It runs on your machine. It is a desktop program with a model client: a system a practitioner can trace, and a product shape a manager can staff and measure. These labs do not deploy it as a hosted chat product.
+The product that runs through this book is a **Local Shop Concierge** for Hearth Lane Café, a fictional neighborhood shop at 12 Hearth Lane, North Mill. It runs on the practitioner’s machine: a desktop program with a model client, which a team can trace and a manager can staff and measure. These labs do not deploy it as a hosted chat product.
 
-The shop rules used to ground answers are deliberately specific, so a generic retail prior is easy to spot:
+The shop rules are specific on purpose, so a generic retail prior is easy to spot.
 
-- Opened coffee is final sale. Unopened bags, with the valve seal intact, may be returned within 14 days as Hearth card credit, not cash.
-- Pastries and anything refrigerated are not shipped. Coffee under $40 ships in the United States for $6.00.
-- Local bike delivery is $4.50, free over $35, Tuesday through Friday only, and within 3 miles.
-- The café is closed on Monday. Tuesday through Friday, the hours are 7:30–15:30. Saturday and Sunday hours are 8:00–16:00.
+- Opened coffee is final sale. Unopened bags, valve seal intact, may be returned within 14 days as store credit on a Hearth card, with a receipt. The café does not give cash refunds.
+- Pastries and anything refrigerated are not shipped. Coffee under $40 ships in the United States for $6.00 and is packed within two business days.
+- Local bike delivery costs $4.50, is free at $35 and above, runs Tuesday through Friday, and covers addresses within 3 miles.
+- The café is closed on Monday. Tuesday through Friday the hours are 7:30–15:30. Saturday and Sunday they are 8:00–16:00.
 - Cardamom buns contain wheat, butter, and almonds. There is no nut-free preparation area.
-- The guest network name is `hearth-guest`. The Wi-Fi password is printed on the paper receipt. It is absent from the FAQ, and the agent must not invent one.
+- The guest network is named `hearth-guest`. The Wi-Fi password is printed on the paper receipt. It is absent from the FAQ, and the concierge must not invent one.
 
-Those sentences live in `labs/ch02-your-first-loop/docs/policy.md` and `docs/faq.md`. The program in this chapter does not read them. That omission is the demonstration. A confident paragraph and a grounded paragraph can share a tone. Only one of them had a document in reach.
+Those sentences live in the shop documents used from Chapter 2 onward. The program in this chapter does not read them. That omission is the demonstration. A confident paragraph and a grounded paragraph can share a tone. Only one of them had a document in reach.
 
-The capstone in Chapter 26 is the same concierge with the harness filled in. One recorded run is expected to read shop files, query inventory, fetch a page and compare a price, remember a constraint such as an allergy or a budget across a restart, propose a cart that a separate checker can reject, wait for a person to confirm before an order is written, open a ticket when an item is out of stock, and leave a trace and a metric for the finished task.
+Chapter 26 is the same concierge with the harness filled in. One recorded run is expected to read shop files, query inventory, fetch a page and compare a price, remember a constraint such as an allergy or a budget across a restart, propose a cart that a separate checker can reject, wait for a person to confirm before an order is written, open a ticket when an item is out of stock, and leave a trace and a metric for the finished task.
 
-You are not building that system in this chapter. You are taking the first measurement: a concierge persona, one completion, and a written list of what the model got wrong. Each later chapter adds one piece of harness or one piece of feedback and keeps the same shop. When a new idea appears—memory, a skill, a protocol, an autonomy tier—the test is whether it changes what the concierge does on a café task.
+This chapter takes the first measurement: a concierge persona, one completion, and a written list of what the model got wrong. Each later chapter adds one piece of harness or one piece of feedback and keeps the same shop. When a new idea appears — memory, a skill, a protocol, an autonomy tier — the test is whether it changes what the concierge does on a café task.
 
 ## What a Bare Completion Gets Wrong
 
-A bare completion fails in ways that look like good service. That is why the failure is a product problem, and a model problem.
+A bare completion fails in ways that look like good service. The failure is a product problem and a model problem at once.
 
-**It invents a shop.** Return windows, fees, hours, and prices arrive fully formed. The program had no document, no database, and no tool. The number came from the weights. A demo that shows the paragraph and hides the absence of a trace will ship the invention.
+**It invents a shop.** Return windows, fees, hours, and prices arrive fully formed. The program had no document, no database, and no tool. The number came from the weights. A demonstration that shows the paragraph and hides the missing trace will ship the invention.
 
-**It cites a source it never opened.** A path in the answer is costume when nothing was read. Citation, later, is a harness feature: the tool result carries a path, and the prompt asks the model to copy it. In this chapter there is no path to copy. If one appears, record it as an invented citation.
+**It cites a source it never opened.** A path in the answer is costume when nothing was read. Citation, later, is a harness feature: the tool result carries a path, and the prompt asks the model to copy it. This chapter has no path to copy. If one appears, record it as an invented citation.
 
-**It offers work it cannot do.** A sentence that promises a refund or a shipping label is still only a sentence. The process has neither function. In a support product, that sentence is how a customer leaves believing an action is underway while the back office received nothing.
+**It offers work it cannot do.** A sentence that promises a refund or a shipping label remains a sentence. The process has neither function. In a support product, that sentence is how a customer leaves believing an action is underway, while the back office received nothing.
 
-**A hedge is a different result, and it still belongs in the notes.** “I do not know the shop’s policy” is a different outcome from a confident “30 days.” A hedge is the model declining a guess. A specific window is a guess the program could not have checked. Later harness will ask the model to abstain when the documents are silent. An abstention instruction is harness. This chapter leaves it off so the bare behavior is visible.
+**A hedge is a different result, and it still belongs in the notes.** “I do not know the shop’s policy” differs from a confident “30 days.” A hedge is the model declining a guess. A specific window is a guess the program could not have checked. Later harness will ask the model to abstain when the documents are silent. An abstention instruction is itself harness. This chapter leaves it off, so the bare behavior is visible.
 
 A second question is worth asking after the first. What time does the café open on Monday, and what is the Wi-Fi password? Monday is a real shop fact: the café is closed. The password is not written in the FAQ at all. A bare model will often supply both, smoothly.
 
-## How to Read This Book
+## How to Read the Chapters That Follow
 
 Read the chapter, run the lab, write down what the model did, and then decide which factor moved. The prose is not a substitute for the trace on your machine. Models differ. The failure modes you observe are the data.
 
-Labs live under `labs/`, with one directory per chapter. The script for this chapter, `labs/ch01-what-an-agent-is/hello_concierge.py`, is a single `chat.completions.create` call with no `tools` argument. Shared setup for the book—Python, a virtual environment, dependencies, and `.env`—is described in the repository README under **Running the labs**.
+The early labs are meant to miss. The system prompt here tells the model that it is the concierge and asks it to be specific. The shop documents stay out of reach, and there is no instruction to abstain when unsure. Chapter 2 adds the loop and a cite-or-admit-ignorance instruction together, so the comparison with this chapter is a before-and-after with two changes at once. Chapter 3 holds the harness still and swaps only the model. That comparison can be attributed to one factor.
 
-The file `.env`, at the repository root, is the only switch among providers.
+*Desktop-first* means file reads happen on the machine where the program runs. When the client points at a hosted API, the prompt — and, in later chapters, any tool results — still leaves the machine inside the request. Chapter 3 returns to that point. This chapter sends only the system prompt and the question.
 
-| Variable | Role |
-|---|---|
-| `BASE_URL` | Where the OpenAI-compatible API lives |
-| `API_KEY` | Bearer token. Ollama ignores the value and still requires a non-empty string (`ollama`) |
-| `MODEL` | The model name that server expects |
-
-The committed template is `.env.example`. The defaults are a local Ollama server: `http://localhost:11434/v1`, the key placeholder `ollama`, and the model `llama3.2`. Groq and OpenRouter use the same three variables. Chapter 3 is the chapter that changes them and leaves the harness in place. `.env` is gitignored. A real key does not belong in a chapter, a lab script, or a commit.
-
-The early labs are designed to miss. The system prompt in this chapter tells the model that it is the concierge and asks it to be specific. It withholds the shop documents, and it gives no instruction to abstain when unsure. Chapter 2 adds the loop and a cite-or-say-you-do-not-know instruction together. Those are two changes, so the comparison with this chapter is a before-and-after, and it is too muddy to call a controlled experiment. Chapter 3 holds the harness still and swaps only the model. That is the comparison you can attribute.
-
-*Desktop-first* means file reads happen on the machine where you run Python. If `BASE_URL` points at Groq or OpenRouter, the prompt—and, in later chapters, any tool results—still leaves the machine inside the HTTP request. Chapter 3 returns to that point when the client is introduced. This chapter sends only the system prompt and the question.
-
-Once dependencies are installed, the path restriction and the stop conditions of the later harness can be checked without calling a model. That check is described with the lab setup in the repository README. The script for this chapter does call the model.
+Every lab selects a provider with three settings: where the API lives, which credential is sent, and which model name that server expects. The defaults are a small local model. Chapter 3 is where those settings move and the harness stays put. Credentials stay out of the chapter text and out of the repository.
 
 ## Lab
 
-The exercise for this chapter is one completion and no tools. Run it, read the reply, and write down three failure modes that are actually present in that run. The output should make three things visible: `TOOLS=none`, so no tool was registered; `BASE_URL` and `MODEL`, so the weights behind the paragraph are known; and either a specific shop claim or an explicit hedge.
+Run one completion with no tools. Read the reply, and write down three failure modes that are actually present in that run. You should be able to see that no tool was registered, which model produced the paragraph, and whether the reply made a specific shop claim or hedged.
 
-Procedure, the default question, and a second prompt are in [`labs/ch01-what-an-agent-is/README.md`](../../labs/ch01-what-an-agent-is/README.md).
+Procedure, the default question, and a second prompt are in the [Chapter 1 lab](../../labs/ch01-what-an-agent-is/README.md).
 
-A single completion remains the right tool for a draft. It is the wrong tool for a shop rule. The next chapter places a loop around the model, so the rule can be read before it is quoted.
+A single completion is the right instrument for a draft, and the wrong instrument for a shop rule. The next chapter places a loop around the model, so the rule can be read before it is quoted.
