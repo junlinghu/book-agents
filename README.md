@@ -142,17 +142,17 @@ That covers the docs path jail, tool-error handling, max steps, and the repeated
 
 ### Part I — Foundations
 
-1. [What an agent is (builders' cut)](chapters/ch01-what-an-agent-is/README.md)
+1. [What an Agent Is](chapters/ch01-what-an-agent-is/README.md)
 
-   Agents vs chatbots and the Model × Harness × Feedback framing for builders.
+   Chatbots, workflows, and agents, and the Model × Harness × Feedback loop framing.
 
-2. [Your first loop](chapters/ch02-your-first-loop/README.md)
+2. [The Agent Loop](chapters/ch02-your-first-loop/README.md)
 
-   The perceive–reason–act–observe loop, tool schemas, and stop conditions.
+   The perceive–reason–act–observe loop, tool schemas, stop conditions, and citations.
 
-3. [Models without the pain](chapters/ch03-models-without-the-pain/README.md)
+3. [Local and Hosted Models](chapters/ch03-models-without-the-pain/README.md)
 
-   Hosted APIs versus local weights, and swapping models through a stable OpenAI-compatible client.
+   Local weights versus hosted APIs, and swapping models through a stable OpenAI-compatible client.
 
 ### Part II — Harness
 

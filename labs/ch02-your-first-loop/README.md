@@ -2,7 +2,7 @@
 
 A tool-calling loop with one tool, `read_file`, jailed to this directory's `docs/`. The agent answers return and shipping questions from `policy.md` and `faq.md` and is instructed to cite the path.
 
-Chapter: [Ch 2. Your first loop](../../chapters/ch02-your-first-loop/README.md)
+Chapter: [Chapter 2: The Agent Loop](../../chapters/ch02-your-first-loop/README.md)
 
 ## Goal
 

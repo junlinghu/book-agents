@@ -2,7 +2,7 @@
 
 The Chapter 2 agent, run from this directory, against the Chapter 2 docs. You change providers by editing the repo-root `.env` only.
 
-Chapter: [Ch 3. Models without the pain](../../chapters/ch03-models-without-the-pain/README.md)
+Chapter: [Chapter 3: Local and Hosted Models](../../chapters/ch03-models-without-the-pain/README.md)
 
 ## Goal
 
