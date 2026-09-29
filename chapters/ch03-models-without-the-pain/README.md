@@ -2,151 +2,151 @@
 
 Part I — Foundations
 
-Chapter 2's loop calls "the model" as if that were one thing. It is an HTTP server that speaks a subset of the OpenAI chat-completions API. This chapter keeps the harness byte-for-byte and moves only three settings: `BASE_URL`, `API_KEY`, and `MODEL`. The lab is `labs/ch03-models-without-the-pain/swap_model.py`. It imports `run_file_agent` and reads the Chapter 2 docs. You switch Ollama, Groq, or OpenRouter by editing `.env` and running the script again.
+On Monday the café compares two weekend transcripts of the same question: "How much is local delivery, and which day are you closed?"
 
-The builder claim: **swap the model client; keep the harness stable.**
+Both concierges had the same binder, the same tool, the same stop rules, and the same instruction to cite a path or admit the documents were silent. One of them opened the policy and the FAQ, then answered: delivery is $4.50, free at $35, Tuesday through Friday, within three miles, and the café is closed Monday, with each fact tied to the file that holds it. The other said something like "about five dollars, and we're closed Sundays," and the tool log was empty.
 
-## 3.1 Hosted API vs local weights
+Nothing in the shop changed between those runs. The person behind the counter changed. In software, that person is the model: which weights answered, and whether those weights ran on the café's own machine or on someone else's. This chapter keeps the harness still and moves only that choice. The claim to keep: **swap the model client; keep the harness stable.**
 
-Two places can run the weights.
+## 3.1 Where the weights live
 
-**Local weights**, in these labs, mean [Ollama](https://ollama.com/download) on your machine. The process that serves `http://localhost:11434/v1` loads the model. There is no per-token invoice. A café policy sent as a prompt stays on that machine unless you have pointed Ollama itself at a remote host. You pay in RAM, disk, and latency. Small instruct models are the ones that fit this setup. They also drop tool calls more often.
+Two places can run the weights. The loop does not care which, until you look at cost, latency, tool-call reliability, and who else can read the shop's documents.
 
-**A hosted API**, here Groq or OpenRouter, means someone else's GPU. You send an API key. You pay in latency that is often lower and in money or a quota. The request body leaves your machine. That body includes the system prompt, the question, and — once the loop is running — the tool results. `read_file` still runs locally. The bytes it returns are then copied into the next completion request. "The file was read locally" and "the file was sent to the provider" are both true for a hosted run. Do not put secrets in `policy.md` and then point `BASE_URL` at a host you would not email that file to.
+**Local weights** mean the model runs on a machine you control. In these labs that machine is yours, and the usual server is [Ollama](https://ollama.com/download): a local process that speaks the same style of chat API the labs already use. There is no per-token invoice. A café policy sent as a prompt stays on that machine, unless you have pointed the local server itself at a remote host. You pay in memory, disk, and waiting. The models that fit a laptop are the small instruct models. They also drop tool calls more often. A dropped tool call looks, in the product, like the concierge who never opened the binder.
 
-What does **not** change between the two:
+**A hosted API** means someone else's GPUs. Groq and OpenRouter are the two this book uses, because both can speak the same client shape as the local server. You send a key. You pay in money or a quota, and you often wait less. The request body leaves your machine. That body includes the system prompt, the question, and — once the loop is running — the tool results. `read_file` still runs locally. The bytes it returns are then copied into the next request. "The file was read on our machine" and "the file was sent to the provider" are both true for a hosted run. A policy file is fine to send when it is the fictional Hearth Lane binder. A real supplier contract, a customer list, or a Wi-Fi password is a different decision. Do not point a hosted client at a document you would not email to that provider.
 
-- `labs/common/loop.py` (the loop, the stop conditions, the system prompt)
-- `labs/common/tools.py` (the schema and the directory jail)
-- `labs/ch02-your-first-loop/docs/` (the shop text)
-- `TEMPERATURE` and `MAX_TOKENS` in `labs/common/client.py`
-
-What does change is which weights see that harness, how reliably they fill `tool_calls`, and whether the prompt leaves the machine.
-
-Use the local default while you are editing the loop. Use a hosted model when you need a cleaner tool-call trace to confirm the harness, or when you are doing the Chapter 3 comparison itself. The point of the comparison is the difference you can attribute to the model, because the harness did not move.
-
-## 3.2 OpenAI-compatible clients (`base_url`, `model`, `api_key`)
-
-The Python SDK is the `openai` package. Compatibility means you construct one client and keep the call shape stable:
-
-```python
-client = OpenAI(
-    base_url=base_url,
-    api_key=api_key,
-    timeout=120.0,
-    max_retries=0,
-)
-client.chat.completions.create(
-    model=model,
-    messages=messages,
-    tools=[READ_FILE_TOOL],
-    temperature=TEMPERATURE,
-    max_tokens=MAX_TOKENS,
-)
+```mermaid
+flowchart TD
+  Q["Same question, same harness, same shop documents"] --> Where{"Where do the weights run?"}
+  Where --> Local["Local weights<br/>Ollama on your machine<br/>Pay in hardware and latency<br/>Documents stay local"]
+  Where --> Hosted["Hosted API<br/>Groq or OpenRouter<br/>Pay in quota or money<br/>Prompt and tool results leave the machine"]
+  Local --> Trace["Keep the trace: tool log, stop tag, citations"]
+  Hosted --> Trace
+  Trace --> Judge["Attribute the difference to the model.<br/>The loop, the jail, and the sampling did not move."]
 ```
 
-That construction is `make_client` and the call inside `run_file_agent`. Three fields select the server:
+What stays put between the two:
 
-| Variable | Role | Ollama default |
+- The loop, the stop conditions, and the system prompt
+- The tool schema and the directory jail
+- The shop documents
+- The sampling choices: how random the reply is allowed to be, and how long a reply may grow
+
+What changes is which weights see that harness, how reliably they fill in a tool call, and whether the prompt leaves the machine.
+
+Use the local default while you are still changing the loop. A broken local server fails in front of you, and you are not paying a provider to watch a bug. Use a hosted model when you want a cleaner tool-call trace to confirm the harness, or when you are doing the comparison this chapter is about. The point of the comparison is a difference you can attribute to the model, because the harness did not move.
+
+## 3.2 One client, three settings
+
+The labs speak to every provider through one OpenAI-compatible client. "Compatible" is a product decision, not a compliment. It means the call keeps a stable shape — messages in, a tool list beside them, text or tool calls out — while three settings select the server:
+
+| Setting | What a practitioner is choosing | What a product manager should hear |
 |---|---|---|
-| `BASE_URL` | Origin of the HTTP API, including the `/v1` prefix the SDK appends routes to | `http://localhost:11434/v1` |
-| `API_KEY` | Bearer token. Ollama requires a non-empty string and ignores the value. Hosted APIs check it. | `ollama` |
-| `MODEL` | Model id the server expects. The id is not portable across vendors. | `llama3.2` |
+| Where the API lives | The origin of the chat service, including the version prefix the client expects | "Whose machine sees this conversation?" |
+| The key | A bearer token. A local server may ignore the value and still require a non-empty string. A hosted API checks it. | "Which account is billed, and who can rotate the secret?" |
+| The model name | The id that server expects. Names are not portable across vendors. | "Which weights, and do they actually call tools?" |
 
-`labs/common/client.py` loads those from the repo-root `.env` via `python-dotenv`, without overriding variables already set in the process. A missing `BASE_URL` or `MODEL` falls back to the Ollama defaults, so a forgotten file fails as a connection error you can read, not as a `KeyError`. A missing `API_KEY` becomes `ollama`. An **empty** `API_KEY` stays empty and `require_settings` exits. The harness will not replace a blank hosted key with the Ollama placeholder.
+The Python package is the ordinary OpenAI client, pointed at whichever origin you chose. One construction serves Ollama, Groq, and OpenRouter. The lab prints the origin and the model name before the request, and it hides the key. If a crash report would have included the key, the harness strips it. The key lives in a local configuration file that is not part of the book. The template is. That split is the whole secret-handling story for these chapters: the example is safe to commit, the real file is not.
 
-Every lab script prints `describe_runtime()` before the request:
+The names you will see in the lab template:
 
-```text
-BASE_URL=http://localhost:11434/v1
-MODEL=llama3.2
-API_KEY=set (value hidden)
+| Provider | Where it lives | Example model | Tool note |
+|---|---|---|---|
+| Ollama | Your machine | `llama3.2` | Small, local, sometimes skips the tool. `llama3.1` is the larger local fallback. |
+| Groq | `api.groq.com` | `llama-3.3-70b-versatile` | Needs a model marked for tool use that runs in *your* process. `llama-3.1-8b-instant` is the smaller option in the same family. |
+| OpenRouter | `openrouter.ai` | `meta-llama/llama-3.3-70b-instruct` | Ids look like `vendor/name`. Confirm on the model page that tools are supported. |
+
+Model ids get retired. When the error says the model is unknown, the fix is a current id from that provider's list. The loop does not need an edit because a vendor renamed a product. Treat a stale id as configuration, and say so in the notes, or the next person will "fix" the harness for a problem the harness does not have.
+
+Two configuration habits save reviews. Use one provider block at a time, so a single origin and a single model name are active. And keep the sampling constants in the harness, not in the provider block. If temperature changes between the local run and the hosted run, you no longer know which factor moved.
+
+## 3.3 What "instruct" and "tool-capable" mean for the café
+
+The labs need an **instruct** model: weights trained to follow a chat template, with roles for the system, the user, the assistant, and the tool result. A base model that only continues text will not reliably emit tool calls. Pointing the concierge at one looks like a broken loop. It is a model-selection mistake. The symptom is an empty tool log or a confused transcript. The repair is a different model name.
+
+**Tool-capable** means the provider documents that this model can return structured tool calls your process will run. That phrase is easy to skim and expensive to get wrong. Some hosted products run tools on *their* side: web search, code execution, a browser that lives in their cloud. Those tools never call `read_file` in the café's process. A run that "browses" instead of opening the policy is that mismatch. Groq's compound-style models are the example to remember. They are the wrong tool for this lab. You want a model marked for local tool use, meaning your program performs the action.
+
+OpenRouter will route a model that cannot call tools at all, if that is the id you asked for. The failure shows up as an HTTP error, or as a final prose answer with an empty trace, depending on the model. The model page's tool flag is the thing to check before the run. A bake-off against a chat-only model measures the wrong capability and then tempts the team to rewrite the loop.
+
+Small local models remain the right default for day-to-day work on the harness. `llama3.2` will sometimes ignore the tool and answer in prose. That is useful data about the model factor. The Chapter 2 lab says so when a final answer arrives with an empty tool log. Before anyone rewrites the loop, change only the model and run the question again.
+
+The Chapter 3 question is chosen so a correct answer has to touch both files. The delivery fee is only in the policy: $4.50, free at $35 and above, Tuesday through Friday, within three miles. The closed day is only in the FAQ: Monday. One model may read both and cite both. Another may answer from habit and cite nothing. That pair of traces is the bake-off. You do not need a leaderboard. You need the stop tag, the tool log, and the two citations.
+
+Hold sampling still during the bake-off. The harness uses a low temperature, so policy wording stays stable across reruns, and a token budget large enough for two short tool calls plus a paragraph with paths. If you change either constant between the local run and the hosted run, the comparison is no longer the one this chapter asks for. Edit them when you are studying the knob, and write down that you edited them.
+
+## 3.4 Quirks that look like product bugs
+
+Providers disagree on the edges of "compatible." The shared client absorbs the disagreements that would otherwise fork the concierge into one agent per vendor. Knowing the list keeps a review from treating a protocol mismatch as a café-policy failure.
+
+**The client does not force a tool.** Ollama's compatible API accepts a tool list and rejects the field that would force a particular tool. Groq accepts that field. The shared client omits it, so one request shape runs on both. The cost is real and visible: the harness cannot demand `read_file`. A skip is a model behavior you record. Forcing the tool would split the client by provider, and this chapter keeps one client.
+
+**Tool results stay small.** Some compatible APIs reject a tool message that carries an extra name field. The loop sends the role, the id that ties the result to the call, and the content. That is enough for the providers in this book. Adding the extra field to "make the trace clearer" breaks the hosted run and leaves the local run looking fine, which is exactly how a team misreads a client bug as a model bug.
+
+**Arguments are usually a JSON string, and sometimes already an object.** The loop accepts both. Invalid structure becomes an error observation, not a crashed process. The next turn can try again with a path the schema asked for. That is the quirk you want the model to see.
+
+**Reply text is sometimes a list of parts.** One normalizer flattens that into text before a lab prints it. A new provider quirk belongs in the lab notes first, and in the shared client only when the same code has to keep running. Growing a special case per vendor inside the loop is how the harness stops being the stable product.
+
+**A local origin does not start the server or download the weights.** Configuration that points at your machine assumes the process is already up and the model tag is already present. A connection error on this chapter is that setup. The swap script is doing what it should: failing once, in front of you, instead of sleeping through a retry that looks like a hang.
+
+**Hosted errors are mostly configuration.** A rejected key, an unknown model id, or a model that has no tool support should change a setting, not the loop. Keep the previous trace. If the prompt, the tool, and the model change in the same edit, the chapter's comparison is gone.
+
+```mermaid
+flowchart TD
+  Miss["A run looks wrong"] --> Log{"What does the trace show?"}
+  Log -->|"No tool call. Stop is final."| Model["Model factor.<br/>Try a tool-capable model.<br/>Leave the loop alone."]
+  Log -->|"ERROR from the tool"| Read["Read the error.<br/>A bad path is the model's choice.<br/>A missing documents folder is the checkout."]
+  Log -->|"Right file, wrong sentence"| Feedback["Feedback factor.<br/>The trace is not a checker.<br/>Compare the claim to the file."]
+  Log -->|"max steps or repeated call"| Stop["The stop worked.<br/>Inspect the trace.<br/>Do not invent a closing paragraph."]
+  Log -->|"Connection, auth, or unknown model"| Config["Configuration.<br/>Server, key, or model id.<br/>The harness did not change."]
 ```
 
-The key's value is not printed. If it ever appears inside an exception string, `redact` strips it. Copy `.env.example` to `.env`. Do not commit `.env`. The example file is the contract; the ignored file is the secret.
+When a run misbehaves, change one setting or one harness constant, run the same question, and keep both traces. The decision diagram above is the review. It sends a skipped tool to the model, a misquote to feedback, and a dead server to configuration. It keeps the team from "fixing" all three in one pull request and then celebrating a demo that cannot be explained.
 
-Provider blocks, commented, also live in `.env.example`. Uncomment one provider and comment the others. Two active `MODEL=` lines are a footgun: dotenv's last assignment wins, which is easy to misread.
+## 3.5 What to ask before a model bake-off
 
-| Provider | `BASE_URL` | `API_KEY` | Example `MODEL` |
-|---|---|---|---|
-| Ollama | `http://localhost:11434/v1` | `ollama` | `llama3.2` |
-| Groq | `https://api.groq.com/openai/v1` | your Groq key | `llama-3.3-70b-versatile` |
-| OpenRouter | `https://openrouter.ai/api/v1` | your OpenRouter key | `meta-llama/llama-3.3-70b-instruct` |
+A bake-off is a product exercise. It answers "which weights should stand behind this harness," and it is only interpretable when the harness is boringly fixed.
 
-Model ids get retired. If the HTTP error says the model is unknown, the fix is a current id from that provider's model list, not a change to `loop.py`. Groq's tool-use docs are the list that matters for Groq: you need a model marked for **local** tool use (your process runs `read_file`). `llama-3.1-8b-instant` is the smaller Groq option in the same family. OpenRouter ids look like `vendor/name`. Confirm on the model page that tools are supported before you burn a run on a chat-only model.
+Freeze, in writing, before the first run:
 
-`max_retries=0` is deliberate. A local server that is not running should fail once, in front of you. The SDK's default retry sleep makes a down Ollama look like a hang.
+- The question. This chapter's question needs both documents, so a model cannot look competent by reading one file.
+- The documents, the tool list, the stop rules, and the sampling constants.
+- The two or three model candidates, each one confirmed as instruct and tool-capable, with tools that run in your process.
+- Whether each candidate is local or hosted, because a hosted run is also a data-sharing decision.
 
-## 3.3 Picking a small open instruct model for labs
+Score each trace the same way:
 
-The labs need an **instruct** model: weights trained to follow a chat template (system, user, assistant, tool), not a base model that only continues text. A base model will not reliably emit `tool_calls`. Pulling one and pointing `MODEL` at it looks like a harness bug. It is a model-selection bug.
+- Did the policy get read, and did the FAQ get read?
+- What stop fired, and after how many model calls?
+- Do $4.50 and Monday each cite the file that actually contains them?
+- Did any answer invent a number, a day, or an action the tool list does not contain?
 
-Constraints for the default:
+Bring the pair of traces to the review, not a single winning paragraph. A hosted model that cites both files has demonstrated the harness. It has also demonstrated that the binder left the building. A small local model that skips the tool has demonstrated a reliability gap you can measure. Either result can be the right product choice. Neither result is a reason to fork the loop per vendor.
 
-- It fits a desktop (the Ollama `llama3.2` tag is a small instruct model).
-- It is documented as tool-capable. Ollama can serve tools on its OpenAI-compatible `/v1/chat/completions` route, and `llama3.2` is the name this repo's `.env.example` uses.
-- You can replace it without editing Python.
+The costs to put next to the traces are the ones a café would feel. Local: machine size, wait time, and the rate of empty tool logs. Hosted: price or quota per finished answer, wait time, and the fact that tool results are copied to the provider. "Finished answer" is the unit. A run that stops at max steps without a customer-ready paragraph still spent the calls. Count it.
 
-`llama3.2` will sometimes ignore the tool and answer in prose. That is useful data about the model factor. The Chapter 2 script prints a note when a final answer arrives with an empty tool log. Before you rewrite the loop, change only `MODEL`.
+Provider quirks that force a fork in the loop are harness bugs worth fixing once, in the shared client. They are a weak reason to keep a second concierge per vendor. The product you are building is the loop, the jail, the stops, and the sampling. The model is a setting in front of that product.
 
-Fallbacks that keep the same client:
+## 3.6 What goes wrong when the model is the only thing that moved
 
-- Local: `ollama pull llama3.1`, then `MODEL=llama3.1`. Llama 3.1 is the model Ollama's own tool-calling write-up used first. It is larger than 3.2.
-- Groq: `MODEL=llama-3.3-70b-versatile` or `MODEL=llama-3.1-8b-instant`, with `BASE_URL=https://api.groq.com/openai/v1`.
-- OpenRouter: a current tool-capable id such as `meta-llama/llama-3.3-70b-instruct`, after you confirm the slug.
+**The team changes three things and calls it a model test.** A new prompt, a new tool description, and a new provider in one afternoon produce a better demo and zero knowledge. The chapter's discipline is dull on purpose. Same script. Same documents. Different settings file.
 
-Pick the small local model for day-to-day loop edits. Pick the hosted model when you want a second trace of the same question. Chapter 3's lab question is chosen so a correct answer has to touch **both** files: the delivery fee is only in `policy.md`, and the closed day is only in `faq.md`. One model may read both and cite both. Another may answer "about five dollars, closed Sundays" and cite nothing. That pair of traces is the bake-off. You do not need a leaderboard. You need the stop tag, the tool log, and the two citations.
+**A compound or server-side tool model "succeeds" without the policy.** The transcript may contain a plausible delivery fee from the public web, or from habit. The café's file never opened. If the product requirement is "answer from our binder," that run failed, however fluent it is.
 
-Sampling stays put during that bake-off. `TEMPERATURE` is `0.2` and `MAX_TOKENS` is `800`, both in `labs/common/client.py`. If you change them between the Ollama run and the Groq run, you no longer know which factor moved.
+**The local model is blamed for a server that is down.** Connection refused on the local origin is setup. The swap did not break. The process that should be serving the weights is absent, or the tag was never pulled.
 
-## 3.4 Temperature, max tokens, and tool-calling quirks by provider
+**The hosted model is blamed for a key still set to the local placeholder.** Hosted APIs check the token. The local placeholder is a non-empty string the local server ignores. Leaving it in place when you change the origin produces an authentication error, which is configuration, visible and dull.
 
-**Temperature.** `0.2` keeps policy wording stable across reruns. A high temperature increases paraphrase and also increases malformed tool arguments. The café lab is a quoting task. Leave the constant low while you compare providers. Edit `TEMPERATURE` when you are studying the knob, and write down that you edited it.
+**A citation bake-off forgets the action boundary.** A model can read both files, cite both files, and still offer to book the bike delivery itself. The tool list cannot book anything. Score the offer as a failure even when the fee and the closed day are perfect. Grounding and permission are different scores.
 
-**Max tokens.** 800 is enough for two short tool calls and a paragraph with paths. If `stopped` is `max_tokens`, or a tool result says the arguments were not valid JSON and the trace looks cut off, raise `MAX_TOKENS`. Do not "fix" a truncated tool call by switching vendors first. You would be changing two factors.
-
-**`tool_choice` is not sent.** Ollama's OpenAI-compatible API supports `tools` and does not support `tool_choice`. Groq does support `tool_choice`. The shared client omits the field so one request shape runs on both. The cost is real: the harness cannot force `read_file`. A skip is a model behavior you observe, not a flag you flip in Chapter 3.
-
-**`messages[].name` is not sent.** Groq's compatible API rejects that field with HTTP 400. Tool results in this loop carry `role`, `tool_call_id`, and `content` only. That is enough for Ollama and for Groq. If you add `name` to debug a trace, Groq runs break and Ollama runs do not, and you will misread the failure as a model problem.
-
-**Arguments arrive as a string, except when they do not.** The loop parses a JSON string or a dict. Invalid JSON is an `ERROR:` observation, not a crashed process. That is the quirk you want the model to see, so the next turn can send `{"path": "policy.md"}`.
-
-**Content shape.** Some servers return assistant content as a list of parts. `message_text` flattens string parts and `{type: text}` parts before the lab prints them. You should not grow a special case per vendor in this chapter. One normalizer is the harness. A new provider quirk belongs in a note in your lab log first, and in `labs/common/` only when the same code has to keep running.
-
-**Groq compound models are the wrong tool for this lab.** Models such as `groq/compound` run Groq-hosted tools (web search, code execution) on Groq's side. They do not call the `read_file` function in your process. A run that "browses" instead of opening `policy.md` is that mismatch. Use a row in Groq's docs marked for local tool use.
-
-**OpenRouter will happily route a model that cannot call tools.** The failure mode is an HTTP error, or a final prose answer with an empty trace, depending on the model. The script's provider note at the end of `swap_model.py` is there so the settings are next to the trace. The model page's tool flag is the thing to check before the run.
-
-**Ollama must already be serving, and the tag must be pulled.** `BASE_URL` pointing at `localhost` does not start the daemon and does not download weights. `ollama pull llama3.2` and a running server are setup, documented in the top-level README. A connection error on Chapter 3 is that setup. It is not a defect in `swap_model.py`.
-
-When a run misbehaves, change one line in `.env` or one constant in `client.py`, run the same script, and keep the previous trace. If you change the prompt, the tool, and the model in the same edit, you have lost the chapter.
+**Data leaves in the tool result, not only in the question.** Teams remember that the prompt is sent. They forget that the file contents ride along on the next turn. A hosted bake-off on real customer mail is a disclosure. The fictional shop exists so the lab can be honest about that fact without leaking a real one.
 
 ## Lab
 
-**Run the Chapter 2 agent on Ollama and on Groq (or OpenRouter) by editing `.env` only.**
+The Chapter 3 lab runs the Chapter 2 loop twice: once on a local configuration, once on Groq or OpenRouter, changing only the settings file. The switch steps, the answer key, and the failure notes are in the lab:
 
-Setup is **Running the labs** in the top-level README. From the repo root:
+[labs/ch03-models-without-the-pain/README.md](../../labs/ch03-models-without-the-pain/README.md)
 
-```bash
-python labs/ch03-models-without-the-pain/swap_model.py
-```
+## Takeaway
 
-The default question is: "How much is local delivery, and which day are you closed?" A grounded answer cites `docs/policy.md` for $4.50 (free at $35, Tuesday–Friday, within 3 miles) and `docs/faq.md` for closed Monday.
-
-Do this twice:
-
-1. With the Ollama block in `.env` (`BASE_URL=http://localhost:11434/v1`, `API_KEY=ollama`, `MODEL=llama3.2`). If the tool log is empty, set `MODEL=llama3.1` only after `ollama pull llama3.1`, and say so in your notes.
-2. With either the Groq block or the OpenRouter block from `.env.example`. Comment the Ollama lines so only one `BASE_URL` and one `MODEL` are active. Run the same command. Do not edit `swap_model.py`.
-
-For each run, keep:
-
-- the printed `BASE_URL` and `MODEL`
-- the tool log (paths requested, `PATH:` or `ERROR:`)
-- the stop tag and step count
-- whether $4.50 and Monday each have a real citation
-
-The script prints a provider cheat sheet after the answer (and after a connection error) so the three `.env` shapes stay next to the output. The lab README at `labs/ch03-models-without-the-pain/README.md` repeats the switch steps. Sampling constants are printed too (`TEMPERATURE`, `MAX_TOKENS`). If those numbers differ between your two runs, you edited the harness, and the comparison is no longer the one this chapter asks for.
-
-## Builder takeaway
-
-Swap the model client; keep the harness stable. `BASE_URL`, `API_KEY`, and `MODEL` select weights. The loop, the jail, the stop conditions, and the sampling constants are the product you are building. A provider quirk that forces a fork in `loop.py` is a harness bug worth fixing once, in the shared client — not a reason to keep a second agent per vendor.
+Swap the model client. Keep the harness stable. Where the API lives, which key you send, and which model name you ask for select the weights. The loop, the jail, the stop conditions, and the sampling constants are the product. A provider quirk that would force a second agent per vendor is a reason to fix the shared client once, then go back to comparing traces.
