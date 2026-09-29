@@ -30,18 +30,18 @@ The core of the harness is a loop, and you can read it as ordinary control flow.
 
 ```mermaid
 flowchart TD
-  start[Message list so far]
-  call[Harness calls the model]
-  choice{Model requested a tool}
-  act[Harness runs the tool]
-  observe[Harness appends the result]
-  done[Harness returns the text]
-  start --> call
-  call --> choice
-  choice -->|yes| act
-  act --> observe
-  observe --> call
-  choice -->|no| done
+  startNode["Message list so far"]
+  callModel["Harness calls the model"]
+  choiceTool{"Model requested a tool"}
+  runTool["Harness runs the tool"]
+  appendObs["Harness appends the result"]
+  stopDone["Harness returns the text"]
+  startNode --> callModel
+  callModel --> choiceTool
+  choiceTool -->|yes| runTool
+  runTool --> appendObs
+  appendObs --> callModel
+  choiceTool -->|no| stopDone
 ```
 
 *Figure 2.1. The core loop. The model proposes a tool call or a final answer. The harness executes a tool call, appends the result, and calls the model again.*
@@ -124,24 +124,24 @@ A loop that cannot stop is a stuck process. On a hosted model it is also an open
 
 ```mermaid
 flowchart TD
-  call[Call the model]
-  choice{What did the model return}
-  final[Stop as final]
-  tokens[Stop as max tokens]
-  repeat{Third identical tool call}
-  repeated[Stop as repeated call]
-  act[Run the tool]
-  budget{Six model calls already used}
-  maxsteps[Stop as max steps]
-  call --> choice
-  choice -->|text only| final
-  choice -->|truncated text| tokens
-  choice -->|tool call| repeat
-  repeat -->|yes| repeated
-  repeat -->|no| act
-  act --> budget
-  budget -->|yes| maxsteps
-  budget -->|no| call
+  callModel["Call the model"]
+  choiceKind{"What did the model return"}
+  stopFinal["Stop as final"]
+  stopTokens["Stop as max tokens"]
+  choiceRepeat{"Third identical tool call"}
+  stopRepeated["Stop as repeated call"]
+  runTool["Run the tool"]
+  choiceBudget{"Six model calls already used"}
+  stopMaxSteps["Stop as max steps"]
+  callModel --> choiceKind
+  choiceKind -->|text only| stopFinal
+  choiceKind -->|truncated text| stopTokens
+  choiceKind -->|tool call| choiceRepeat
+  choiceRepeat -->|yes| stopRepeated
+  choiceRepeat -->|no| runTool
+  runTool --> choiceBudget
+  choiceBudget -->|yes| stopMaxSteps
+  choiceBudget -->|no| callModel
 ```
 
 *Figure 2.2. The four stops. "Final" means the model stopped requesting tools.*
