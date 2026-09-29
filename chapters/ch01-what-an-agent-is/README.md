@@ -1,7 +1,5 @@
 # Ch 1. What an agent is
 
-Part I — Foundations
-
 This chapter fixes three words builders mix up — chatbot, workflow, and agent — and gives you one product equation to carry through the rest of the book: **Model × Harness × Feedback loop**. The running example is a desktop concierge for a fictional shop, Hearth Lane Café. By the end of the chapter you will have run a single chat completion with no tools, and you will have written down how it fails.
 
 The lab is `labs/ch01-what-an-agent-is/`. Run instructions for the whole book are in the top-level README, under **Running the labs**.
