@@ -30,18 +30,18 @@ The core of the harness is a loop, and you can read it as ordinary control flow.
 
 ```mermaid
 flowchart TD
-  start["Message list: the brief, the question, and any results so far"]
-  call["The harness calls the model and offers read_file"]
-  choice{"Did the model request a tool?"}
-  act["The harness runs the tool"]
-  observe["The harness appends the result to the messages"]
-  done["The harness stops and returns the text"]
+  start[Message list so far]
+  call[Harness calls the model]
+  choice{Model requested a tool}
+  act[Harness runs the tool]
+  observe[Harness appends the result]
+  done[Harness returns the text]
   start --> call
   call --> choice
-  choice -->|Yes| act
+  choice -->|yes| act
   act --> observe
   observe --> call
-  choice -->|No| done
+  choice -->|no| done
 ```
 
 *Figure 2.1. The core loop. The model proposes a tool call or a final answer. The harness executes a tool call, appends the result, and calls the model again.*
@@ -62,7 +62,7 @@ response = client.chat.completions.create(
 
 The call does not include a `tool_choice` field that would force the model to use `read_file`. Chapter 3 explains the practical reason: Ollama, the local server these labs use by default, does not accept that field on its compatible endpoint, so the shared client omits it for every provider. The consequence belongs in this chapter as well. The model is allowed to skip the tool and answer at once. When that happens, the lab prints a final answer and an empty trace. The loop ran, and the model chose not to use the tool. Treat that paragraph as ungrounded until the trace shows a read, just as you treated the reply in Chapter 1.
 
-Let us walk the café question through a cooperative run, and keep track of what the model can see at each step. The customer writes: “I opened a bag of your house coffee and they’re not for me. Can I return them? Also, can you ship a cardamom bun to another state?”
+Let us walk the café question through a cooperative run, and keep track of what the model can see at each step. The customer writes: "I opened a bag of your house coffee and they’re not for me. Can I return them? Also, can you ship a cardamom bun to another state?"
 
 1. The harness starts the message list with two messages. The system message is the brief you met above. The user message is the customer’s question. At this moment neither file has been opened. The model cannot yet see the policy.
 2. The harness calls the model. A cooperative model does not invent a return window. It proposes a tool call: `read_file`, with `path` set to `policy.md`. The file is still closed, because a proposal is only a request.
@@ -80,7 +80,7 @@ The same loop can be described as four moments. The names are perceive, reason, 
 
 **Perceive.** To perceive, in this chapter, means to take in the message list. The list holds the system brief, the customer’s question, and every tool result the harness has appended so far. The model perceives that list. It does not perceive the filesystem. A fact that is absent from the messages is absent from the model’s world on this turn. If the model then states the fact anyway, it is drawing on habit from training, which is the behavior Chapter 1 put on the screen. A further sentence in the prompt leaves that world unchanged. Copying a document into the message list is what lets the model perceive the document.
 
-**Reason.** To reason, here, means to call the model and to read the object that comes back. The call is a request to a server that holds the weights. You do not inspect those weights, and you do not need to. You inspect the reply. The reply may contain assistant text, one or more tool calls, or both. In this lab, “reasoning” names that choice as it appears in the reply. You can see what the model asked to do. You cannot see a private chain of thought unless the model writes one into the text, and the loop does not depend on one being written.
+**Reason.** To reason, here, means to call the model and to read the object that comes back. The call is a request to a server that holds the weights. You do not inspect those weights, and you do not need to. You inspect the reply. The reply may contain assistant text, one or more tool calls, or both. In this lab, "reasoning" names that choice as it appears in the reply. You can see what the model asked to do. You cannot see a private chain of thought unless the model writes one into the text, and the loop does not depend on one being written.
 
 **Act.** To act means that your code runs the tool the model requested. The model proposes a read, and the function `read_file` performs it. This split is the security boundary later chapters will tighten. In this chapter the boundary is concrete and modest: the path must stay inside the shop’s documents directory. A request that tries to step outside that directory becomes an error string, which is the next moment, and it does not become an action on the disk.
 
@@ -124,27 +124,27 @@ A loop that cannot stop is a stuck process. On a hosted model it is also an open
 
 ```mermaid
 flowchart TD
-  call["Call the model with the messages and the tool list"]
-  choice{"What did the model return?"}
-  final["Stop: final. Use the text as the answer."]
-  tokens["Stop: max tokens. The reply was cut off."]
-  repeat{"Third identical tool call?"}
-  repeated["Stop: repeated call. End the loop."]
-  act["Run the tool and append the result"]
-  budget{"Six model calls already used?"}
-  maxsteps["Stop: max steps. Do not invent an answer."]
+  call[Call the model]
+  choice{What did the model return}
+  final[Stop as final]
+  tokens[Stop as max tokens]
+  repeat{Third identical tool call}
+  repeated[Stop as repeated call]
+  act[Run the tool]
+  budget{Six model calls already used}
+  maxsteps[Stop as max steps]
   call --> choice
-  choice -->|"Text, and no tool call"| final
-  choice -->|"Text cut off, and no tool call"| tokens
-  choice -->|"A tool call"| repeat
-  repeat -->|Yes| repeated
-  repeat -->|No| act
+  choice -->|text only| final
+  choice -->|truncated text| tokens
+  choice -->|tool call| repeat
+  repeat -->|yes| repeated
+  repeat -->|no| act
   act --> budget
-  budget -->|Yes| maxsteps
-  budget -->|No| call
+  budget -->|yes| maxsteps
+  budget -->|no| call
 ```
 
-*Figure 2.2. The four stops. “Final” means the model stopped requesting tools.*
+*Figure 2.2. The four stops. "Final" means the model stopped requesting tools.*
 
 **Final.** The model returned a message with no tool calls. The harness treats the assistant text as the customer-facing answer and returns it. This is the success path, and it is also the path on which the model skipped the tool and answered from memory. The word `final` means that the model stopped calling tools. Whether the answer is true is a separate question, and you settle it by reading the trace and the file. A polished paragraph with an empty tool log is one event. A paragraph that arrived after `policy.md` was read is another. The trace is what tells them apart.
 
