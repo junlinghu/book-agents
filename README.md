@@ -11,105 +11,11 @@ Repository: https://github.com/junlinghu/book-agents
 ## Folders
 
 - `chapters/` — manuscript. Chapters 1–3 are full prose. Later chapters are still outlines.
-- `labs/` — Chapters 1–3 are runnable. Later labs are stubs.
+- `labs/` — Chapters 1–3 are runnable. Later labs are stubs. Shared setup is [labs/README.md](labs/README.md).
 
 ## Running the labs
 
-This section is the shared setup for Chapters 1–3. Each lab README repeats what that lab needs (goal, install, `.env`, the command, what to observe, troubleshooting) and is the operational guide for that chapter. The commands here and in the lab READMEs are the same.
-
-Chapters 1–3 share one OpenAI-compatible client. Ollama is the default. Groq and OpenRouter are the same three variables in `.env`.
-
-### Requirements
-
-- Python 3.10 or newer
-- Either **Ollama** on your machine, or an API key for **Groq** or **OpenRouter**
-
-Chapter 1 is a single chat completion. Chapters 2 and 3 need a model that can emit tool calls.
-
-### Install
-
-From the repo root:
-
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-python -m pip install -r requirements.txt
-```
-
-Windows PowerShell:
-
-```powershell
-python -m venv .venv
-.venv\Scripts\Activate.ps1
-python -m pip install -r requirements.txt
-```
-
-`requirements.txt` installs `openai`, `python-dotenv`, and `httpx`.
-
-### Configure `.env`
-
-```bash
-cp .env.example .env
-```
-
-`.env` is gitignored. `.env.example` is the committed template. Do not commit a real hosted key.
-
-| Variable | Meaning | Ollama default |
-|---|---|---|
-| `BASE_URL` | OpenAI-compatible API origin | `http://localhost:11434/v1` |
-| `API_KEY` | Bearer token. Ollama ignores the value and still wants a non-empty string. | `ollama` |
-| `MODEL` | Model name that server expects | `llama3.2` |
-
-Process environment variables win over `.env`. Commented Groq and OpenRouter blocks are in `.env.example`. Use one provider at a time.
-
-### Ollama
-
-Install from [ollama.com/download](https://ollama.com/download), pull the default tag, and start the server if it is not already running:
-
-```bash
-ollama pull llama3.2
-ollama serve
-```
-
-Default `.env`:
-
-```env
-BASE_URL=http://localhost:11434/v1
-API_KEY=ollama
-MODEL=llama3.2
-```
-
-If Chapter 2's trace never shows a `read_file` call, pull a tool-capable fallback and change only `MODEL`:
-
-```bash
-ollama pull llama3.1
-```
-
-```env
-MODEL=llama3.1
-```
-
-### Groq or OpenRouter
-
-Comment out the Ollama lines in `.env` and set one hosted provider. These placeholders are not real keys:
-
-```env
-# Groq — use a model with local tool-call support, not groq/compound
-BASE_URL=https://api.groq.com/openai/v1
-API_KEY=gsk_your_key_here
-MODEL=llama-3.3-70b-versatile
-```
-
-```env
-# OpenRouter — confirm the id on the model page and that it lists tools
-BASE_URL=https://openrouter.ai/api/v1
-API_KEY=sk-or-your_key_here
-MODEL=meta-llama/llama-3.3-70b-instruct
-```
-
-A hosted request includes the prompt and, for Chapters 2 and 3, the text of any file the agent read. The shop docs are fictional. Do not send a private document to a third-party API unless you mean to.
-
-### Run each script
+Chapters 1–3 are runnable scripts. Later labs are stubs. Install, `.env`, and Ollama / Groq / OpenRouter setup are shared: do them once from [labs/README.md](labs/README.md), then follow the lab you are on.
 
 From the repo root, with the virtualenv active:
 
@@ -119,26 +25,13 @@ python labs/ch02-your-first-loop/file_agent.py
 python labs/ch03-models-without-the-pain/swap_model.py
 ```
 
-Each script prints `BASE_URL` and `MODEL` and hides the key. Optional questions are extra arguments:
+Each script prints `BASE_URL` and `MODEL` and hides the key. Optional questions are extra arguments. Notes for each lab:
 
-```bash
-python labs/ch02-your-first-loop/file_agent.py "What's the Wi-Fi password?"
-python labs/ch03-models-without-the-pain/swap_model.py "How much is local delivery, and which day are you closed?"
-```
+- [Chapter 1](labs/ch01-what-an-agent-is/README.md) — failure modes to write down
+- [Chapter 2](labs/ch02-your-first-loop/README.md) — docs, stop conditions, citations
+- [Chapter 3](labs/ch03-models-without-the-pain/README.md) — Ollama vs Groq vs OpenRouter
 
-Chapter 3 is the Chapter 2 loop. Switching providers is an edit to `.env`, then the same command. Shop files are `labs/ch02-your-first-loop/docs/policy.md` and `docs/faq.md`. Per-lab notes:
-
-- `labs/ch01-what-an-agent-is/README.md` — failure modes to write down
-- `labs/ch02-your-first-loop/README.md` — docs, stop conditions, citations
-- `labs/ch03-models-without-the-pain/README.md` — Ollama vs Groq vs OpenRouter
-
-### Check the harness without a model
-
-```bash
-python -m unittest labs.common.test_harness
-```
-
-That covers the docs path jail, tool-error handling, max steps, and the repeated-call stop. It does not contact Ollama or a hosted API.
+The harness check without a model (`python -m unittest labs.common.test_harness`) is in the labs README. It does not contact Ollama or a hosted API.
 
 ## Outline
 

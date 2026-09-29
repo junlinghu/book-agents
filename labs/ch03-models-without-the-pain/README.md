@@ -21,12 +21,13 @@ Turn in:
 
 ## Prerequisites
 
-- Python 3.10 or newer
-- Chapter 2's virtualenv, `requirements.txt`, and repo-root `.env`
+- The shared setup in [`../README.md`](../README.md). Chapter 1 or 2's virtualenv is enough if you already did it
 - Ollama on your machine, plus a Groq or OpenRouter key
-- On each provider, a model that can emit tool calls (see Setup)
+- On each provider, a model that can emit tool calls (see the shared setup)
 
 ## Setup
+
+Do the shared setup in [`../README.md`](../README.md) once, then come back here. If you already installed dependencies for Chapter 1 or 2, reuse that virtualenv.
 
 Work from the repository root. This script imports `run_file_agent` from `labs/common/loop.py` and reads:
 
@@ -53,72 +54,15 @@ If `TEMPERATURE` or `MAX_TOKENS` differ between your two runs, you edited the ha
 
 `read_file` executes on your machine. On a hosted run, the file text is then sent to that provider as the tool result on the next request. The shop docs are fictional.
 
-Install steps are also in the top-level README under **Running the labs**.
+Edit `.env` at the repo root to switch providers. Leave `swap_model.py`, `labs/common/`, and the docs alone. Comment out the provider you are not using so a single `BASE_URL` and a single `MODEL` are set. A restart is not required. The next process reads `.env` again. The Ollama, Groq, and OpenRouter blocks are in [`../README.md`](../README.md). The same blocks are commented in `.env.example`. The script prints them again after each run.
 
-1. From the repo root, if you do not already have the lab environment. If you already installed dependencies for Chapter 1 or 2, reuse that virtualenv.
+Two active `MODEL=` lines are easy to misread: the last assignment wins. Process environment variables win over `.env`.
 
-   ```bash
-   python3 -m venv .venv
-   source .venv/bin/activate
-   python -m pip install -r requirements.txt
-   cp .env.example .env
-   ```
+**Ollama** (local). Pull the tag and keep the server running, as in the shared setup. If this model answers with an empty tool log, change only `MODEL` to the tool-capable fallback there. Say so in your notes if you switched.
 
-   Windows PowerShell:
+**Groq** (hosted). Create a key in the Groq console. Use a model with local tool-call support. `groq/compound` runs tools on Groq's servers and will not call this lab's `read_file`. A smaller option on the same URL and key is `llama-3.1-8b-instant`. If the API says the model id is gone, pick a current local-tool-use id from Groq's docs. Do not commit the key.
 
-   ```powershell
-   python -m venv .venv
-   .venv\Scripts\Activate.ps1
-   python -m pip install -r requirements.txt
-   Copy-Item .env.example .env
-   ```
-
-   `requirements.txt` installs `openai`, `python-dotenv`, and `httpx`. Do not commit `.env`.
-
-2. Edit `.env` at the repo root. Leave `swap_model.py`, `labs/common/`, and the docs alone. Comment out the provider you are not using so a single `BASE_URL` and a single `MODEL` are set. A restart is not required. The next process reads `.env` again.
-
-   Process environment variables win over `.env`. Two active `MODEL=` lines are easy to misread: the last assignment wins.
-
-   **Ollama** (local). Pull the tag first. The server has to be running.
-
-   ```bash
-   ollama pull llama3.2
-   ollama serve
-   ```
-
-   ```env
-   BASE_URL=http://localhost:11434/v1
-   API_KEY=ollama
-   MODEL=llama3.2
-   ```
-
-   If this model answers with an empty tool log, pull a model that calls tools and change only `MODEL`. Say so in your notes if you switched.
-
-   ```bash
-   ollama pull llama3.1
-   ```
-
-   ```env
-   MODEL=llama3.1
-   ```
-
-   **Groq** (hosted). Create a key in the Groq console. Use a model with local tool-call support. `groq/compound` runs tools on Groq's servers and will not call this lab's `read_file`. Smaller option, same URL and key: `MODEL=llama-3.1-8b-instant`. If the API says the model id is gone, pick a current local-tool-use id from Groq's docs. Do not commit the key.
-
-   ```env
-   BASE_URL=https://api.groq.com/openai/v1
-   API_KEY=gsk_your_key_here
-   MODEL=llama-3.3-70b-versatile
-   ```
-
-   **OpenRouter** (hosted). Model ids are `vendor/name`. On the model page, confirm tool support before you run.
-
-   ```env
-   BASE_URL=https://openrouter.ai/api/v1
-   API_KEY=sk-or-your_key_here
-   MODEL=meta-llama/llama-3.3-70b-instruct
-   ```
-
-   The same blocks are commented in `.env.example`. The script prints them again after each run.
+**OpenRouter** (hosted). Model ids are `vendor/name`. On the model page, confirm tool support before you run.
 
 ## Steps
 
@@ -158,10 +102,9 @@ Then write a short comparison: what changed between the two providers, and which
 
 ## Troubleshooting
 
-- Connection refused on localhost: Ollama is not serving, or `BASE_URL` still has a trailing path the server does not use. The default is `http://localhost:11434/v1`. `ollama pull` and `ollama serve` are setup. A connection error is not a defect in `swap_model.py`.
-- HTTP 401: the hosted key is wrong or still set to `ollama`.
+Connection refused, HTTP 401, and HTTP 404 on the model id are the checks in [`../README.md`](../README.md). A connection error is not a defect in `swap_model.py`.
+
 - HTTP 400 mentioning `messages[].name`: Groq rejects that field. The shared client does not send it. If you added it locally, remove it.
-- HTTP 404 on the model: the id is stale or not enabled on your account. Change `MODEL` only.
 - Empty tool log on a model that should call tools: run once more and keep both outputs. If it is stable, note it. That is a Chapter 3 result, not a broken script.
 - A run that browses or searches instead of opening `policy.md` or `faq.md`: the model is running tools on the provider's side. Switch to a model marked for local tool use.
 - `max_tokens`, or truncated tool-call JSON: leave the provider in place and look at `MAX_TOKENS` in `labs/common/client.py` (800). Changing the vendor and the token limit in one edit muddies the comparison. Record it if you change the limit.
