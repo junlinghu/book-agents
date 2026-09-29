@@ -1,4 +1,4 @@
-# Ch 1. What an agent is (builders' cut)
+# Ch 1. What an agent is
 
 Part I — Foundations
 
