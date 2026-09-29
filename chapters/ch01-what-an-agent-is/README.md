@@ -1,7 +1,5 @@
 # Ch 1. What an agent is
 
-Part I — Foundations
-
 Saturday, just after the pour-over rush, a regular sets a half-empty bag of house coffee on the counter at Hearth Lane Café.
 
 "These aren't for me," she says. "Can I bring them back? And can you mail a cardamom bun to my sister in another state?"
