@@ -14,12 +14,18 @@ A **hosted API**, here Groq or OpenRouter, means someone else’s machines. Both
 
 ```mermaid
 flowchart TD
-  Q["Same question, same harness, same shop documents"] --> Where{"Where do the weights run?"}
-  Where --> Local["Local weights: Ollama on your machine. Cost is hardware and latency. Documents stay local."]
-  Where --> Hosted["Hosted API: Groq or OpenRouter. Cost is quota or money. The prompt and tool results leave the machine."]
-  Local --> Trace["Keep the trace: tool log, stop tag, citations"]
+  Q[Same question and harness]
+  Where{Where do the weights run}
+  Local[Local weights on your machine]
+  Hosted[Hosted API off your machine]
+  Trace[Keep the tool log and stop tag]
+  Judge[Attribute differences to the model]
+  Q --> Where
+  Where --> Local
+  Where --> Hosted
+  Local --> Trace
   Hosted --> Trace
-  Trace --> Judge["Attribute the difference to the model. The loop, the directory limit, and the sampling did not move."]
+  Trace --> Judge
 ```
 
 *Figure 3.1. A fair comparison holds the harness fixed and changes only where the weights run.*
@@ -90,12 +96,19 @@ Hold sampling fixed during that comparison. Temperature 0.2 keeps policy wording
 
 ```mermaid
 flowchart TD
-  Miss["A run looks wrong"] --> Log{"What does the trace show?"}
-  Log -->|"No tool call. The stop is final."| Model["Model factor. Try a tool-capable model. Leave the loop alone."]
-  Log -->|"ERROR from the tool"| Read["Read the error. A bad path is the model's choice. A missing documents folder is the checkout."]
-  Log -->|"Right file, wrong sentence"| Feedback["Feedback factor. The trace is not a checker. Compare the claim with the file."]
-  Log -->|"max steps or repeated call"| Stop["The stop worked. Inspect the trace. Do not invent a closing paragraph."]
-  Log -->|"Connection, authentication, or an unknown model"| Config["Configuration: server, key, or model identifier. The harness did not change."]
+  Miss[A run looks wrong]
+  Log{What does the trace show}
+  Model[Model factor]
+  Read[Read the tool error]
+  Feedback[Feedback factor]
+  Stop[The stop worked]
+  Config[Check server key or model name]
+  Miss --> Log
+  Log -->|no tool call| Model
+  Log -->|tool error| Read
+  Log -->|right file wrong sentence| Feedback
+  Log -->|max steps or repeated call| Stop
+  Log -->|connection or auth failure| Config
 ```
 
 *Figure 3.2. A bad run goes to the model, to feedback, or to configuration.*
