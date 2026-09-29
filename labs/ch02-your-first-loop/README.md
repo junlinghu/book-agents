@@ -22,84 +22,14 @@ Turn in:
 
 ## Prerequisites
 
-- Python 3.10 or newer
-- The Chapter 1 install: a virtualenv, `requirements.txt`, and a repo-root `.env`
+- The shared setup in [`../README.md`](../README.md): Python 3.10 or newer, a virtualenv, and a repo-root `.env`
 - A model that can emit OpenAI-style `tool_calls`. The default `llama3.2` often can, and sometimes will not
 
 ## Setup
 
-Work from the repository root. The script uses the shared harness in `labs/common/loop.py` and `labs/common/tools.py`, and reads only `labs/ch02-your-first-loop/docs/`.
+Do the shared setup in [`../README.md`](../README.md) once, then come back here. If you already installed dependencies for Chapter 1, reuse that virtualenv.
 
-Install and `.env` are also in the top-level README under **Running the labs**. This lab needs tool calls. If the trace never shows `read_file`, switch `MODEL`. Chapter 3 is the full provider switch. You can borrow those `.env` lines now if you want a cleaner trace while you learn the loop.
-
-1. Create a virtualenv and install dependencies if you have not already. If you already installed them for Chapter 1, reuse that virtualenv.
-
-   ```bash
-   python3 -m venv .venv
-   source .venv/bin/activate
-   python -m pip install -r requirements.txt
-   cp .env.example .env
-   ```
-
-   Windows PowerShell:
-
-   ```powershell
-   python -m venv .venv
-   .venv\Scripts\Activate.ps1
-   python -m pip install -r requirements.txt
-   Copy-Item .env.example .env
-   ```
-
-   `requirements.txt` installs `openai`, `python-dotenv`, and `httpx`. `.env` is gitignored. Do not commit a real hosted key. Process environment variables win over `.env`.
-
-   | Variable | Meaning | Ollama default |
-   |---|---|---|
-   | `BASE_URL` | OpenAI-compatible API origin | `http://localhost:11434/v1` |
-   | `API_KEY` | Bearer token. Ollama ignores the value and still wants a non-empty string. | `ollama` |
-   | `MODEL` | Model name that server expects | `llama3.2` |
-
-2. Start with Ollama. Install from [ollama.com/download](https://ollama.com/download), then:
-
-   ```bash
-   ollama pull llama3.2
-   ollama serve
-   ```
-
-   ```env
-   BASE_URL=http://localhost:11434/v1
-   API_KEY=ollama
-   MODEL=llama3.2
-   ```
-
-3. If the trace is empty, pull a fallback and change only `MODEL`:
-
-   ```bash
-   ollama pull llama3.1
-   ```
-
-   ```env
-   MODEL=llama3.1
-   ```
-
-   Or use a hosted model that supports local tool calls. Comment out the provider you are not using so a single `BASE_URL` and a single `MODEL` are set. Two active `MODEL=` lines are easy to misread: the last assignment wins.
-
-   **Groq.** Use a model with local tool-call support. `groq/compound` runs tools on Groq's servers and will not call this lab's `read_file`. Smaller option, same URL and key: `MODEL=llama-3.1-8b-instant`. If the API says the model id is gone, pick a current local-tool-use id from Groq's docs.
-
-   ```env
-   BASE_URL=https://api.groq.com/openai/v1
-   API_KEY=gsk_your_key_here
-   MODEL=llama-3.3-70b-versatile
-   ```
-
-   **OpenRouter.** Model ids are `vendor/name`. On the model page, confirm tool support before you run.
-
-   ```env
-   BASE_URL=https://openrouter.ai/api/v1
-   API_KEY=sk-or-your_key_here
-   MODEL=meta-llama/llama-3.3-70b-instruct
-   ```
-
-   A hosted request includes the prompt and the text of any file the agent read. The shop docs are fictional. Do not send a private document to a third-party API unless you mean to.
+The script uses the shared harness in `labs/common/loop.py` and `labs/common/tools.py`, and reads only `labs/ch02-your-first-loop/docs/`. This lab needs tool calls. If the trace never shows `read_file`, use the tool-capable `MODEL` note in the shared setup. Chapter 3 is the full provider switch.
 
 ## Documents
 
@@ -173,7 +103,7 @@ Record:
 
 ## Troubleshooting
 
-- Connection error: server down, bad `BASE_URL`, or bad key. Same checks as Chapter 1. Ollama's default `BASE_URL` is `http://localhost:11434/v1`.
+- Connection error: server down, bad `BASE_URL`, or bad key. Checks are in [`../README.md`](../README.md).
 - `final` after 1 model call and an empty trace: the model never called the tool. Change `MODEL`, not the question, and run again. Keep the empty trace in the write-up.
 - `ERROR:` in the trace for a normal question: read the error. A bad path is the model. A missing `docs/` directory is the checkout.
 - `max_steps` or `repeated_call`: the harness stopped on purpose and did not invent a closing paragraph. The trace is the result.
