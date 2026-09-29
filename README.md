@@ -18,7 +18,7 @@ Repository: https://github.com/junlinghu/book-agents
 ### Part I — Foundations
 
 [1. What an agent is (builders' cut)](chapters/ch01-what-an-agent-is/README.md)
-    Agents vs chatbots and the Model × Harness × Feedback framing for builders.
+  - Agents vs chatbots and the Model × Harness × Feedback framing for builders.
 [2. Your first loop](chapters/ch02-your-first-loop/README.md)
   - The perceive–reason–act–observe loop, tool schemas, and stop conditions.
 [3. Models without the pain](chapters/ch03-models-without-the-pain/README.md)
