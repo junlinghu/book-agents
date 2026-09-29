@@ -15,6 +15,8 @@ Repository: https://github.com/junlinghu/book-agents
 
 ## Running the labs
 
+This section is the shared setup for Chapters 1–3. Each lab README repeats what that lab needs (goal, install, `.env`, the command, what to observe, troubleshooting) and is the operational guide for that chapter. The commands here and in the lab READMEs are the same.
+
 Chapters 1–3 share one OpenAI-compatible client. Ollama is the default. Groq and OpenRouter are the same three variables in `.env`.
 
 ### Requirements
@@ -142,17 +144,17 @@ That covers the docs path jail, tool-error handling, max steps, and the repeated
 
 ### Part I — Foundations
 
-1. [What an agent is (builders' cut)](chapters/ch01-what-an-agent-is/README.md)
+1. [What an agent is](chapters/ch01-what-an-agent-is/README.md)
 
-   Agents vs chatbots and the Model × Harness × Feedback framing for builders.
+   Chatbots, workflows, and agents, and the Model × Harness × Feedback framing for practitioners and product managers.
 
 2. [Your first loop](chapters/ch02-your-first-loop/README.md)
 
-   The perceive–reason–act–observe loop, tool schemas, and stop conditions.
+   The perceive–reason–act–observe loop, tool schemas, stop conditions, and what a trace should show.
 
 3. [Models without the pain](chapters/ch03-models-without-the-pain/README.md)
 
-   Hosted APIs versus local weights, and swapping models through a stable OpenAI-compatible client.
+   Hosted APIs versus local weights, and swapping models through a stable OpenAI-compatible client while the harness stays fixed.
 
 ### Part II — Harness
 
