@@ -6,11 +6,87 @@ Chapter: [Chapter 1: What an Agent Is](../../chapters/ch01-what-an-agent-is/READ
 
 ## Goal
 
-Run `hello_concierge.py` and write down three failure modes you saw in the reply. The script cannot open `policy.md` or `faq.md`. Specific shop facts in the answer are coming from the model.
+Run `hello_concierge.py` and write down three failure modes you saw in the reply. The script cannot open `policy.md` or `faq.md`. Specific shop facts in the answer come from the model.
 
-## Setup
+## Prerequisites
 
-Shared install, `.env`, and Ollama-or-hosted key steps are in the top-level README under **Running the labs**. You need a working chat endpoint. Tool calling is not required for this lab.
+- Python 3.10 or newer
+- Either **Ollama** on your machine, or an API key for **Groq** or **OpenRouter**
+
+This lab is a single chat completion. Tool calling is not required.
+
+## Environment
+
+Work from the repository root (the directory that contains `requirements.txt` and `.env.example`). Chapters 1–3 share one OpenAI-compatible client. Ollama is the default. Groq and OpenRouter use the same three variables in `.env`.
+
+The same shared setup is summarized in the top-level README under **Running the labs**. The commands below match that section.
+
+## Install
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -r requirements.txt
+```
+
+Windows PowerShell:
+
+```powershell
+python -m venv .venv
+.venv\Scripts\Activate.ps1
+python -m pip install -r requirements.txt
+```
+
+`requirements.txt` installs `openai`, `python-dotenv`, and `httpx`.
+
+## `.env`
+
+```bash
+cp .env.example .env
+```
+
+`.env` is gitignored. `.env.example` is the committed template. Do not commit a real hosted key.
+
+| Variable | Meaning | Ollama default |
+|---|---|---|
+| `BASE_URL` | OpenAI-compatible API origin | `http://localhost:11434/v1` |
+| `API_KEY` | Bearer token. Ollama ignores the value and still wants a non-empty string. | `ollama` |
+| `MODEL` | Model name that server expects | `llama3.2` |
+
+Process environment variables win over `.env`. Commented Groq and OpenRouter blocks are in `.env.example`. Use one provider at a time.
+
+Ollama, from [ollama.com/download](https://ollama.com/download):
+
+```bash
+ollama pull llama3.2
+ollama serve
+```
+
+```env
+BASE_URL=http://localhost:11434/v1
+API_KEY=ollama
+MODEL=llama3.2
+```
+
+Hosted placeholders (not real keys). Comment out the Ollama lines so only one `BASE_URL` and one `MODEL` are active:
+
+```env
+# Groq
+BASE_URL=https://api.groq.com/openai/v1
+API_KEY=gsk_your_key_here
+MODEL=llama-3.3-70b-versatile
+```
+
+```env
+# OpenRouter — confirm the id on the model page
+BASE_URL=https://openrouter.ai/api/v1
+API_KEY=sk-or-your_key_here
+MODEL=meta-llama/llama-3.3-70b-instruct
+```
+
+Chapter 1 sends the persona and the question. It does not send shop files.
+
+## Run
 
 From the repo root, with the virtualenv active:
 
@@ -18,7 +94,7 @@ From the repo root, with the virtualenv active:
 python labs/ch01-what-an-agent-is/hello_concierge.py
 ```
 
-Pass another question if you want a second sample:
+Pass another question as arguments if you want a second sample:
 
 ```bash
 python labs/ch01-what-an-agent-is/hello_concierge.py "What time do you open on Monday, and what's the Wi-Fi password?"
@@ -29,7 +105,7 @@ Monday hours and the Wi-Fi password are also unknowable to this script. Monday i
 ## What the script does
 
 - Loads `BASE_URL`, `API_KEY`, and `MODEL` through `labs/common/client.py`.
-- Prints those values with the key hidden, plus `TOOLS=none`.
+- Prints those values with the key hidden, plus `TOOLS=none`, `TEMPERATURE`, and `MAX_TOKENS`.
 - Sends a system prompt and your question to `chat.completions.create`. There is no `tools` argument.
 - Prints the reply, then a checklist of failure modes to look for.
 
@@ -49,6 +125,12 @@ Also note the hedge case. If the model says it does not know the shop's policy, 
 
 The header line `TOOLS=none` is there so a later Chapter 2 trace is obviously a different program.
 
-## Failure
+## Troubleshooting
 
-A connection error means `.env` or the server, not the café prompt. Check `BASE_URL` (Ollama default `http://localhost:11434/v1`), that `ollama serve` is up or your hosted key is set, and that `MODEL` is a tag you have pulled or a hosted id that exists. The key is not printed.
+A connection error means `.env` or the server, not the café prompt.
+
+- Check `BASE_URL`. The Ollama default is `http://localhost:11434/v1`.
+- For Ollama, confirm `ollama serve` is up and `ollama pull llama3.2` has finished.
+- For Groq or OpenRouter, confirm `API_KEY` is a real key and `MODEL` is an id that provider still serves.
+- The key is not printed. `API_KEY=set (value hidden)` means a non-empty value was loaded.
+- An empty `API_KEY` exits before the request. For Ollama use the literal value `ollama`.

@@ -15,6 +15,8 @@ Repository: https://github.com/junlinghu/book-agents
 
 ## Running the labs
 
+This section is the shared setup for Chapters 1–3. Each lab README repeats what that lab needs (goal, install, `.env`, the command, what to observe, troubleshooting) and is the operational guide for that chapter. The commands here and in the lab READMEs are the same.
+
 Chapters 1–3 share one OpenAI-compatible client. Ollama is the default. Groq and OpenRouter are the same three variables in `.env`.
 
 ### Requirements
@@ -144,15 +146,15 @@ That covers the docs path jail, tool-error handling, max steps, and the repeated
 
 1. [What an Agent Is](chapters/ch01-what-an-agent-is/README.md)
 
-   Chatbots, workflows, and agents, and the Model × Harness × Feedback loop framing.
+   Chatbots, workflows, and agents, and the Model × Harness × Feedback framing for practitioners and product managers.
 
 2. [The Agent Loop](chapters/ch02-your-first-loop/README.md)
 
-   The perceive–reason–act–observe loop, tool schemas, stop conditions, and citations.
+   The perceive–reason–act–observe loop, tool schemas, stop conditions, and what a trace should show.
 
 3. [Local and Hosted Models](chapters/ch03-models-without-the-pain/README.md)
 
-   Local weights versus hosted APIs, and swapping models through a stable OpenAI-compatible client.
+   Local weights versus hosted APIs, and swapping models through a stable OpenAI-compatible client while the harness stays fixed.
 
 ### Part II — Harness
 
