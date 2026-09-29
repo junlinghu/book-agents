@@ -65,15 +65,25 @@ An agent is the wrong tool when the steps can already be named, when a single dr
 
 ```mermaid
 flowchart TD
-  Start["A task you might hand to a model"] --> Steps{"Can you list the steps in order before the question arrives?"}
-  Steps -->|Yes| WF["Use a workflow. The model may write the sentences. Your procedure owns the path."]
-  Steps -->|No| Draft{"Is success a paragraph, with nothing to look up or change?"}
-  Draft -->|Yes| One["Use one completion."]
-  Draft -->|No| Gate{"Could a wrong action spend money, send mail, or delete a record, with no confirm in front of it?"}
-  Gate -->|Yes| Hold["Keep the agent out until the harness has a confirmation step."]
-  Gate -->|No| Ready{"Can you say, in one sentence, what a wrong answer looks like?"}
-  Ready -->|No| Feedback["Write that sentence before you automate. There is no feedback loop yet."]
-  Ready -->|Yes| Loop["A bounded loop can earn its place."]
+  Start[A task for a model]
+  Steps{Can you list the steps in advance}
+  WF[Use a workflow]
+  Draft{Is success only a paragraph}
+  One[Use one completion]
+  Gate{Could a wrong action be costly}
+  Hold[Wait for a confirmation step]
+  Ready{Can you name a wrong answer}
+  Feedback[Write the miss before you automate]
+  Loop[A bounded loop can earn its place]
+  Start --> Steps
+  Steps -->|yes| WF
+  Steps -->|no| Draft
+  Draft -->|yes| One
+  Draft -->|no| Gate
+  Gate -->|yes| Hold
+  Gate -->|no| Ready
+  Ready -->|no| Feedback
+  Ready -->|yes| Loop
 ```
 
 *Figure 1.1. Choosing among a workflow, one completion, and an agent.*
