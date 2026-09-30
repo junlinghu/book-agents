@@ -1,0 +1,56 @@
+{
+  "currency": "USD",
+  "note": "Menu prices match labs/ch02-your-first-loop/docs/faq.md. The 12 oz house coffee bag is catalog data for this lab. faq.md does not list a bag price.",
+  "items": [
+    {
+      "sku": "house-coffee-12oz",
+      "name": "House coffee, 12 oz",
+      "price_cents": 1800,
+      "stock": 20,
+      "kind": "coffee",
+      "shippable": true,
+      "deliverable": true,
+      "pickup": true
+    },
+    {
+      "sku": "cardamom-bun",
+      "name": "Cardamom bun",
+      "price_cents": 475,
+      "stock": 8,
+      "kind": "pastry",
+      "shippable": false,
+      "deliverable": true,
+      "pickup": true
+    },
+    {
+      "sku": "house-espresso",
+      "name": "House espresso",
+      "price_cents": 350,
+      "stock": 40,
+      "kind": "hot-drink",
+      "shippable": false,
+      "deliverable": false,
+      "pickup": true
+    },
+    {
+      "sku": "pour-over",
+      "name": "Pour-over",
+      "price_cents": 425,
+      "stock": 40,
+      "kind": "hot-drink",
+      "shippable": false,
+      "deliverable": false,
+      "pickup": true
+    },
+    {
+      "sku": "rye-porridge",
+      "name": "Rye porridge",
+      "price_cents": 800,
+      "stock": 10,
+      "kind": "food",
+      "shippable": false,
+      "deliverable": false,
+      "pickup": true
+    }
+  ]
+}

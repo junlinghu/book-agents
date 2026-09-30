@@ -150,12 +150,12 @@ The through-line is a Local Shop Concierge for a fictional café. Early chapters
 
 ## Folders
 
-- `chapters/` — manuscript. Chapters 1–3 and 7–10 are full prose. The other chapters are still outlines.
-- `labs/` — Chapters 1–3 are runnable scripts. Chapters 7–10 are assignment labs with starter files and no solution notes. The other labs are stubs. Shared setup is [labs/README.md](labs/README.md).
+- `chapters/` — manuscript. Chapters 1–10 and 16–18 are full prose. The other chapters are still outlines.
+- `labs/` — Chapters 1–6 are runnable scripts. Chapters 4–10 are assignment labs with starter files and no solution notes. Chapters 16–18 are runnable and do not need a model for their required traces. The other labs are stubs. Shared setup is [labs/README.md](labs/README.md).
 
 ## Running the labs
 
-Chapters 1–3 are runnable scripts. Chapters 7–10 are assignment labs (starter files, no `SOLUTION.md`). The other labs are stubs. Install, `.env`, and the OpenAI API key are shared: do them once from [labs/README.md](labs/README.md), then follow the lab you are on.
+Chapters 1–6 are runnable scripts. Chapters 4–10 are assignment labs (starter files, no `SOLUTION.md`). Chapters 16–18 are runnable; their required traces do not call the API. The other labs are stubs. Install, `.env`, and the OpenAI API key are shared: do them once from [labs/README.md](labs/README.md), then follow the lab you are on.
 
 From the repo root, with the virtualenv active:
 
@@ -163,6 +163,9 @@ From the repo root, with the virtualenv active:
 python labs/ch01-what-an-agent-is/hello_concierge.py
 python labs/ch02-your-first-loop/file_agent.py
 python labs/ch03-models-without-the-pain/swap_model.py
+python labs/ch04-tools-and-sensors/stock_agent.py
+python labs/ch05-context-engineering/restock_notes.py
+python labs/ch06-memory/prefs_agent.py
 ```
 
 Each script prints `MODEL` and hides the key. Optional questions are extra arguments. Notes for each lab:
@@ -170,6 +173,9 @@ Each script prints `MODEL` and hides the key. Optional questions are extra argum
 - [Chapter 1](labs/ch01-what-an-agent-is/README.md) — failure modes to write down
 - [Chapter 2](labs/ch02-your-first-loop/README.md) — docs, stop conditions, citations
 - [Chapter 3](labs/ch03-models-without-the-pain/README.md) — same loop, swap `MODEL`
+- [Chapter 4](labs/ch04-tools-and-sensors/README.md) — read-only SQL, a limited write, low stock
+- [Chapter 5](labs/ch05-context-engineering/README.md) — huddle notes and a context budget
+- [Chapter 6](labs/ch06-memory/README.md) — prefs across a restart, then a quiz
 
 The harness check without a model (`python -m unittest labs.common.test_harness`) is in the labs README. It does not call the OpenAI API.
 

@@ -1,8 +1,8 @@
 """OpenAI settings shared by the labs.
 
-Chapter 1 loads `.env` in its own script. Chapters 2 and 3 use this
-file. Put `OPENAI_API_KEY` in the repo-root `.env`. `MODEL` is optional.
-Temperature and max tokens live here, not in `.env`.
+Chapter 1 loads `.env` in its own script. The other labs use this file
+for the same settings. Put `OPENAI_API_KEY` in the repo-root `.env`.
+`MODEL` is optional. Temperature and max tokens live here, not in `.env`.
 """
 
 import os

@@ -1,4 +1,9 @@
-"""The Chapter 2 loop: ask the model, run read_file, ask again.
+"""Ask the model, run a tool, then ask again.
+
+`run_file_agent` is the Chapter 2 loop. The model may call `read_file`,
+and this module reads the file. `run_tool_agent` is that same loop with
+a tool list the caller supplies. Later labs use it for SQL, notes, and
+memory.
 
 Stops:
 - final: the model replied with text and did not call a tool
@@ -6,8 +11,7 @@ Stops:
 - repeated_call: the same tool call happened too many times
 - max_tokens: the reply was cut off by the length limit
 
-The model proposes read_file calls. This module runs them and appends
-the result. It does not write a customer-facing answer when it stops early.
+Neither function writes a customer-facing answer when the loop stops early.
 """
 
 import json
@@ -37,6 +41,12 @@ Do not invent a Wi-Fi password, a refund, or a shipping exception.
 Do not offer to refund, charge, email, or ship anything yourself.
 You can only read files and reply.
 """
+
+# Shown to the model the second time it repeats one tool call.
+DEFAULT_REPEAT_NOTE = (
+    "\n\nNOTE: You already read this file. "
+    "Answer the customer now without calling read_file again."
+)
 
 
 class AgentResult:
@@ -91,7 +101,7 @@ def parse_arguments(raw):
 
 
 def run_one_tool(docs_dir, name, args):
-    """Run one tool call. Unknown tools become an ERROR string, not a crash."""
+    """Run one Chapter 2 tool call. Unknown tools become an ERROR string, not a crash."""
     if name != "read_file":
         return "ERROR: unknown tool " + repr(name) + ". Only read_file is available."
     path = args.get("path", "")
@@ -100,13 +110,26 @@ def run_one_tool(docs_dir, name, args):
     return read_file(docs_dir, path)
 
 
-def run_file_agent(client, model, user_text, docs_dir, max_steps=DEFAULT_MAX_STEPS, verbose=True):
-    """Run the tool loop until the model stops or a limit hits.
+def run_tool_agent(
+    client,
+    model,
+    user_text,
+    tools,
+    dispatch,
+    system_prompt,
+    max_steps=DEFAULT_MAX_STEPS,
+    verbose=True,
+    arguments_hint='{"path": "policy.md"}',
+    repeat_note=DEFAULT_REPEAT_NOTE,
+):
+    """Run a tool loop until the model stops or a limit hits.
 
+    `dispatch(name, args)` runs the tool and returns the tool message.
+    It should return an error string, not raise, when the call is refused.
     `stopped` is one of `final`, `max_steps`, `repeated_call`, or `max_tokens`.
     """
     messages = [
-        {"role": "system", "content": SYSTEM_PROMPT},
+        {"role": "system", "content": system_prompt},
         {"role": "user", "content": user_text},
     ]
     seen = {}
@@ -116,7 +139,7 @@ def run_file_agent(client, model, user_text, docs_dir, max_steps=DEFAULT_MAX_STE
         response = client.chat.completions.create(
             model=model,
             messages=messages,
-            tools=[READ_FILE_TOOL],
+            tools=tools,
             temperature=TEMPERATURE,
             max_tokens=MAX_TOKENS,
         )
@@ -187,7 +210,7 @@ def run_file_agent(client, model, user_text, docs_dir, max_steps=DEFAULT_MAX_STE
             except ValueError as error:
                 result = (
                     "ERROR: " + str(error) + ". "
-                    + 'Pass a JSON object such as {"path": "policy.md"}.'
+                    + "Pass a JSON object such as " + arguments_hint + "."
                 )
                 log.append("step " + str(step) + ": " + name + " invalid arguments")
             else:
@@ -208,13 +231,9 @@ def run_file_agent(client, model, user_text, docs_dir, max_steps=DEFAULT_MAX_STE
                         "repeated_call",
                         log,
                     )
-                result = run_one_tool(docs_dir, name, args)
+                result = dispatch(name, args)
                 if count == MAX_IDENTICAL_CALLS:
-                    result = (
-                        result
-                        + "\n\nNOTE: You already read this file. "
-                        + "Answer the customer now without calling read_file again."
-                    )
+                    result = result + repeat_note
                 if result:
                     first_line = result.splitlines()[0]
                 else:
@@ -247,6 +266,24 @@ def run_file_agent(client, model, user_text, docs_dir, max_steps=DEFAULT_MAX_STE
         max_steps,
         "max_steps",
         log,
+    )
+
+
+def run_file_agent(client, model, user_text, docs_dir, max_steps=DEFAULT_MAX_STEPS, verbose=True):
+    """Run the Chapter 2 loop: `read_file` only, and only inside `docs_dir`."""
+
+    def dispatch(name, args):
+        return run_one_tool(docs_dir, name, args)
+
+    return run_tool_agent(
+        client,
+        model,
+        user_text,
+        [READ_FILE_TOOL],
+        dispatch,
+        system_prompt=SYSTEM_PROMPT,
+        max_steps=max_steps,
+        verbose=verbose,
     )
 
 
