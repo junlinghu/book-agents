@@ -150,12 +150,12 @@ The through-line is a Local Shop Concierge for a fictional café. Early chapters
 
 ## Folders
 
-- `chapters/` — manuscript. Chapters 1–3 are full prose. Later chapters are still outlines.
-- `labs/` — Chapters 1–3 are runnable. Later labs are stubs. Shared setup is [labs/README.md](labs/README.md).
+- `chapters/` — manuscript. Chapters 1–3 and 7–10 are full prose. The other chapters are still outlines.
+- `labs/` — Chapters 1–3 are runnable scripts. Chapters 7–10 are assignment labs with starter files and no solution notes. The other labs are stubs. Shared setup is [labs/README.md](labs/README.md).
 
 ## Running the labs
 
-Chapters 1–3 are runnable scripts. Later labs are stubs. Install, `.env`, and the OpenAI API key are shared: do them once from [labs/README.md](labs/README.md), then follow the lab you are on.
+Chapters 1–3 are runnable scripts. Chapters 7–10 are assignment labs (starter files, no `SOLUTION.md`). The other labs are stubs. Install, `.env`, and the OpenAI API key are shared: do them once from [labs/README.md](labs/README.md), then follow the lab you are on.
 
 From the repo root, with the virtualenv active:
 
@@ -172,3 +172,5 @@ Each script prints `MODEL` and hides the key. Optional questions are extra argum
 - [Chapter 3](labs/ch03-models-without-the-pain/README.md) — same loop, swap `MODEL`
 
 The harness check without a model (`python -m unittest labs.common.test_harness`) is in the labs README. It does not call the OpenAI API.
+
+Chapters 7–10 follow the lab README in each folder. Chapter 9's contract test does not need a model. Chapter 10's ledger check does not need one either.
