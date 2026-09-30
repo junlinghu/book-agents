@@ -22,9 +22,9 @@ This folder uses the same OpenAI client as the other labs (`labs/common/client.p
 | 12 | [12-multi-agent](12-multi-agent.ipynb) | A stocker and a checker hand off a shelf gap, not a note's quantity. | Ready |
 | 13 | [13-observability](13-observability.ipynb) | Spans that name the user, the agent, and the tool. | Ready |
 | 14 | [14-cost-latency](14-cost-latency.ipynb) | Token, cost, and latency ledger, plus a read cache. | Ready |
-| 15 | 15-shop-manager | Tuesday restock: plan, check, confirm, write tickets. | Planned |
+| 15 | [15-shop-manager](15-shop-manager.ipynb) | Tuesday restock: plan, check, confirm, write tickets. | Ready |
 
-Planned rows are the later lessons in this series. They are not in this folder until that lesson is merged.
+Every row in the table is ready. Run the notebooks in order, or open any one on its own. Each file still contains the earlier lessons' code.
 
 ## Prerequisites
 
