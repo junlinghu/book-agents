@@ -9,7 +9,7 @@ This folder uses the same OpenAI client as the other labs (`labs/common/client.p
 | # | Notebook | Summary | Status |
 |---|---|---|---|
 | 1 | [1-using-tool](1-using-tool.ipynb) | Define a tool, let the model request it, run it, and send the result back. | Ready |
-| 2 | 2-data-and-files | Tools that read shop documents and the SQLite shelf. | Planned |
+| 2 | [2-data-and-files](2-data-and-files.ipynb) | Tools that read shop documents and the SQLite shelf. | Ready |
 | 3 | 3-agent-loop | Perceive–reason–act–observe, with step and repeat stops. | Planned |
 | 4 | 4-context-engineering | Note titles in the prompt; bodies loaded on purpose. | Planned |
 | 5 | 5-memory | Session messages versus a JSON memory file. | Planned |
