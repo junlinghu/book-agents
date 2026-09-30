@@ -1,21 +1,16 @@
-"""OpenAI client shared by every lab.
+"""OpenAI settings shared by the labs.
 
-The labs keep this module stable. Set ``OPENAI_API_KEY`` in the
-repo-root ``.env``. Optionally set ``MODEL``. The client uses the
-official SDK default API (``https://api.openai.com/v1``). Temperature
-and max tokens live here, in the harness, not in ``.env``.
+Chapter 1 loads `.env` in its own script. The other labs use this file
+for the same settings. Put `OPENAI_API_KEY` in the repo-root `.env`.
+`MODEL` is optional. Temperature and max tokens live here, not in `.env`.
 """
 
-from __future__ import annotations
-
 import os
-from collections.abc import Mapping
-from pathlib import Path
 
 from dotenv import load_dotenv
 from openai import OpenAI
 
-# Harness sampling defaults. Chapter 3 explains why these are code, not env.
+# Sampling defaults. Chapter 3 explains why these are code, not env.
 TEMPERATURE = 0.2
 MAX_TOKENS = 800
 
@@ -25,36 +20,41 @@ MAX_TOKENS = 800
 DEFAULT_MODEL = "gpt-4.1-mini"
 
 
-def repo_root() -> Path:
-    """Repository root (the directory that contains ``.env.example``)."""
-    return Path(__file__).resolve().parents[2]
+def repo_root():
+    """Repository root (the folder that contains `.env.example`).
+
+    This file is `labs/common/client.py`, so the root is two folders up.
+    """
+    this_folder = os.path.dirname(os.path.abspath(__file__))
+    return os.path.dirname(os.path.dirname(this_folder))
 
 
-def ensure_env_loaded() -> None:
-    """Load repo-root ``.env`` without overriding existing process variables."""
-    load_dotenv(repo_root() / ".env", override=False)
+def ensure_env_loaded():
+    """Load repo-root `.env`. Variables already set in the shell stay as they are."""
+    load_dotenv(os.path.join(repo_root(), ".env"), override=False)
 
 
-def settings_from_env(env: Mapping[str, str]) -> tuple[str, str]:
-    """Resolve ``(api_key, model)`` from a mapping.
+def settings_from_env(env):
+    """Return `(api_key, model)` from a dict or from `os.environ`.
 
-    ``OPENAI_API_KEY`` is the variable the official SDK reads. A missing
-    or blank key stays empty so the run can stop before a request.
-    A missing or blank ``MODEL`` becomes :data:`DEFAULT_MODEL`.
+    A missing or blank key stays empty so the run can stop before a request.
+    A missing or blank `MODEL` becomes `DEFAULT_MODEL`.
     """
     api_key = env.get("OPENAI_API_KEY", "").strip()
-    model = env.get("MODEL", "").strip() or DEFAULT_MODEL
+    model = env.get("MODEL", "").strip()
+    if not model:
+        model = DEFAULT_MODEL
     return api_key, model
 
 
-def load_settings() -> tuple[str, str]:
-    """Return ``(api_key, model)`` after loading ``.env``."""
+def load_settings():
+    """Return `(api_key, model)` after loading `.env`."""
     ensure_env_loaded()
     return settings_from_env(os.environ)
 
 
-def require_settings() -> tuple[str, str]:
-    """Like :func:`load_settings`, but exit if the API key is blank."""
+def require_settings():
+    """Like `load_settings`, but exit if the API key is blank."""
     api_key, model = load_settings()
     if not api_key:
         raise SystemExit(
@@ -62,15 +62,15 @@ def require_settings() -> tuple[str, str]:
             "from https://platform.openai.com/api-keys. Never commit .env."
         )
     if not model:
-        raise SystemExit(f"MODEL is empty. Leave it unset to use {DEFAULT_MODEL}.")
+        raise SystemExit("MODEL is empty. Leave it unset to use " + DEFAULT_MODEL + ".")
     return api_key, model
 
 
-def make_client() -> OpenAI:
+def make_client():
     """Build a client. Does not send a request.
 
-    The base URL is the SDK default. ``max_retries=0`` so an auth or
-    network error fails in this process instead of after a retry sleep.
+    `max_retries=0` so a bad key fails immediately instead of sleeping
+    through retries.
     """
     api_key, _model = require_settings()
     return OpenAI(
@@ -80,14 +80,17 @@ def make_client() -> OpenAI:
     )
 
 
-def describe_runtime() -> str:
-    """Non-secret runtime config for lab scripts to print."""
+def describe_runtime():
+    """Model name and whether a key is set. The key value is not included."""
     api_key, model = load_settings()
-    key_state = "set" if api_key else "missing"
-    return f"MODEL={model}\nOPENAI_API_KEY={key_state} (value hidden)"
+    if api_key:
+        key_state = "set"
+    else:
+        key_state = "missing"
+    return "MODEL=" + model + "\nOPENAI_API_KEY=" + key_state + " (value hidden)"
 
 
-def redact(text: str, secret: str) -> str:
+def redact(text, secret):
     """Remove an API key from an error string before printing it."""
     if secret and secret in text:
         return text.replace(secret, "***")

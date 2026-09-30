@@ -36,7 +36,7 @@ Chapters 16–18 do not have solution files. Their required traces run without a
 - Python 3.10 or newer
 - An OpenAI API key from [platform.openai.com/api-keys](https://platform.openai.com/api-keys)
 
-The labs share one client, `labs/common/client.py`. It uses the official OpenAI Python SDK and the default API (`https://api.openai.com/v1`). You do not set a base URL.
+Chapters 1–3 each read `OPENAI_API_KEY` and `MODEL` from the repo-root `.env` inside the lab script. Later labs use `labs/common/client.py` for that same file. Temperature and max tokens for the tool loops live in `labs/common/client.py`. The labs use the official OpenAI Python SDK and the default API (`https://api.openai.com/v1`). You do not set a base URL.
 
 Chapter 1 is a single chat completion. Tool calling is not required. Chapters 2–6 need a model that can emit tool calls. The default `gpt-4.1-mini` does. If a trace never shows a tool call, set `MODEL` to another current tool-capable id, such as `gpt-4.1`.
 

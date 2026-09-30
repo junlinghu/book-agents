@@ -38,7 +38,7 @@ From the repo root, with the virtualenv active.
    python labs/ch01-what-an-agent-is/hello_concierge.py
    ```
 
-   The script loads `OPENAI_API_KEY` and `MODEL` through `labs/common/client.py`. It prints the model with the key hidden, plus `TEMPERATURE`, `MAX_TOKENS`, and `TOOLS=none`. It sends a system prompt and your question to `chat.completions.create`. There is no `tools` argument. It prints the reply, then a checklist of failure modes.
+   The script reads `OPENAI_API_KEY` and `MODEL` from the shell, and from the repo-root `.env` if that file exists. It prints the model with the key hidden, plus `TEMPERATURE`, `MAX_TOKENS`, and `TOOLS=none`. It sends a system prompt and your question to `chat.completions.create`. There is no `tools` argument. It prints the reply, then a checklist of failure modes.
 
    Default question:
 

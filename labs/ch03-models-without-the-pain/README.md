@@ -29,7 +29,7 @@ Turn in:
 
 Do the shared setup in [`../README.md`](../README.md) once, then come back here. If you already installed dependencies for Chapter 1 or 2, reuse that virtualenv.
 
-Work from the repository root. This script imports `run_file_agent` from `labs/common/loop.py` and reads:
+Work from the repository root. `swap_model.py` loads `.env`, prints the header, and calls `run_file_agent` from `labs/common/loop.py` (the same loop as Chapter 2). It reads:
 
 ```text
 labs/ch02-your-first-loop/docs/

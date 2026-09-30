@@ -29,7 +29,7 @@ Turn in:
 
 Do the shared setup in [`../README.md`](../README.md) once, then come back here. If you already installed dependencies for Chapter 1, reuse that virtualenv.
 
-The script uses the shared harness in `labs/common/loop.py` and `labs/common/tools.py`, and reads only `labs/ch02-your-first-loop/docs/`. This lab needs tool calls. If the trace never shows `read_file`, change `MODEL` as the shared setup describes. Chapter 3 runs this same loop and changes only `MODEL`.
+`file_agent.py` loads `.env`, prints the header, and calls `run_file_agent`. That function, in `labs/common/loop.py`, is the loop. `read_file` in `labs/common/tools.py` is the only tool, and it reads only `labs/ch02-your-first-loop/docs/`. This lab needs tool calls. If the trace never shows `read_file`, change `MODEL` as the shared setup describes. Chapter 3 runs this same loop and changes only `MODEL`.
 
 ## Documents
 
