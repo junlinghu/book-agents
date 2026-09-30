@@ -4,4 +4,4 @@ You record one end-to-end run that uses files, the database, the web, and memory
 
 Lab code goes here in later commits.
 
-Chapter: [Ch 26. Capstone: café restock end-to-end](../../chapters/ch26-capstone-cafe-restock/README.md)
+Chapter: [Chapter 26: Capstone: Café Restock End to End](../../chapters/ch26-capstone-cafe-restock/README.md)
