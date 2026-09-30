@@ -8,7 +8,7 @@ The success is real, and it is narrow. It covers one shop on one day, and only b
 
 This chapter names four problems that stay open after a demo like that. 
 
-- Rules written for one demo day can go out of date. The same rules can also fail in a shop they were not written for, or on a task they were not written for.
+- Rules written for one demo day can go out of date. 
 - A scoring program can give a pass when the real work is still wrong. A pass can also be misleading when the answer was already sitting in the instructions.
 - A job with many steps can fail in ways one short script never shows. A program that clicks around a screen can fail in further ways, because the screen can change.
 - When software takes part in a sale, a receipt still leaves open who acted, who has to cover a loss, and what an outside party would need before trusting the cart.
