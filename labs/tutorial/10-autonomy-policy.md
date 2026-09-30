@@ -1,48 +1,24 @@
-        # Tutorial 10. Autonomy policy
+# Tutorial 10. Who may act without asking
 
-        ## Purpose
+## Motivation
 
-        Put a gate in front of side effects. Shelf reads are auto. `write_ticket` is confirm. `charge_card` is never, even with a token for that exact call. The first restock run prints a token and writes nothing. The second run passes the token and writes one file.
+The agent can read the shop, check a proposal, and show that a few important answers still pass a grader. Every action so far has been a reading, or a check that changes nothing on disk. What the agent still cannot do is tell a reading from an action that writes a file or moves money. A restock ticket writes a file. A card charge would take payment. If the sentence “please write the ticket” is enough to write it, the program has handed the decision to the wording of the request. We add a gate now, after the checker and before we trust the agent with pages that will try to demand a charge. The gate is the program’s decision, in three grades: run the action, wait for a person, or refuse.
 
-        ## What you should learn
+## What this tutorial is about
 
-        - The harness decides. The wording of the user message does not.
-- A confirm token matches one tool name plus one argument object.
-- A token never promotes a never-tier tool.
-- This gate uses `labs.common.autonomy` for cards and email.
+Readings of the shop, the notes, the memory, the supplier page, and the checker may run on their own. Writing a restock ticket waits for a person. Charging a card is refused, and an approval that matches that exact charge does not promote it into an allowed action. You will learn that the program decides. The wording of the user’s message does not. An approval matches one action and one set of arguments, so a different quantity is a different approval. The same grades cover mail. A message to the counter can wait for a person. A message to any other address is refused. This lesson uses the approval rules from Chapter 16 for cards and mail.
 
-        ## How this maps to the book
+## How you will get there
 
-        | Tutorial idea | Book chapter and lab |
-        |---|---|
-        | auto / confirm / never | Chapter 16, `labs/common/autonomy.py` and `labs/ch16-autonomy-policy` |
+The notebook asks for an oat-milk restock ticket and asks that no card be charged. The first run prints a short approval code and writes nothing. You can see the ticket waiting, and you can see that the model is still allowed to finish its answer while the file stays unwritten. A separate check then offers an approval for a card charge of that exact call, and the gate still refuses. A second run of the same ticket request passes the approval from the first run. One ticket file appears, and the record shows that the write happened after the approval matched.
 
-        The café in these files is fictional. Prices, hours, and the shelf match the Local Shop Concierge labs. Do not point the tools at a private document.
+## Additional things
 
-        ## How to run
+A gate that treats a polite request as permission will confirm whatever the model was persuaded to ask. Tutorial 11 is the case that makes this concrete. The supplier page demands a charge and a look at a secret file, and the gate and the folder boundary have to hold when the model is wrong. Tutorial 15 writes two tickets, and each ticket needs its own approval, because confirmation is per call.
 
-        From the repository root, with the virtualenv from `labs/README.md` active:
+Chapter 16 is the book’s treatment of the three grades, of mapping actions to risk, and of approvals a person will actually use. The café in these files is fictional. Leave private files alone.
 
-        ```bash
-        jupyter notebook labs/tutorial/10-autonomy-policy.ipynb
-        ```
+## Sources and references
 
-        In VS Code or Cursor, open `labs/tutorial/10-autonomy-policy.ipynb` and choose Run All. The setup cell walks parent folders until it finds `labs/common/client.py`, so the kernel may start in `labs/tutorial` or at the repo root.
-
-        Scripted demo (no API call):
-
-        ```bash
-        DEMO_MODE=1 jupyter nbconvert --to notebook --execute labs/tutorial/10-autonomy-policy.ipynb --output /tmp/10-autonomy-policy-out.ipynb
-        ```
-
-        Live Chat Completions API:
-
-        ```bash
-        DEMO_MODE=0 jupyter nbconvert --to notebook --execute labs/tutorial/10-autonomy-policy.ipynb --output /tmp/10-autonomy-policy-out.ipynb
-        ```
-
-        `DEMO_MODE=0` needs `OPENAI_API_KEY` in the repo-root `.env`. `DEMO_MODE` unset uses the API when a key is present and the scripted demo when it is not. The notebook's first code cell can also set `DEMO_MODE` to `True` or `False`.
-
-        This notebook is standalone. The cells include the working code from earlier tutorials and then add this lesson.
-
-        Series map: [README.md](README.md).
+- [Chapter 16: Autonomy Policy](../../chapters/ch16-autonomy-policy/README.md). The shared gate is [labs/common/autonomy.py](../common/autonomy.py), and the lab is [labs/ch16-autonomy-policy](../ch16-autonomy-policy).
+- The previous lecture is [9-evals.md](9-evals.md). The notebook is [10-autonomy-policy.ipynb](10-autonomy-policy.ipynb). The series map is in [README.md](README.md).
