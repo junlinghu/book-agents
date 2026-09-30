@@ -2,7 +2,7 @@
 
 Chapter 5 left the Tuesday decisions in a notes folder so the next question could open them. That folder is not a memory of the guests. Close the process and the message list is gone. The notes remain only because they are files, and nothing in that design says which sentence is still true on Wednesday, or which sentence was one person's allergy copied onto the whole café. The claim of this chapter is that durable memory is a store with a small API — get, set, search, and forget — and that a store which cannot invalidate a record will be quoted later as fact. Memory without invalidation becomes fiction.
 
-The guest who makes the problem concrete is Priya, from an office in North Mill. On day 1 the staff says: she is allergic to almonds, she takes oat milk in a pour-over, and her office order has to stay at or under $40. On day 2 the process is new. The concierge has to know those constraints, and it has to refuse two stories the store will otherwise tell. The first is a seeded belief, already on disk, that cardamom buns are nut-free. The FAQ says the buns contain wheat, butter, and almonds. The second is the leap from Priya to the shop: because she is allergic, Hearth Lane is now a nut-free café. It is not. The menu still sells the bun. There is also no nut-free preparation area, so the concierge cannot promise Priya a safe bun either. Both directions are failures. One forgets her constraint. The other rewrites the shop.
+The guest who makes the problem concrete is Priya, from an office in North Mill. On day 1 the staff says: she is allergic to almonds, she takes oat milk in a pour-over, and her office order has to stay at or under \$40. On day 2 the process is new. The concierge has to know those constraints, and it has to refuse two stories the store will otherwise tell. The first is a seeded belief, already on disk, that cardamom buns are nut-free. The FAQ says the buns contain wheat, butter, and almonds. The second is the leap from Priya to the shop: because she is allergic, Hearth Lane is now a nut-free café. It is not. The menu still sells the bun. There is also no nut-free preparation area, so the concierge cannot promise Priya a safe bun either. Both directions are failures. One forgets her constraint. The other rewrites the shop.
 
 ## 6.1 Session memory vs durable memory
 
@@ -38,7 +38,7 @@ A **preference** is a choice the guest can survive if you miss it. Priya takes o
 A **constraint** is a limit the harness should be able to check, not only a sentence the model might mention. Two constraints arrive in the same staff note.
 
 - She is allergic to almonds. The FAQ says cardamom buns contain almonds, and that there is no nut-free preparation area. A bun in her bag is a failed constraint even if the paragraph was polite.
-- Her office order stays at or under $40. That number happens to match the coffee shipping threshold in the policy. It is not that rule. Her ceiling is about her order. The policy's threshold is about the shop's shipping fee. Do not merge them into one memory that says "free shipping starts at $40 because of Priya." If you answer a shipping question, read `policy.md`. If you answer her office order, search memory.
+- Her office order stays at or under \$40. That number happens to match the coffee shipping threshold in the policy. It is not that rule. Her ceiling is about her order. The policy's threshold is about the shop's shipping fee. Do not merge them into one memory that says "free shipping starts at \$40 because of Priya." If you answer a shipping question, read `policy.md`. If you answer her office order, search memory.
 
 Scope is the field that keeps those facts in their lane. `customer:priya` is her constraint. `shop` is a belief about the café, and this chapter is stingy about those. A shop-scoped record that restates the FAQ will drift. A shop-scoped record that generalizes one guest is the failure in the next section. The tool rejects a scope that is neither `shop` nor `customer:` followed by a short name. "Everyone" is not a scope. The error is `bad_scope`, and the hint tells the model to use `customer:priya` for her allergy. That refusal is harness. A sentence in the prompt that says "be careful with scope" does not stop the write.
 
@@ -54,7 +54,7 @@ Day 1, done by a cooperative model, leaves the seed belief untouched and adds th
 |---|---|---|
 | Priya is allergic to almonds. | customer:priya | constraint |
 | Priya takes oat milk in a pour-over, not dairy. | customer:priya | preference |
-| Priya's office order stays at or under $40. | customer:priya | constraint |
+| Priya's office order stays at or under \$40. | customer:priya | constraint |
 
 The seeded row is still active until something forgets it.
 
@@ -76,7 +76,7 @@ The generalization also runs in the other direction, and the FAQ is what stops i
 
 Other leaps the quiz is built to tempt:
 
-- Her $40 ceiling becomes the shop's shipping policy. The policy already has a $40 line for coffee, and the reason is the policy. Quote the file for shipping. Quote memory for her office order. Do not cite her as the origin of the fee.
+- Her \$40 ceiling becomes the shop's shipping policy. The policy already has a \$40 line for coffee, and the reason is the policy. Quote the file for shipping. Quote memory for her office order. Do not cite her as the origin of the fee.
 - Her oat-milk preference becomes "the café no longer stocks whole milk." MLK-1 is a shelf count from Chapter 4. One guest does not zero it.
 - An old belief stays active because forget was never called. The starter's `memory_forget` returns `forget_not_implemented` and does not touch the file. You can watch a careful model *try* to invalidate the bun belief and fail. The search after the quiz still shows the row. That is the fiction surviving a restart. Implementing forget is the edit. Swapping the model is not, until the function writes `status`.
 
@@ -84,9 +84,9 @@ Stale and generalized records fail the morning in the same way. The paragraph so
 
 1. Priya is picking up a pour-over and a pastry. What must not be in her order, and can we promise a nut-free cardamom bun? A sound answer keeps almonds, and the bun, out of her order, and refuses the promise because of `faq.md`.
 2. A new hire asks whether Hearth Lane is a nut-free café now, because Priya is allergic. A sound answer says no. Her scope is `customer:priya`. The shop still sells the bun.
-3. What is the ceiling on her office order? A sound answer says $40, from an active memory record, or says the store does not have it if day 1 never wrote the row. It does not invent a ceiling, and it does not restate the shipping fee as if it were her budget.
+3. What is the ceiling on her office order? A sound answer says \$40, from an active memory record, or says the store does not have it if day 1 never wrote the row. It does not invent a ceiling, and it does not restate the shipping fee as if it were her budget.
 
-A fourth probe, after forget works: forget the budget record, start a new process, and ask the ceiling again. The store must not still be active. If the answer is $40 and search still returns the row, forget is a no-op and the quiz caught it.
+A fourth probe, after forget works: forget the budget record, start a new process, and ask the ceiling again. The store must not still be active. If the answer is \$40 and search still returns the row, forget is a no-op and the quiz caught it.
 
 ```mermaid
 flowchart TD
