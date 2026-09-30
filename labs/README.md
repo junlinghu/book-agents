@@ -1,6 +1,6 @@
 # Labs
 
-Exercises for the Local Shop Concierge. Chapters 1–3 are scripts you can run. Later chapter folders are stubs.
+Exercises for the Local Shop Concierge. Chapters 1–3 are scripts you can run. Chapters 7–10 are assignment labs with starter files. The other chapter folders are stubs.
 
 Do this setup once from the repo root. Then open the lab you are on and follow that README.
 
@@ -11,8 +11,12 @@ Do this setup once from the repo root. Then open the lab you are on and follow t
 | [Chapter 1. Hello Concierge](ch01-what-an-agent-is/README.md) | `labs/ch01-what-an-agent-is/hello_concierge.py` |
 | [Chapter 2. Your first loop](ch02-your-first-loop/README.md) | `labs/ch02-your-first-loop/file_agent.py` |
 | [Chapter 3. Swap the model](ch03-models-without-the-pain/README.md) | `labs/ch03-models-without-the-pain/swap_model.py` |
+| [Chapter 7. Skills](ch07-skills-as-portable-procedures/README.md) | `labs/ch07-skills-as-portable-procedures/concierge.py` |
+| [Chapter 8. Browse](ch08-browsing-the-web/README.md) | `labs/ch08-browsing-the-web/browse_agent.py` |
+| [Chapter 9. Protocols](ch09-protocols-and-open-stack/README.md) | `labs/ch09-protocols-and-open-stack/concierge.py` |
+| [Chapter 10. Runtime](ch10-runtime-for-long-running-agents/README.md) | `labs/ch10-runtime-for-long-running-agents/restock.py` |
 
-Each of Labs 1–3 has a `SOLUTION.md` in its folder. Those notes are for instructors and for checking your own write-up after you have finished it. If the lab is homework, finish the write-up before you open that file.
+Each of Labs 1–3 has a `SOLUTION.md` in its folder. Those notes are for instructors and for checking your own write-up after you have finished it. If the lab is homework, finish the write-up before you open that file. Labs 7–10 do not include a solution file. Follow the assignment in that lab's README. The starter scripts are incomplete on purpose.
 
 ## Requirements
 
