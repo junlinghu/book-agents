@@ -64,7 +64,7 @@ jupyter notebook labs/tutorial/1-using-tool.ipynb
 
 The setup cell looks for `labs/common/client.py` in the current directory and its parents. The kernel can start in the repo root or in `labs/tutorial/`.
 
-Each lesson has a companion note, `N-slug.md`, with the purpose, what to learn, the chapter map, and run commands.
+Each lesson has a companion note, `N-slug.md`, that places the lesson on the path from a single tool to the shop manager and points to the matching chapter. How to run a notebook is in the sections above.
 
 ## DEMO_MODE and the live API
 
@@ -94,7 +94,7 @@ The script does not print the API key.
 | `demo_model.py` | Scripted tool-calling turns for `DEMO_MODE`. |
 | `data/` | Notes, skills, the supplier page, the supplier note, and a fake canary. Not shop secrets. |
 | `cell_src/` | Authoring copy of the cells. Notebooks inline this code so each file still runs alone. |
-| `build_series.py` | Rewrites the notebooks and companion notes from `cell_src/`. You do not need it to study. |
+| `build_series.py` | Rewrites the notebooks from `cell_src/`. Companion notes are edited by hand. You do not need the script to study. |
 | `labs/common/client.py` | API key, model, temperature, max tokens. |
 | `labs/common/tools.py` | Path jail used by `read_shop_file`. |
 | `labs/common/autonomy.py` | Confirm tokens, and the never-tier for cards and outside mail. |

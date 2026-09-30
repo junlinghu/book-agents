@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
-"""Regenerate the tutorial notebooks and companion notes.
+"""Regenerate the tutorial notebooks.
+
+Companion notes (``N-slug.md``) are lecture prose maintained by hand.
+This script does not rewrite them.
 
 The notebooks are what learners run. ``cell_src/`` is the authoring copy
 this script inlines into each notebook, so a later lesson carries the
@@ -57,6 +60,8 @@ FRAGMENTS = [
      "Token totals and an illustrative cost. A second read of the same document can hit the cache."),
 ]
 
+# one_line, purpose, learn, and maps are author notes for each lesson.
+# The learner-facing prose is the companion markdown, edited by hand.
 LESSONS = [
     {
         "n": 1,
@@ -808,68 +813,12 @@ def notebook_for(lesson: dict):
     return notebook
 
 
-def companion_md(lesson: dict) -> str:
-    learn = "\n".join("- " + item for item in lesson["learn"])
-    rows = "\n".join("| " + left + " | " + right + " |" for left, right in lesson["maps"])
-    slug = lesson["slug"]
-    return textwrap.dedent(
-        f"""\
-        # Tutorial {lesson["n"]}. {lesson["title"]}
-
-        ## Purpose
-
-        {lesson["purpose"]}
-
-        ## What you should learn
-
-        {learn}
-
-        ## How this maps to the book
-
-        | Tutorial idea | Book chapter and lab |
-        |---|---|
-        {rows}
-
-        The café in these files is fictional. Prices, hours, and the shelf match the Local Shop Concierge labs. Do not point the tools at a private document.
-
-        ## How to run
-
-        From the repository root, with the virtualenv from `labs/README.md` active:
-
-        ```bash
-        jupyter notebook labs/tutorial/{slug}.ipynb
-        ```
-
-        In VS Code or Cursor, open `labs/tutorial/{slug}.ipynb` and choose Run All. The setup cell walks parent folders until it finds `labs/common/client.py`, so the kernel may start in `labs/tutorial` or at the repo root.
-
-        Scripted demo (no API call):
-
-        ```bash
-        DEMO_MODE=1 jupyter nbconvert --to notebook --execute labs/tutorial/{slug}.ipynb --output /tmp/{slug}-out.ipynb
-        ```
-
-        Live Chat Completions API:
-
-        ```bash
-        DEMO_MODE=0 jupyter nbconvert --to notebook --execute labs/tutorial/{slug}.ipynb --output /tmp/{slug}-out.ipynb
-        ```
-
-        `DEMO_MODE=0` needs `OPENAI_API_KEY` in the repo-root `.env`. `DEMO_MODE` unset uses the API when a key is present and the scripted demo when it is not. The notebook's first code cell can also set `DEMO_MODE` to `True` or `False`.
-
-        This notebook is standalone. The cells include the working code from earlier tutorials and then add this lesson.
-
-        Series map: [README.md](README.md).
-        """
-    )
-
-
 def write_series() -> None:
+    """Rewrite notebooks from cell_src. Leave companion notes untouched."""
     for lesson in LESSONS:
         path = OUT / (lesson["slug"] + ".ipynb")
         nbformat.write(notebook_for(lesson), path)
-        note = OUT / (lesson["slug"] + ".md")
-        note.write_text(companion_md(lesson), encoding="utf-8")
-        print("wrote", path.relative_to(ROOT), "and", note.relative_to(ROOT))
+        print("wrote", path.relative_to(ROOT))
 
 
 def check_series() -> None:
