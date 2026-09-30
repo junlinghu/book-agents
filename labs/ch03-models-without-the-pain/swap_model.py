@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Same Chapter 2 loop. The only provider switch is the repo-root .env.
+"""Same Chapter 2 loop. The only model switch is MODEL in the repo-root .env.
 
-Prints BASE_URL and MODEL, runs one question against the Chapter 2
-docs, then prints the Ollama / Groq / OpenRouter settings this file
-will follow if you edit .env and run it again.
+Prints MODEL, runs one question against the Chapter 2 docs, then
+prints the OpenAI model ids this file will follow if you edit .env
+and run it again.
 """
 
 from __future__ import annotations
@@ -34,30 +34,26 @@ DOCS = Path(__file__).resolve().parents[1] / "ch02-your-first-loop" / "docs"
 
 DEFAULT_QUESTION = "How much is local delivery, and which day are you closed?"
 
-PROVIDER_NOTES = """
+MODEL_NOTES = """
 ---
-Switch providers by editing .env only, then run this script again.
+Swap models by editing MODEL in .env only, then run this script again.
 Do not change this file. Do not commit .env.
 
-Ollama (local weights; API key is ignored but must be non-empty):
-  BASE_URL=http://localhost:11434/v1
-  API_KEY=ollama
-  MODEL=llama3.2
-  Fallback if tool calls never appear: MODEL=llama3.1
+The client uses the official OpenAI API (https://api.openai.com/v1).
+Set OPENAI_API_KEY from https://platform.openai.com/api-keys.
 
-Groq (hosted). Use a model with local tool-call support.
-groq/compound cannot call this lab's read_file (its tools run on Groq).
-  BASE_URL=https://api.groq.com/openai/v1
-  API_KEY=<your Groq key>
-  MODEL=llama-3.3-70b-versatile
-  Smaller option: MODEL=llama-3.1-8b-instant
+Default (tool calling):
+  MODEL=gpt-4.1-mini
 
-OpenRouter (hosted). Ids are vendor/name. Pick a model that lists tools.
-  BASE_URL=https://openrouter.ai/api/v1
-  API_KEY=<your OpenRouter key>
-  MODEL=meta-llama/llama-3.3-70b-instruct
+A second run, same key, different weights:
+  MODEL=gpt-4.1
 
-Harness knobs that stay put when the provider changes:
+Both ids support tool calls on this loop. If an id is retired, pick
+another current tool-capable model from
+https://developers.openai.com/api/docs/models
+and change only MODEL.
+
+Harness knobs that stay put when MODEL changes:
   temperature and max_tokens in labs/common/client.py
     (this run uses TEMPERATURE={temperature}, MAX_TOKENS={max_tokens})
   the loop and read_file tool in labs/common/
@@ -65,10 +61,8 @@ Harness knobs that stay put when the provider changes:
 """
 
 
-def print_provider_notes() -> None:
-    print(
-        PROVIDER_NOTES.format(temperature=TEMPERATURE, max_tokens=MAX_TOKENS).rstrip()
-    )
+def print_model_notes() -> None:
+    print(MODEL_NOTES.format(temperature=TEMPERATURE, max_tokens=MAX_TOKENS).rstrip())
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -85,7 +79,7 @@ def main(argv: list[str] | None = None) -> int:
         print(f"Missing docs directory: {DOCS}", file=sys.stderr)
         return 1
 
-    _base_url, api_key, model = require_settings()
+    api_key, model = require_settings()
     client = make_client()
     try:
         result = run_file_agent(
@@ -99,10 +93,11 @@ def main(argv: list[str] | None = None) -> int:
     except Exception as exc:
         print(redact(f"Request failed: {type(exc).__name__}: {exc}", api_key), file=sys.stderr)
         print(
-            "Check BASE_URL, API_KEY, and MODEL in .env, and that the server is running.",
+            "Check OPENAI_API_KEY and MODEL in .env. "
+            "A 401 means the key is wrong. A 404 means MODEL is not a current id.",
             file=sys.stderr,
         )
-        print_provider_notes()
+        print_model_notes()
         return 1
 
     print("--- answer ---")
@@ -111,7 +106,7 @@ def main(argv: list[str] | None = None) -> int:
     print(f"--- stop: {result.stopped} after {result.steps} model call(s) ---")
     for note in observation_notes(result):
         print(f"NOTE: {note}")
-    print_provider_notes()
+    print_model_notes()
     return 0
 
 
