@@ -1,48 +1,32 @@
-        # Tutorial 4. Context engineering
+# Tutorial 4. Context engineering
 
-        ## Purpose
+## Motivation
 
-        Show context rot with three huddle notes. Pasting every body overflows a small turn budget. A catalog of titles fits. The agent reads the oat-milk note and the Thursday bun note, checks the shelf, and leaves the long picnic note on disk.
+The loop from the previous tutorial will read whatever you place in front of it. A Tuesday huddle produces notes: a carton count, a baking plan, a long write-up of a picnic. Paste every note into the prompt and the question drowns. The model still answers, and the answer drifts, because the useful sentence is buried. This lesson is about choosing what enters the prompt, and leaving the rest on disk until a question asks for it.
 
-        ## What you should learn
+## What this tutorial is about
 
-        - A turn budget is a character cap for what you put in the prompt on purpose.
-- A per-note cap refuses an oversized body even if the model asks for it.
-- Selection is a tool call, not a bigger paste.
-- The shelf tool still confirms a number that also appears in a note.
+Context is the text the model sees on one call. Context engineering is the work of deciding which text that is. Context rot is what happens when that text fills with leftovers until the original question is hard to find.
 
-        ## How this maps to the book
+You will learn to keep a catalog of note titles in the prompt and to load a note body only when the question needs it. You will learn a budget: a limit on how much text you deliberately add to one turn. You will see a note that is too long for that budget refused, even when the model asks for it. You will also see why a number that appears in a note is checked again on the shelf. The note is a memory of a conversation. The shelf is the count.
 
-        | Tutorial idea | Book chapter and lab |
-        |---|---|
-        | Notes, caps, and a map instead of a paste | Chapter 5, `labs/ch05-context-engineering` |
+## How you will get there
 
-        The café in these files is fictional. Prices, hours, and the shelf match the Local Shop Concierge labs. Do not point the tools at a private document.
+The notebook adds a small catalog of staff notes. Titles sit in the brief. Bodies come back through a tool that reads one note. One note is over the size limit, so you can see the refusal. A long picnic note is the wrong document for a question about how many cartons are on hand, and the run leaves it unread.
 
-        ## How to run
+The question that matters asks about oat milk. The agent reads the short note that discusses it, and it reads the shelf. The answer uses the shelf count. The hands-on steps are in the notebook [4-context-engineering](4-context-engineering.ipynb).
 
-        From the repository root, with the virtualenv from `labs/README.md` active:
+## Additional things
 
-        ```bash
-        jupyter notebook labs/tutorial/4-context-engineering.ipynb
-        ```
+A bigger prompt is not a repair for a missing fact. If the fact lives in a file, a tool can fetch it on the turn that needs it. Loading every file “just in case” spends the budget on text the question never uses.
 
-        In VS Code or Cursor, open `labs/tutorial/4-context-engineering.ipynb` and choose Run All. The setup cell walks parent folders until it finds `labs/common/client.py`, so the kernel may start in `labs/tutorial` or at the repo root.
+The size limit on a single note is a second rail. A model that asks for an oversized body receives a refusal, and the body stays out of the conversation. That refusal is useful. It tells you the note should be split, or that the question should name a smaller piece.
 
-        Scripted demo (no API call):
+Later lessons treat memory and skills the same way: a short handle in the prompt, and the full text loaded when the question matches. Chapter 5 is the book’s treatment of budgets, rot, and a map of notes instead of a paste.
 
-        ```bash
-        DEMO_MODE=1 jupyter nbconvert --to notebook --execute labs/tutorial/4-context-engineering.ipynb --output /tmp/4-context-engineering-out.ipynb
-        ```
+The café in these files is fictional. The notes are practice documents, not a record of a real shop.
 
-        Live Chat Completions API:
+## Sources and references
 
-        ```bash
-        DEMO_MODE=0 jupyter nbconvert --to notebook --execute labs/tutorial/4-context-engineering.ipynb --output /tmp/4-context-engineering-out.ipynb
-        ```
-
-        `DEMO_MODE=0` needs `OPENAI_API_KEY` in the repo-root `.env`. `DEMO_MODE` unset uses the API when a key is present and the scripted demo when it is not. The notebook's first code cell can also set `DEMO_MODE` to `True` or `False`.
-
-        This notebook is standalone. The cells include the working code from earlier tutorials and then add this lesson.
-
-        Series map: [README.md](README.md).
+- [Chapter 5: Context engineering](../../chapters/ch05-context-engineering/README.md), and the lab [labs/ch05-context-engineering](../ch05-context-engineering).
+- The previous lecture is [3-agent-loop.md](3-agent-loop.md). The series map is in [README.md](README.md).
