@@ -60,7 +60,7 @@ response = client.chat.completions.create(
 )
 ```
 
-The call does not include a `tool_choice` field that would force the model to use `read_file`. Chapter 3 explains the practical reason: Ollama, the local server these labs use by default, does not accept that field on its compatible endpoint, so the shared client omits it for every provider. The consequence belongs in this chapter as well. The model is allowed to skip the tool and answer at once. When that happens, the lab prints a final answer and an empty trace. The loop ran, and the model chose not to use the tool. Treat that paragraph as ungrounded until the trace shows a read, just as you treated the reply in Chapter 1.
+The call does not include a `tool_choice` field that would force the model to use `read_file`. The shared client omits it so a skipped read stays visible in the trace. The model is allowed to skip the tool and answer at once. When that happens, the lab prints a final answer and an empty trace. The loop ran, and the model chose not to use the tool. Treat that paragraph as ungrounded until the trace shows a read, just as you treated the reply in Chapter 1.
 
 Let us walk the café question through a cooperative run, and keep track of what the model can see at each step. The customer writes: "I opened a bag of your house coffee and they’re not for me. Can I return them? Also, can you ship a cardamom bun to another state?"
 
@@ -201,7 +201,7 @@ Once a file can be opened, the failures you should watch for become more specifi
 
 You will commonly see one of the following.
 
-- **The model skips the tool.** The stop is `final`, and the tool log is empty. The paragraph may be fluent and wrong. It is Chapter 1, running inside a Chapter 2 program. The harness allows the skip, because a field that forces a tool call is not portable across the providers in Chapter 3. Record the empty trace. Treat it as model behavior until you have asked the same question of a model that does call tools.
+- **The model skips the tool.** The stop is `final`, and the tool log is empty. The paragraph may be fluent and wrong. It is Chapter 1, running inside a Chapter 2 program. The harness allows the skip. It does not send a field that would force the tool, so an empty trace stays visible. Record the empty trace. Treat it as model behavior until you have asked the same question of a model that does call tools.
 - **The model reads the wrong file, then recovers.** An error, or a file that lacks the fact, is followed by a second read. That recovery is the loop earning its place, even when the first choice was clumsy.
 - **The model reads the right file and still misquotes it.** The opened-coffee trap above is the usual example. The trace shows that the document was seen. You still compare the sentence with the file.
 - **The model cites a path it did not read.** The soft check looks for the letters of a path. A review that stops at that check will accept a path the trace never opened, so you still open the file and compare the sentence with the text.

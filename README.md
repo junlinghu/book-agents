@@ -146,7 +146,7 @@ Agents that can read documents, call tools, and take actions are becoming a prac
 
    Shared definitions for harness, skill, MCP, grader, autonomy tier, and context rot.
 
-The through-line is a Local Shop Concierge for a fictional café. Early chapters stay conceptual. Matching labs under `labs/` let you run the same ideas on your machine with an OpenAI-compatible client, using Ollama by default or a hosted API. Later chapters grow the same agent—tools, memory, verification, autonomy, commerce patterns, and operations—without restarting the product story.
+The through-line is a Local Shop Concierge for a fictional café. Early chapters stay conceptual. Matching labs under `labs/` let you run the same ideas against the OpenAI API. Later chapters grow the same agent—tools, memory, verification, autonomy, commerce patterns, and operations—without restarting the product story.
 
 ## Folders
 
@@ -155,7 +155,7 @@ The through-line is a Local Shop Concierge for a fictional café. Early chapters
 
 ## Running the labs
 
-Chapters 1–3 are runnable scripts. Later labs are stubs. Install, `.env`, and Ollama / Groq / OpenRouter setup are shared: do them once from [labs/README.md](labs/README.md), then follow the lab you are on.
+Chapters 1–3 are runnable scripts. Later labs are stubs. Install, `.env`, and the OpenAI API key are shared: do them once from [labs/README.md](labs/README.md), then follow the lab you are on.
 
 From the repo root, with the virtualenv active:
 
@@ -165,10 +165,10 @@ python labs/ch02-your-first-loop/file_agent.py
 python labs/ch03-models-without-the-pain/swap_model.py
 ```
 
-Each script prints `BASE_URL` and `MODEL` and hides the key. Optional questions are extra arguments. Notes for each lab:
+Each script prints `MODEL` and hides the key. Optional questions are extra arguments. Notes for each lab:
 
 - [Chapter 1](labs/ch01-what-an-agent-is/README.md) — failure modes to write down
 - [Chapter 2](labs/ch02-your-first-loop/README.md) — docs, stop conditions, citations
-- [Chapter 3](labs/ch03-models-without-the-pain/README.md) — Ollama vs Groq vs OpenRouter
+- [Chapter 3](labs/ch03-models-without-the-pain/README.md) — same loop, swap `MODEL`
 
-The harness check without a model (`python -m unittest labs.common.test_harness`) is in the labs README. It does not contact Ollama or a hosted API.
+The harness check without a model (`python -m unittest labs.common.test_harness`) is in the labs README. It does not call the OpenAI API.
