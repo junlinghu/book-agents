@@ -42,7 +42,7 @@ Two stubs in `memory_api.py`:
 
 Day 1's staff note, stored as separate records if the model calls `memory_set`:
 
-> Priya from the mill office is picking up tomorrow. She is allergic to almonds. She takes oat milk in a pour-over, not dairy. Her office order has to stay at or under $40. Please remember that for the morning.
+> Priya from the mill office is picking up tomorrow. She is allergic to almonds. She takes oat milk in a pour-over, not dairy. Her office order has to stay at or under \$40. Please remember that for the morning.
 
 An allergy is a `constraint`. A milk choice is a `preference`. The ceiling is a `constraint`. Scope for those rows is `customer:priya`.
 
@@ -88,7 +88,7 @@ From the repo root, with the virtualenv active.
    python labs/ch06-memory/prefs_agent.py quiz "What is the ceiling on Priya's office order? If memory has no active record, say so."
    ```
 
-   The last command is a new process. `$40` from an active row is a different result from `$40` after a successful forget.
+   The last command is a new process. \$40 from an active row is a different result from \$40 after a successful forget.
 
 ## What to write up
 
