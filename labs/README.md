@@ -1,6 +1,6 @@
 # Labs
 
-Exercises for the Local Shop Concierge. Chapters 1–6 are scripts you can run. Chapters 4–10 are assignment labs with starter files. The other chapter folders are stubs.
+Exercises for the Local Shop Concierge. Chapters 1–6 and 16–18 are scripts you can run. Chapters 4–10 are assignment labs with starter files. The other chapter folders are stubs.
 
 Do this setup once from the repo root. Then open the lab you are on and follow that README.
 
@@ -18,8 +18,13 @@ Do this setup once from the repo root. Then open the lab you are on and follow t
 | [Chapter 8. Browse](ch08-browsing-the-web/README.md) | `labs/ch08-browsing-the-web/browse_agent.py` |
 | [Chapter 9. Protocols](ch09-protocols-and-open-stack/README.md) | `labs/ch09-protocols-and-open-stack/concierge.py` |
 | [Chapter 10. Runtime](ch10-runtime-for-long-running-agents/README.md) | `labs/ch10-runtime-for-long-running-agents/restock.py` |
+| [Chapter 16. Autonomy policy](ch16-autonomy-policy/README.md) | `labs/ch16-autonomy-policy/policy_gate.py` |
+| [Chapter 17. Work-agent blueprint](ch17-work-agent-blueprint/README.md) | `labs/ch17-work-agent-blueprint/draft_mail.py` |
+| [Chapter 18. Agentic commerce](ch18-agentic-commerce/README.md) | `labs/ch18-agentic-commerce/checkout.py` |
 
 Each of Labs 1–3 has a `SOLUTION.md` in its folder. Those notes are for instructors and for checking your own write-up after you have finished it. If the lab is homework, finish the write-up before you open that file. Labs 4–10 do not include a solution file. Follow the assignment in that lab's README. The starter scripts are incomplete on purpose.
+
+Chapters 16–18 do not have solution files. Their required traces run without a model server. `--self-check` on those three scripts does not call the OpenAI API.
 
 ## Requirements
 

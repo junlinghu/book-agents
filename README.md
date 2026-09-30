@@ -150,12 +150,12 @@ The through-line is a Local Shop Concierge for a fictional café. Early chapters
 
 ## Folders
 
-- `chapters/` — manuscript. Chapters 1–10 are full prose. The other chapters are still outlines.
-- `labs/` — Chapters 1–6 are runnable scripts. Chapters 4–10 are assignment labs with starter files and no solution notes. The other labs are stubs. Shared setup is [labs/README.md](labs/README.md).
+- `chapters/` — manuscript. Chapters 1–10 and 16–18 are full prose. The other chapters are still outlines.
+- `labs/` — Chapters 1–6 are runnable scripts. Chapters 4–10 are assignment labs with starter files and no solution notes. Chapters 16–18 are runnable and do not need a model for their required traces. The other labs are stubs. Shared setup is [labs/README.md](labs/README.md).
 
 ## Running the labs
 
-Chapters 1–6 are runnable scripts. Chapters 4–10 are assignment labs (starter files, no `SOLUTION.md`). The other labs are stubs. Install, `.env`, and the OpenAI API key are shared: do them once from [labs/README.md](labs/README.md), then follow the lab you are on.
+Chapters 1–6 are runnable scripts. Chapters 4–10 are assignment labs (starter files, no `SOLUTION.md`). Chapters 16–18 are runnable; their required traces do not call the API. The other labs are stubs. Install, `.env`, and the OpenAI API key are shared: do them once from [labs/README.md](labs/README.md), then follow the lab you are on.
 
 From the repo root, with the virtualenv active:
 
