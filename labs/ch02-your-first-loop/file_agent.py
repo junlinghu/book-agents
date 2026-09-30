@@ -1,75 +1,96 @@
 #!/usr/bin/env python3
-"""File-reading concierge: a tool loop with read_file limited to docs/.
+"""Chapter 2 lab. The model may call read_file. This process reads the file.
 
-Chapter 2 lab. Answers should cite docs/policy.md or docs/faq.md.
-The harness stops on a final message, max steps, a repeated call, or
-a completion cut off by max_tokens.
+Answers should cite docs/policy.md or docs/faq.md.
+The loop stops on a final message, max steps, a repeated call, or
+a completion cut off by max_tokens. The loop itself is run_file_agent
+in labs/common/loop.py.
 """
 
-from __future__ import annotations
-
+import os
 import sys
-from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[2]
-if str(ROOT) not in sys.path:
-    sys.path.insert(0, str(ROOT))
+# This file is labs/ch02-your-first-loop/file_agent.py.
+# Python would otherwise only search this folder for imports.
+# The repo root is two folders up, which is where the labs package lives.
+this_folder = os.path.dirname(os.path.abspath(__file__))
+repo_root = os.path.dirname(os.path.dirname(this_folder))
+sys.path.insert(0, repo_root)
 
-from labs.common.client import describe_runtime, make_client, redact, require_settings  # noqa: E402
-from labs.common.loop import (  # noqa: E402
-    DEFAULT_MAX_STEPS,
-    observation_notes,
-    run_file_agent,
-)
+from dotenv import load_dotenv
+from openai import OpenAI
 
-DOCS = Path(__file__).resolve().parent / "docs"
+from labs.common.client import DEFAULT_MODEL
+from labs.common.loop import DEFAULT_MAX_STEPS, observation_notes, run_file_agent
+
+DOCS = os.path.realpath(os.path.join(this_folder, "docs"))
 
 DEFAULT_QUESTION = (
     "I opened a bag of your house coffee and they're not for me. "
     "Can I return them? Also, can you ship a cardamom bun to another state?"
 )
 
+# A variable already set in the shell wins over .env.
+load_dotenv(os.path.join(repo_root, ".env"))
 
-def main(argv: list[str] | None = None) -> int:
-    args = list(sys.argv[1:] if argv is None else argv)
-    question = " ".join(args).strip() or DEFAULT_QUESTION
-    print(describe_runtime())
-    print(f"DOCS={DOCS}")
-    print(f"MAX_STEPS={DEFAULT_MAX_STEPS}")
-    print(f"QUESTION: {question}\n")
+api_key = os.environ.get("OPENAI_API_KEY", "").strip()
+model = os.environ.get("MODEL", "").strip()
+if not model:
+    model = DEFAULT_MODEL
 
-    if not DOCS.is_dir():
-        print(f"Missing docs directory: {DOCS}", file=sys.stderr)
-        return 1
+question = " ".join(sys.argv[1:]).strip()
+if not question:
+    question = DEFAULT_QUESTION
 
-    api_key, model = require_settings()
-    client = make_client()
-    try:
-        result = run_file_agent(
-            client,
-            model,
-            question,
-            DOCS,
-            max_steps=DEFAULT_MAX_STEPS,
-            verbose=True,
-        )
-    except Exception as exc:
-        print(redact(f"Request failed: {type(exc).__name__}: {exc}", api_key), file=sys.stderr)
-        print(
-            "Check OPENAI_API_KEY and MODEL in .env. "
-            "A 401 means the key is wrong. A 404 means MODEL is not a current id.",
-            file=sys.stderr,
-        )
-        return 1
+if api_key:
+    key_status = "set"
+else:
+    key_status = "missing"
 
-    print("--- answer ---")
-    print(result.text)
-    print()
-    print(f"--- stop: {result.stopped} after {result.steps} model call(s) ---")
-    for note in observation_notes(result):
-        print(f"NOTE: {note}")
-    return 0
+print("MODEL=" + model)
+print("OPENAI_API_KEY=" + key_status + " (value hidden)")
+print("DOCS=" + DOCS)
+print("MAX_STEPS=" + str(DEFAULT_MAX_STEPS))
+print("QUESTION: " + question)
+print()
 
+if not os.path.isdir(DOCS):
+    print("Missing docs directory: " + DOCS, file=sys.stderr)
+    sys.exit(1)
 
-if __name__ == "__main__":
-    sys.exit(main())
+if not api_key:
+    print(
+        "OPENAI_API_KEY is empty. Copy .env.example to .env and paste a key "
+        "from https://platform.openai.com/api-keys. Never commit .env.",
+        file=sys.stderr,
+    )
+    sys.exit(1)
+
+# A wrong key should fail immediately instead of sleeping through retries.
+client = OpenAI(api_key=api_key, timeout=120, max_retries=0)
+
+try:
+    result = run_file_agent(
+        client,
+        model,
+        question,
+        DOCS,
+        max_steps=DEFAULT_MAX_STEPS,
+        verbose=True,
+    )
+except Exception as error:
+    detail = str(error).replace(api_key, "***")
+    print("Request failed: " + type(error).__name__ + ": " + detail, file=sys.stderr)
+    print(
+        "Check OPENAI_API_KEY and MODEL in .env. "
+        "A 401 means the key is wrong. A 404 means MODEL is not a current id.",
+        file=sys.stderr,
+    )
+    sys.exit(1)
+
+print("--- answer ---")
+print(result.text)
+print()
+print("--- stop: " + result.stopped + " after " + str(result.steps) + " model call(s) ---")
+for note in observation_notes(result):
+    print("NOTE: " + note)

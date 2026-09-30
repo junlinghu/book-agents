@@ -23,7 +23,7 @@ Each of Labs 1–3 has a `SOLUTION.md` in its folder. Those notes are for instru
 - Python 3.10 or newer
 - An OpenAI API key from [platform.openai.com/api-keys](https://platform.openai.com/api-keys)
 
-Chapter 1 reads `OPENAI_API_KEY` and `MODEL` from the repo-root `.env` inside its own script. Chapters 2 and 3 share `labs/common/client.py`, which reads that same file. The labs use the official OpenAI Python SDK and the default API (`https://api.openai.com/v1`). You do not set a base URL.
+Chapters 1–3 each read `OPENAI_API_KEY` and `MODEL` from the repo-root `.env`. The Chapter 2 loop’s temperature and max tokens live in `labs/common/client.py`. The labs use the official OpenAI Python SDK and the default API (`https://api.openai.com/v1`). You do not set a base URL.
 
 Chapter 1 is a single chat completion. Tool calling is not required. Chapters 2 and 3 need a model that can emit tool calls. The default `gpt-4.1-mini` does. If a Chapter 2 or 3 trace never shows a tool call, set `MODEL` to another current tool-capable id, such as `gpt-4.1`.
 
