@@ -1,48 +1,24 @@
-        # Tutorial 13. Traces and identity
+# Tutorial 13. A record of the run
 
-        ## Purpose
+## Motivation
 
-        Print a structured trace for the low-stock question. Every span names `counter-lead`, `shop-concierge`, and the tool that ran. The trace does not copy API keys or the supplier canary. You can explain the run from the spans without reading the model provider's private logs.
+The agent can hand work from a stocker to a checker, refuse a charge, and keep untrusted text from granting tools. When a restock goes wrong, none of that helps if the only account of the run is a paragraph and a guess about which tool ran. What the agent still cannot do is leave a record that names who asked, which agent acted, and which tool ran, in a form you can read without opening the model provider’s private logs. We add that record now, after the roles and the gate exist to be named, and before we attach cost and time to the same trace.
 
-        ## What you should learn
+## What this tutorial is about
 
-        - Identity is a field: user, agent, and tool are different actors.
-- A confirm or an error is a status, not a hidden branch.
-- Do not put secrets, page bodies, or raw credentials on a span.
-- The answer is still grounded in the shelf and the policy file.
+A trace is the record of one turn. A span is one step inside it. Identity is a field on that span, and the three actors are different people or programs: the user, the agent, and the tool. In this lesson the user is the counter lead and the agent is the shop concierge. A tool has its own actor, so a shelf reading is not silently attributed to the concierge. A confirmation, a refusal, or an error is a status you can see on the span. Secrets, the body of a supplier page, and raw credentials do not belong there. The customer’s answer is still grounded in the shelf and the policy. The trace explains the run. It does not replace the documents.
 
-        ## How this maps to the book
+## How you will get there
 
-        | Tutorial idea | Book chapter and lab |
-        |---|---|
-        | Spans you can replay without a collector | Chapter 22, `labs/ch22-identity-and-observability` |
+The notebook asks the same low-stock question as tutorial 3: which products are at or below their reorder point, and whether oat milk may be shipped. The loop runs as before, and it now prints the spans. You read them and check that every span names the counter lead and the shop concierge, that a tool has its own actor, and that the answer still comes from the shelf and the policy. You also check that the trace does not carry an API key or the supplier’s planted secret from tutorial 11. The handoff roles and the gate are still in the notebook, so the new record sits on top of work you have already seen.
 
-        The café in these files is fictional. Prices, hours, and the shelf match the Local Shop Concierge labs. Do not point the tools at a private document.
+## Additional things
 
-        ## How to run
+A trace that copies a tool’s full result will eventually copy a secret, because someone will point a tool at a file that contains one. Record the name, the status, and the identity. Leave the body in the tool result the model needed for that turn, and keep it out of the long-term record.
 
-        From the repository root, with the virtualenv from `labs/README.md` active:
+Tutorial 14 hangs token counts, an illustrative cost, and elapsed time on this same trace, including runs that stop early. Chapter 22 is the book’s treatment of actor identity, spans, and the ability to replay a run for debugging and for an audit. The café in these files is fictional.
 
-        ```bash
-        jupyter notebook labs/tutorial/13-observability.ipynb
-        ```
+## Sources and references
 
-        In VS Code or Cursor, open `labs/tutorial/13-observability.ipynb` and choose Run All. The setup cell walks parent folders until it finds `labs/common/client.py`, so the kernel may start in `labs/tutorial` or at the repo root.
-
-        Scripted demo (no API call):
-
-        ```bash
-        DEMO_MODE=1 jupyter nbconvert --to notebook --execute labs/tutorial/13-observability.ipynb --output /tmp/13-observability-out.ipynb
-        ```
-
-        Live Chat Completions API:
-
-        ```bash
-        DEMO_MODE=0 jupyter nbconvert --to notebook --execute labs/tutorial/13-observability.ipynb --output /tmp/13-observability-out.ipynb
-        ```
-
-        `DEMO_MODE=0` needs `OPENAI_API_KEY` in the repo-root `.env`. `DEMO_MODE` unset uses the API when a key is present and the scripted demo when it is not. The notebook's first code cell can also set `DEMO_MODE` to `True` or `False`.
-
-        This notebook is standalone. The cells include the working code from earlier tutorials and then add this lesson.
-
-        Series map: [README.md](README.md).
+- [Chapter 22: Identity and Observability](../../chapters/ch22-identity-and-observability/README.md), and the lab [labs/ch22-identity-and-observability](../ch22-identity-and-observability).
+- The previous lecture is [12-multi-agent.md](12-multi-agent.md). The notebook is [13-observability.ipynb](13-observability.ipynb). The series map is in [README.md](README.md).
