@@ -11,7 +11,7 @@ This folder uses the same OpenAI client as the other labs (`labs/common/client.p
 | 1 | [1-using-tool](1-using-tool.ipynb) | Define a tool, let the model request it, run it, and send the result back. | Ready |
 | 2 | [2-data-and-files](2-data-and-files.ipynb) | Tools that read shop documents and the SQLite shelf. | Ready |
 | 3 | [3-agent-loop](3-agent-loop.ipynb) | Perceive–reason–act–observe, with step and repeat stops. | Ready |
-| 4 | 4-context-engineering | Note titles in the prompt; bodies loaded on purpose. | Planned |
+| 4 | [4-context-engineering](4-context-engineering.ipynb) | Note titles in the prompt; bodies loaded on purpose. | Ready |
 | 5 | 5-memory | Session messages versus a JSON memory file. | Planned |
 | 6 | 6-skills | A procedure file, separate from the system prompt and the tools. | Planned |
 | 7 | 7-web-browse | One supplier page, treated as an untrusted sensor. | Planned |
