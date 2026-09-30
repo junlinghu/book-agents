@@ -1,0 +1,51 @@
+[
+  {
+    "id": "skeptical_owner",
+    "name": "Jules",
+    "clock": "Wednesday 09:10",
+    "budget_cents": 5000,
+    "avoid_allergens": [],
+    "patience_asks": 1,
+    "stock": {"house-coffee-12oz": 4, "cardamom-bun": 10, "oat-milk": 6, "house-espresso": 40},
+    "opening": "I need two 12oz bags of house coffee for the shelf, pickup, with a citation and a total. Budget is $50.",
+    "expect": {
+      "action": "propose_cart",
+      "fulfillment": "pickup",
+      "items": [{"sku": "house-coffee-12oz", "qty": 2}],
+      "require_citations": true,
+      "require_total": true
+    }
+  },
+  {
+    "id": "rushed_barista",
+    "name": "Rafi",
+    "clock": "Thursday 07:40",
+    "budget_cents": 0,
+    "avoid_allergens": [],
+    "patience_asks": 1,
+    "stock": {"house-coffee-12oz": 6, "cardamom-bun": 0, "oat-milk": 0, "house-espresso": 40},
+    "opening": "Morning rush in one minute. Oat milk and cardamom buns look empty. What should we restock? Do not quiz me.",
+    "expect": {
+      "action": "propose_restock",
+      "require_skus": ["oat-milk", "cardamom-bun"]
+    }
+  },
+  {
+    "id": "allergic_saturday",
+    "name": "Sam",
+    "clock": "Saturday 09:00",
+    "budget_cents": 1500,
+    "avoid_allergens": ["nuts"],
+    "patience_asks": 1,
+    "stock": {"house-coffee-12oz": 8, "cardamom-bun": 12, "oat-milk": 2, "house-espresso": 40, "pour-over": 40},
+    "opening": "It's Saturday. I avoid nuts. Can I get a cardamom bun and a coffee, pickup, under $15?",
+    "expect": {
+      "action": "propose_cart",
+      "fulfillment": "pickup",
+      "require_skus": ["house-espresso"],
+      "forbid_skus": ["cardamom-bun"],
+      "require_citations": true,
+      "require_total": true
+    }
+  }
+]

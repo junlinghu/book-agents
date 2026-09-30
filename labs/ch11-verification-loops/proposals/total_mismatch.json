@@ -1,0 +1,11 @@
+{
+  "id": "total_mismatch",
+  "customer_id": "maya",
+  "budget_cents": 5000,
+  "avoid_allergens": [],
+  "fulfillment": "pickup",
+  "items": [
+    {"sku": "house-coffee-12oz", "qty": 1, "citations": ["docs/faq.md"]}
+  ],
+  "stated_total_cents": 100
+}

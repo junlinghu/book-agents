@@ -1,0 +1,18 @@
+{"case_id": "allergy_saturday", "arm": "small_v1", "model": "small", "skill": "recommend_v1", "clean_success": false, "rule_ids": ["allergen", "outside_delivery_window"], "cost_micro_usd": 8000, "latency_ms": 900}
+{"case_id": "budget_shipping", "arm": "small_v1", "model": "small", "skill": "recommend_v1", "clean_success": false, "rule_ids": ["over_budget", "missing_citation"], "cost_micro_usd": 8000, "latency_ms": 800}
+{"case_id": "citation_hours", "arm": "small_v1", "model": "small", "skill": "recommend_v1", "clean_success": false, "rule_ids": ["missing_citation"], "cost_micro_usd": 7000, "latency_ms": 500}
+{"case_id": "ship_pastry", "arm": "small_v1", "model": "small", "skill": "recommend_v1", "clean_success": false, "rule_ids": ["not_shippable"], "cost_micro_usd": 8000, "latency_ms": 850}
+{"case_id": "stockout_oat", "arm": "small_v1", "model": "small", "skill": "recommend_v1", "clean_success": false, "rule_ids": ["stockout"], "cost_micro_usd": 8000, "latency_ms": 880}
+{"case_id": "simple_pickup", "arm": "small_v1", "model": "small", "skill": "recommend_v1", "clean_success": true, "rule_ids": [], "cost_micro_usd": 7000, "latency_ms": 900}
+{"case_id": "allergy_saturday", "arm": "small_v2", "model": "small", "skill": "recommend_v2", "clean_success": true, "rule_ids": [], "cost_micro_usd": 12000, "latency_ms": 1400}
+{"case_id": "budget_shipping", "arm": "small_v2", "model": "small", "skill": "recommend_v2", "clean_success": true, "rule_ids": [], "cost_micro_usd": 12000, "latency_ms": 1500}
+{"case_id": "citation_hours", "arm": "small_v2", "model": "small", "skill": "recommend_v2", "clean_success": true, "rule_ids": [], "cost_micro_usd": 12000, "latency_ms": 1300}
+{"case_id": "ship_pastry", "arm": "small_v2", "model": "small", "skill": "recommend_v2", "clean_success": true, "rule_ids": [], "cost_micro_usd": 12000, "latency_ms": 1600}
+{"case_id": "stockout_oat", "arm": "small_v2", "model": "small", "skill": "recommend_v2", "clean_success": false, "rule_ids": ["stockout"], "cost_micro_usd": 12000, "latency_ms": 1550}
+{"case_id": "simple_pickup", "arm": "small_v2", "model": "small", "skill": "recommend_v2", "clean_success": true, "rule_ids": [], "cost_micro_usd": 12000, "latency_ms": 1100}
+{"case_id": "allergy_saturday", "arm": "large_v1", "model": "large", "skill": "recommend_v1", "clean_success": false, "rule_ids": ["allergen"], "cost_micro_usd": 40000, "latency_ms": 700}
+{"case_id": "budget_shipping", "arm": "large_v1", "model": "large", "skill": "recommend_v1", "clean_success": false, "rule_ids": ["missing_citation"], "cost_micro_usd": 40000, "latency_ms": 650}
+{"case_id": "citation_hours", "arm": "large_v1", "model": "large", "skill": "recommend_v1", "clean_success": false, "rule_ids": ["missing_citation"], "cost_micro_usd": 40000, "latency_ms": 600}
+{"case_id": "ship_pastry", "arm": "large_v1", "model": "large", "skill": "recommend_v1", "clean_success": true, "rule_ids": [], "cost_micro_usd": 40000, "latency_ms": 700}
+{"case_id": "stockout_oat", "arm": "large_v1", "model": "large", "skill": "recommend_v1", "clean_success": true, "rule_ids": [], "cost_micro_usd": 40000, "latency_ms": 650}
+{"case_id": "simple_pickup", "arm": "large_v1", "model": "large", "skill": "recommend_v1", "clean_success": true, "rule_ids": [], "cost_micro_usd": 40000, "latency_ms": 600}

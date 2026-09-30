@@ -1,0 +1,38 @@
+{
+  "cardamom-bun": {
+    "name": "Cardamom bun",
+    "unit_price_cents": 475,
+    "allergens": ["wheat", "butter", "almonds"],
+    "shippable": false
+  },
+  "house-coffee-12oz": {
+    "name": "House coffee 12oz",
+    "unit_price_cents": 1800,
+    "allergens": [],
+    "shippable": true
+  },
+  "house-espresso": {
+    "name": "House espresso",
+    "unit_price_cents": 350,
+    "allergens": [],
+    "shippable": false
+  },
+  "pour-over": {
+    "name": "Pour-over",
+    "unit_price_cents": 425,
+    "allergens": [],
+    "shippable": false
+  },
+  "oat-milk": {
+    "name": "Oat milk add-on",
+    "unit_price_cents": 75,
+    "allergens": [],
+    "shippable": false
+  },
+  "rye-porridge": {
+    "name": "Rye porridge",
+    "unit_price_cents": 800,
+    "allergens": ["gluten", "milk"],
+    "shippable": false
+  }
+}
