@@ -1,4 +1,4 @@
-# Introduction to AI Agents
+# A Practical Guide to Agents
 
 The spine agent is a Local Shop Concierge for a café / small store. The same bot grows every chapter.
 
