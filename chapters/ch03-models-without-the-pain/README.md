@@ -158,8 +158,8 @@ Place the costs next to the traces, in units of one finished answer. Locally, th
 
 ## Lab
 
-Run the Chapter 2 agent twice. Use the local server once, and use Groq or OpenRouter once. Change only the three settings between the runs. For each run, keep the printed origin and model name, the tool log, the stop and the step count, and whether $4.50 and Monday each have a citation you can verify by opening the file. The script also prints the sampling constants. If those numbers differ between the two runs, the harness moved, and the comparison is no longer the one this chapter describes.
+Run the Chapter 2 agent twice. Change only `MODEL` in `.env` between the runs (for example `gpt-4.1-mini`, then `gpt-4.1`). For each run, keep the printed model name, the tool log, the stop and the step count, and whether $4.50 and Monday each have a citation you can verify by opening the file. The script also prints the sampling constants. If those numbers differ between the two runs, the harness moved, and the comparison is no longer the one this chapter describes.
 
-Switching providers, the answer key, and notes on common failures are in the [Chapter 3 lab](../../labs/ch03-models-without-the-pain/README.md).
+The model swap, the answer key, and notes on common failures are in the [Chapter 3 lab](../../labs/ch03-models-without-the-pain/README.md).
 
-The three settings select the weights. The loop, the directory limit, the stop conditions, and the sampling constants are the program you are building. A provider disagreement that forces a second loop is a defect in the harness, and it belongs in the shared client, repaired once.
+`MODEL` selects the weights. The loop, the directory limit, the stop conditions, and the sampling constants are the program you are building. A model disagreement that forces a second loop is a defect in the harness, and it belongs in the shared client, repaired once.

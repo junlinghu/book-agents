@@ -1,1 +1,1 @@
-"""Shared client, the read_file loop, and later-lab autonomy tiers."""
+"""Shared OpenAI client, the tool-calling agent loop, and later-lab autonomy tiers."""

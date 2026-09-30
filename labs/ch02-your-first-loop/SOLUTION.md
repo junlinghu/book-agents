@@ -44,7 +44,7 @@ Neither file mentions live crabs or any crab item. The model should say it does 
 
 ### Empty tool log
 
-`final` after 1 model call with an empty trace means the model never called `read_file`. Shop facts in that answer were not read from `docs/`. That is a model miss, including when the prose happens to match the files. The harness does not send `tool_choice`, because Ollama's compatible API does not support that field. The remedy is a different `MODEL` (`llama3.1` after `ollama pull llama3.1`, or a Groq / OpenRouter id with local tool calls), not a different question, and not an edit to the loop for this lab.
+`final` after 1 model call with an empty trace means the model never called `read_file`. Shop facts in that answer were not read from `docs/`. That is a model miss, including when the prose happens to match the files. The harness does not send `tool_choice`, so it cannot force a tool call. The remedy is a different `MODEL` (for example `gpt-4.1`), not a different question, and not an edit to the loop for this lab.
 
 ### Checks without a model
 
@@ -62,13 +62,13 @@ ERROR: path must stay inside docs/. Example: policy.md
 
 `read_file` in `labs/common/tools.py` returns an `ERROR:` string for `..`, absolute paths, hidden names, and symlinks that resolve outside `docs/`. It does not raise. The same rejection covers `/etc/passwd`, `docs/../../.env`, and `policy.md/../../.env`.
 
-Stop conditions and the jail, without a server:
+Stop conditions and the jail, without calling the API:
 
 ```bash
 python -m unittest labs.common.test_harness
 ```
 
-Expect a run that finishes `OK` with no failures. The module covers the docs path jail, tool-error handling, the max-steps stop, the repeated-call stop, and `max_tokens`. It does not contact Ollama or a hosted API.
+Expect a run that finishes `OK` with no failures. The module covers the docs path jail, tool-error handling, the max-steps stop, the repeated-call stop, and `max_tokens`. It does not call the OpenAI API.
 
 ## How to score
 

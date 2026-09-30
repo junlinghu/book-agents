@@ -42,7 +42,7 @@ def main(argv: list[str] | None = None) -> int:
         print(f"Missing docs directory: {DOCS}", file=sys.stderr)
         return 1
 
-    _base_url, api_key, model = require_settings()
+    api_key, model = require_settings()
     client = make_client()
     try:
         result = run_file_agent(
@@ -56,7 +56,8 @@ def main(argv: list[str] | None = None) -> int:
     except Exception as exc:
         print(redact(f"Request failed: {type(exc).__name__}: {exc}", api_key), file=sys.stderr)
         print(
-            "Check BASE_URL, API_KEY, and MODEL in .env, and that the server is running.",
+            "Check OPENAI_API_KEY and MODEL in .env. "
+            "A 401 means the key is wrong. A 404 means MODEL is not a current id.",
             file=sys.stderr,
         )
         return 1

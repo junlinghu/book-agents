@@ -22,7 +22,7 @@ Turn in:
 
 ## Prerequisites
 
-- The shared setup in [`../README.md`](../README.md) is enough if you want the same virtualenv as Chapters 1–3. The required traces do not call Ollama, Groq, or OpenRouter.
+- The shared setup in [`../README.md`](../README.md) is enough if you want the same virtualenv as the earlier labs. The required traces do not call the OpenAI API.
 - Python 3.10 or newer
 
 ## Setup
