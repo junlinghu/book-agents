@@ -1,9 +1,5 @@
 # Tutorial 1. Tool calling
 
-## Motivation
-
-A shop agent that answers from habit will invent the return rule. The customer hears a finished paragraph, and the policy file stays closed. That is the failure this tutorial exists to repair. Before an agent can help run a shop, it needs a way to ask for a fact the shop actually wrote down, and to wait for that fact before it speaks.
-
 ## What this tutorial is about
 
 This lesson is about tool calling. A tool is a named action your program can perform, such as reading one section of the shop policy. The language model may request that action. It does not perform the action itself. The program around the model, called the harness, carries the request out and places the result back where the model can read it.
