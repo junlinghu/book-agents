@@ -1,0 +1,11 @@
+{
+  "id": "ship_bun",
+  "customer_id": "guest",
+  "budget_cents": 5000,
+  "avoid_allergens": [],
+  "fulfillment": "ship",
+  "items": [
+    {"sku": "cardamom-bun", "qty": 1, "citations": ["docs/faq.md"]}
+  ],
+  "stated_total_cents": 1075
+}

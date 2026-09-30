@@ -1,0 +1,11 @@
+{
+  "id": "unknown_sku",
+  "customer_id": "guest",
+  "budget_cents": 5000,
+  "avoid_allergens": [],
+  "fulfillment": "pickup",
+  "items": [
+    {"sku": "live-crab", "qty": 1, "citations": ["docs/faq.md"]}
+  ],
+  "stated_total_cents": 0
+}

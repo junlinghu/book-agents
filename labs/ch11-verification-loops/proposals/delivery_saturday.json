@@ -1,0 +1,12 @@
+{
+  "id": "delivery_saturday",
+  "customer_id": "sam",
+  "budget_cents": 2000,
+  "avoid_allergens": [],
+  "fulfillment": "delivery",
+  "now": "Saturday 09:00",
+  "items": [
+    {"sku": "house-espresso", "qty": 1, "citations": ["docs/faq.md"]}
+  ],
+  "stated_total_cents": 800
+}

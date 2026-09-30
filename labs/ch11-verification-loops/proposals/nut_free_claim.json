@@ -1,0 +1,12 @@
+{
+  "id": "nut_free_claim",
+  "customer_id": "guest",
+  "budget_cents": 1000,
+  "avoid_allergens": [],
+  "fulfillment": "pickup",
+  "claims_nut_free_prep": true,
+  "items": [
+    {"sku": "house-espresso", "qty": 1, "citations": ["docs/faq.md"]}
+  ],
+  "stated_total_cents": 350
+}

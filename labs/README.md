@@ -1,6 +1,6 @@
 # Labs
 
-Exercises for the Local Shop Concierge. Chapters 1–6 and 16–18 are scripts you can run. Chapters 4–10 are assignment labs with starter files. The other chapter folders are stubs.
+Exercises for the Local Shop Concierge. Chapters 1–6 and 16–18 are scripts you can run. Chapters 4–15 are assignment labs with starter files. Chapters 11–15 tests do not need a model server. Chapters 16–18 required traces do not need a model server. The other chapter folders are stubs.
 
 Do this setup once from the repo root. Then open the lab you are on and follow that README.
 
@@ -18,11 +18,16 @@ Do this setup once from the repo root. Then open the lab you are on and follow t
 | [Chapter 8. Browse](ch08-browsing-the-web/README.md) | `labs/ch08-browsing-the-web/browse_agent.py` |
 | [Chapter 9. Protocols](ch09-protocols-and-open-stack/README.md) | `labs/ch09-protocols-and-open-stack/concierge.py` |
 | [Chapter 10. Runtime](ch10-runtime-for-long-running-agents/README.md) | `labs/ch10-runtime-for-long-running-agents/restock.py` |
+| [Chapter 11. Verification loops](ch11-verification-loops/README.md) | `labs/ch11-verification-loops/run_check.py` |
+| [Chapter 12. Evals from real failures](ch12-evals-from-real-failures/README.md) | `labs/ch12-evals-from-real-failures/run_eval.py` |
+| [Chapter 13. Simulated users](ch13-simulated-users-and-environments/README.md) | `labs/ch13-simulated-users-and-environments/run_personas.py` |
+| [Chapter 14. Honest metrics](ch14-production-signals-and-honest-metrics/README.md) | `labs/ch14-production-signals-and-honest-metrics/report.py` |
+| [Chapter 15. Model lever](ch15-pulling-the-model-lever/README.md) | `labs/ch15-pulling-the-model-lever/bakeoff.py` |
 | [Chapter 16. Autonomy policy](ch16-autonomy-policy/README.md) | `labs/ch16-autonomy-policy/policy_gate.py` |
 | [Chapter 17. Work-agent blueprint](ch17-work-agent-blueprint/README.md) | `labs/ch17-work-agent-blueprint/draft_mail.py` |
 | [Chapter 18. Agentic commerce](ch18-agentic-commerce/README.md) | `labs/ch18-agentic-commerce/checkout.py` |
 
-Each of Labs 1–3 has a `SOLUTION.md` in its folder. Those notes are for instructors and for checking your own write-up after you have finished it. If the lab is homework, finish the write-up before you open that file. Labs 4–10 do not include a solution file. Follow the assignment in that lab's README. The starter scripts are incomplete on purpose.
+Each of Labs 1–3 has a `SOLUTION.md` in its folder. Those notes are for instructors and for checking your own write-up after you have finished it. If the lab is homework, finish the write-up before you open that file. Labs 4–18 do not include a solution file. Follow the assignment in that lab's README. The starter scripts are incomplete on purpose. Labs 11–15 checker and report tests fail on the starter until the TODOs in that lab are done.
 
 Chapters 16–18 do not have solution files. Their required traces run without a model server. `--self-check` on those three scripts does not call the OpenAI API.
 
@@ -98,6 +103,10 @@ Each script prints `MODEL` and hides the key. Optional questions are extra argum
 Chapter 4 rebuilds a SQLite shelf and answers "What's low stock?" `python labs/ch04-tools-and-sensors/stock_agent.py --check` exercises the SQL tools without a model. Chapter 5 defaults to filing notes (`file`); `size` prints the context budget without a model, and `next` asks the morning question. Chapter 6 stores guest memory in JSON. `--check` and `--reset` do not call a model; `quiz` is the next process.
 
 Chapters 7–10 follow the lab README in each folder. Chapter 9's contract test does not need a model. Chapter 10's ledger check does not need one either.
+
+Chapters 11–15 follow the lab README in each folder. Their tests do not call the OpenAI API. On the starter, those tests fail until the TODOs are done.
+
+Chapters 16–18 follow the lab README in each folder. Their required traces run without a model server.
 
 ## Check the harness without a model
 

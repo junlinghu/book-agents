@@ -1,0 +1,11 @@
+{
+  "id": "bad_qty",
+  "customer_id": "maya",
+  "budget_cents": 5000,
+  "avoid_allergens": [],
+  "fulfillment": "pickup",
+  "items": [
+    {"sku": "house-espresso", "qty": 0, "citations": ["docs/faq.md"]}
+  ],
+  "stated_total_cents": 0
+}
