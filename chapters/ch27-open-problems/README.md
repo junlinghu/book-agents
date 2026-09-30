@@ -29,9 +29,7 @@ People sometimes write the relationship this way.
 
 **Agent quality = Model × Harness × Feedback loop**
 
-Read the multiplication sign as a warning. If one factor is missing or wrong, the result is poor, even when the other two look fine. The line tells you which factor you changed. It does not tell you that the factor will mean the same thing next month. A new model, an edited procedure, or a new scoring rule each needs a shop you can reset, and a definition of done written down before the edit. When the shop changes and that definition stays still, a passing report from the Tuesday demo is a report about an old copy of the shop.
-
-Frontier work, meaning the unsolved part of this subject, is measurement under change. You say what you held still. You say what you changed. You write down the part of the shop the score does not cover. The four sections below are four places where that measurement is still open.
+If one factor is missing or wrong, the result is poor, even when the other two look fine. The line tells you which factor you changed. It does not tell you that the factor will mean the same thing next month. A new model, an edited procedure, or a new scoring rule each needs a shop you can reset, and a definition of done written down before the edit. When the shop changes and that definition stays still, a passing report from the Tuesday demo is a report about an old copy of the shop.
 
 ## 27.1 Harness assumptions go stale and don't transfer
 
