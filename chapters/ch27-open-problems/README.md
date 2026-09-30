@@ -6,7 +6,7 @@ If you run one full restock on one Tuesday, every piece can seem to work. A rest
 
 The success is real, and it is narrow. It covers one shop on one day, and only because you froze that shop for the demo. A frozen shop is a saved copy of the files, the prices, and the shelf counts, so the same Tuesday can be replayed. The polished run shows that this copy worked on that day. It does not prove the same setup will still work next month, after the real shop has changed. It does not prove the same setup will work at another shop.
 
-This chapter names four problems that stay open after a demo like that. An open problem, here, is a limit you can describe and measure. This chapter does not hand you a fix that has already been verified.
+This chapter names four problems that stay open after a demo like that. 
 
 - Rules written for one demo day can go out of date. The same rules can also fail in a shop they were not written for, or on a task they were not written for.
 - A scoring program can give a pass when the real work is still wrong. A pass can also be misleading when the answer was already sitting in the instructions.
