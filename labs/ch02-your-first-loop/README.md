@@ -23,13 +23,13 @@ Turn in:
 ## Prerequisites
 
 - The shared setup in [`../README.md`](../README.md): Python 3.10 or newer, a virtualenv, and a repo-root `.env`
-- A model that can emit OpenAI-style `tool_calls`. The default `llama3.2` often can, and sometimes will not
+- A model that can emit `tool_calls`. The default `gpt-4.1-mini` can. If a trace never shows `read_file`, set `MODEL` to another current tool-capable id, such as `gpt-4.1`
 
 ## Setup
 
 Do the shared setup in [`../README.md`](../README.md) once, then come back here. If you already installed dependencies for Chapter 1, reuse that virtualenv.
 
-The script uses the shared harness in `labs/common/loop.py` and `labs/common/tools.py`, and reads only `labs/ch02-your-first-loop/docs/`. This lab needs tool calls. If the trace never shows `read_file`, use the tool-capable `MODEL` note in the shared setup. Chapter 3 is the full provider switch.
+The script uses the shared harness in `labs/common/loop.py` and `labs/common/tools.py`, and reads only `labs/ch02-your-first-loop/docs/`. This lab needs tool calls. If the trace never shows `read_file`, change `MODEL` as the shared setup describes. Chapter 3 runs this same loop and changes only `MODEL`.
 
 ## Documents
 
@@ -80,19 +80,19 @@ From the repo root, with the virtualenv active:
    python -c "from labs.common.tools import read_file; from pathlib import Path; print(read_file(Path('labs/ch02-your-first-loop/docs'), '../.env'))"
    ```
 
-4. Optional. Stop conditions and the jail, without a server:
+4. Optional. Stop conditions and the jail, without calling the API:
 
    ```bash
    python -m unittest labs.common.test_harness
    ```
 
-   That run does not contact Ollama or a hosted API.
+   That run does not call the OpenAI API.
 
 ## What to write up
 
 Record:
 
-- Header values: `BASE_URL`, `MODEL`, `DOCS`, `MAX_STEPS`. The key is not printed.
+- Header values: `MODEL`, `DOCS`, `MAX_STEPS`. The key is not printed.
 - Every tool line: tool name, path argument, and whether the result started with `PATH:` or `ERROR:`.
 - The answer text.
 - The stop tag (`final`, `max_steps`, `repeated_call`, or `max_tokens`) and the model-call count.
@@ -103,7 +103,7 @@ Record:
 
 ## Troubleshooting
 
-- Connection error: server down, bad `BASE_URL`, or bad key. Checks are in [`../README.md`](../README.md).
+- Request error: bad key, stale `MODEL`, or network. Checks are in [`../README.md`](../README.md).
 - `final` after 1 model call and an empty trace: the model never called the tool. Change `MODEL`, not the question, and run again. Keep the empty trace in the write-up.
 - `ERROR:` in the trace for a normal question: read the error. A bad path is the model. A missing `docs/` directory is the checkout.
 - `max_steps` or `repeated_call`: the harness stopped on purpose and did not invent a closing paragraph. The trace is the result.

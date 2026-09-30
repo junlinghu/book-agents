@@ -1,4 +1,4 @@
-"""Harness tests that do not call a model server.
+"""Harness tests that do not call the OpenAI API.
 
 Run from the repo root:
 
@@ -13,12 +13,7 @@ import unittest
 from pathlib import Path
 from types import SimpleNamespace
 
-from labs.common.client import (
-    OLLAMA_API_KEY,
-    OLLAMA_BASE_URL,
-    OLLAMA_MODEL,
-    settings_from_env,
-)
+from labs.common.client import DEFAULT_MODEL, settings_from_env
 from labs.common.loop import run_file_agent
 from labs.common.tools import read_file
 
@@ -57,33 +52,47 @@ class ScriptedClient:
 
 
 class SettingsTests(unittest.TestCase):
-    def test_ollama_defaults_when_unset(self):
-        base_url, api_key, model = settings_from_env({})
-        self.assertEqual(base_url, OLLAMA_BASE_URL)
-        self.assertEqual(api_key, OLLAMA_API_KEY)
-        self.assertEqual(model, OLLAMA_MODEL)
+    def test_default_model_when_unset(self):
+        api_key, model = settings_from_env({})
+        self.assertEqual(api_key, "")
+        self.assertEqual(model, DEFAULT_MODEL)
+        self.assertEqual(DEFAULT_MODEL, "gpt-4.1-mini")
 
     def test_empty_api_key_is_preserved(self):
-        _base_url, api_key, _model = settings_from_env({"API_KEY": "  "})
+        api_key, _model = settings_from_env({"OPENAI_API_KEY": "  "})
         self.assertEqual(api_key, "")
 
+    def test_blank_model_uses_default(self):
+        _api_key, model = settings_from_env({"MODEL": "  "})
+        self.assertEqual(model, DEFAULT_MODEL)
+
     def test_explicit_values_win(self):
-        base_url, api_key, model = settings_from_env(
+        api_key, model = settings_from_env(
             {
-                "BASE_URL": "https://api.groq.com/openai/v1",
-                "API_KEY": "gsk_test",
-                "MODEL": "llama-3.3-70b-versatile",
+                "OPENAI_API_KEY": "sk-test",
+                "MODEL": "gpt-4.1",
             }
         )
-        self.assertEqual(base_url, "https://api.groq.com/openai/v1")
-        self.assertEqual(api_key, "gsk_test")
-        self.assertEqual(model, "llama-3.3-70b-versatile")
+        self.assertEqual(api_key, "sk-test")
+        self.assertEqual(model, "gpt-4.1")
+
+    def test_legacy_provider_variables_are_ignored(self):
+        api_key, model = settings_from_env(
+            {
+                "BASE_URL": "http://localhost:11434/v1",
+                "API_KEY": "ollama",
+            }
+        )
+        self.assertEqual(api_key, "")
+        self.assertEqual(model, DEFAULT_MODEL)
 
     def test_loader_does_not_require_a_committed_secret(self):
-        self.assertFalse((Path(__file__).resolve().parents[2] / ".env").exists())
-        self.assertNotIn("gsk_", OLLAMA_API_KEY)
-        self.assertNotIn("sk-", OLLAMA_API_KEY)
-        self.assertEqual(OLLAMA_API_KEY, "ollama")
+        root = Path(__file__).resolve().parents[2]
+        self.assertFalse((root / ".env").exists())
+        example = (root / ".env.example").read_text(encoding="utf-8")
+        self.assertIn("OPENAI_API_KEY=", example)
+        self.assertNotIn("sk-proj-", example)
+        self.assertNotIn("sk-or-", example)
 
 
 class ReadFileTests(unittest.TestCase):

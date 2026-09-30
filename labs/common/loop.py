@@ -87,7 +87,7 @@ def parse_arguments(raw: object) -> dict:
 
 
 def _assistant_message(message: object) -> dict:
-    # Empty string, not null: both Ollama and Groq accept it on tool turns.
+    # Empty string, not null: Chat Completions accepts "" on tool turns.
     content = message_text(getattr(message, "content", None))
     assistant: dict = {"role": "assistant", "content": content}
     tool_calls = list(getattr(message, "tool_calls", None) or [])
@@ -237,9 +237,8 @@ def observation_notes(result: AgentResult) -> list[str]:
     if result.stopped == "final" and not result.tool_log:
         notes.append(
             "No tool ran. Shop facts in the answer were not read from docs/. "
-            "The lab does not send tool_choice, because Ollama's compatible "
-            "API does not support that field. A small local model often answers from memory anyway. "
-            "Try MODEL=llama3.1, or a Groq/OpenRouter model with local tool calls."
+            "The lab does not send tool_choice, so the model can skip the read. "
+            "Try another tool-capable MODEL in .env, such as gpt-4.1, and run again."
         )
     if result.stopped == "final" and "docs/" not in result.text:
         notes.append(

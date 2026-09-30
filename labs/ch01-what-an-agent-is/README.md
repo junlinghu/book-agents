@@ -21,7 +21,7 @@ Turn in:
 
 ## Prerequisites
 
-- The shared setup in [`../README.md`](../README.md): Python 3.10 or newer, and a working chat endpoint (Ollama, Groq, or OpenRouter)
+- The shared setup in [`../README.md`](../README.md): Python 3.10 or newer, and an OpenAI API key in `.env`
 - Tool calling is not required for this lab
 
 ## Setup
@@ -38,7 +38,7 @@ From the repo root, with the virtualenv active.
    python labs/ch01-what-an-agent-is/hello_concierge.py
    ```
 
-   The script loads `BASE_URL`, `API_KEY`, and `MODEL` through `labs/common/client.py`. It prints those values with the key hidden, plus `TEMPERATURE`, `MAX_TOKENS`, and `TOOLS=none`. It sends a system prompt and your question to `chat.completions.create`. There is no `tools` argument. It prints the reply, then a checklist of failure modes.
+   The script loads `OPENAI_API_KEY` and `MODEL` through `labs/common/client.py`. It prints the model with the key hidden, plus `TEMPERATURE`, `MAX_TOKENS`, and `TOOLS=none`. It sends a system prompt and your question to `chat.completions.create`. There is no `tools` argument. It prints the reply, then a checklist of failure modes.
 
    Default question:
 
@@ -56,7 +56,7 @@ From the repo root, with the virtualenv active.
 
 From the run, record:
 
-- The header, including `TOOLS=none`, `BASE_URL`, and `MODEL`. The key is not printed. `TOOLS=none` is there so a later Chapter 2 trace is obviously a different program.
+- The header, including `TOOLS=none` and `MODEL`. The key is not printed. `TOOLS=none` is there so a later Chapter 2 trace is obviously a different program.
 - The full reply.
 - Three quoted sentences, each labeled with one of these modes:
   - **Invented shop fact.** A return window, a fee, an hour, or a price this program had no way to look up.
@@ -68,6 +68,6 @@ The script's closing note is a checklist for your write-up. It is not a grade of
 
 ## Troubleshooting
 
-A connection error means `.env` or the server, not the café prompt. The checks are in [`../README.md`](../README.md). The key is not printed.
+A request error means `.env` or the key, not the café prompt. The checks are in [`../README.md`](../README.md). The key is not printed.
 
 Instructor notes are in `SOLUTION.md` in this folder. If this lab is homework, finish the write-up before you open that file.
