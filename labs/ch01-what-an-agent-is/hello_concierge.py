@@ -1,28 +1,20 @@
 #!/usr/bin/env python3
 """Hello Concierge: one chat completion, no tools.
 
-Chapter 1 lab. This process cannot open shop documents. The reply is
-the model's text. Read the failure-mode note before you trust a sentence.
+Chapter 1 lab. This program cannot open shop documents. The reply is
+the model's text. Read the note at the end before you trust a sentence.
 """
 
-from __future__ import annotations
-
+import os
 import sys
-from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[2]
-if str(ROOT) not in sys.path:
-    sys.path.insert(0, str(ROOT))
+from dotenv import load_dotenv
+from openai import OpenAI
 
-from labs.common.client import (  # noqa: E402
-    MAX_TOKENS,
-    TEMPERATURE,
-    describe_runtime,
-    make_client,
-    redact,
-    require_settings,
-)
-from labs.common.loop import message_text  # noqa: E402
+# Same sampling numbers as the later labs. They live here, not in .env.
+TEMPERATURE = 0.2
+MAX_TOKENS = 800
+DEFAULT_MODEL = "gpt-4.1-mini"
 
 SYSTEM = """You are the counter concierge for Hearth Lane Café, a small neighborhood café.
 Customers ask about the menu, hours, returns, and shipping.
@@ -36,13 +28,13 @@ DEFAULT_QUESTION = (
 
 FAILURE_NOTE = """
 ---
-What to notice before you ship any sentence above
+What to notice before you trust any sentence above
 
 This script sent one chat completion. It did not open a file, query a
-database, or call a tool. Anything specific — a return window, a shipping
-fee, a closed day, a price — came from the model and the prompt.
+database, or call a tool. A return window, a fee, a closed day, or a
+price came from the model and the prompt.
 
-Write down three failure modes you actually saw. Start with these:
+Write down three failure modes you actually saw:
 
 1. Invented shop facts. A return window, fee, hour, or price that this
    program had no way to look up.
@@ -51,50 +43,73 @@ Write down three failure modes you actually saw. Start with these:
 3. No action boundary. The model may offer to refund, ship, or email.
    This process cannot do any of those. The text only sounds like it can.
 
-If the model hedged ("I don't know your policy"), record that too. A
-refusal is a different miss from a fake "30-day refund." Chapter 2 is
-the loop that reads docs/policy.md and docs/faq.md before it answers.
+If the model hedged ("I don't know your policy"), write that down too.
+A refusal is different from a fake "30-day refund." Chapter 2 reads
+docs/policy.md and docs/faq.md before it answers.
 """
 
+# This file is labs/ch01-what-an-agent-is/hello_concierge.py.
+# .env is in the repository root, two folders above this folder.
+this_folder = os.path.dirname(os.path.abspath(__file__))
+repo_root = os.path.dirname(os.path.dirname(this_folder))
+load_dotenv(os.path.join(repo_root, ".env"))
 
-def main(argv: list[str] | None = None) -> int:
-    args = list(sys.argv[1:] if argv is None else argv)
-    question = " ".join(args).strip() or DEFAULT_QUESTION
-    print(describe_runtime())
-    print(f"TEMPERATURE={TEMPERATURE}")
-    print(f"MAX_TOKENS={MAX_TOKENS}")
-    print("TOOLS=none")
-    print(f"QUESTION: {question}\n")
+api_key = os.environ.get("OPENAI_API_KEY", "").strip()
+model = os.environ.get("MODEL", "").strip()
+if not model:
+    model = DEFAULT_MODEL
 
-    api_key, model = require_settings()
-    client = make_client()
-    try:
-        response = client.chat.completions.create(
-            model=model,
-            temperature=TEMPERATURE,
-            max_tokens=MAX_TOKENS,
-            messages=[
-                {"role": "system", "content": SYSTEM},
-                {"role": "user", "content": question},
-            ],
-        )
-    except Exception as exc:
-        print(redact(f"Request failed: {type(exc).__name__}: {exc}", api_key), file=sys.stderr)
-        print(
-            "Check OPENAI_API_KEY and MODEL in .env. "
-            "A 401 means the key is wrong. A 404 means MODEL is not a current id.",
-            file=sys.stderr,
-        )
-        return 1
+question = " ".join(sys.argv[1:]).strip()
+if not question:
+    question = DEFAULT_QUESTION
 
-    if not response.choices:
-        print("The provider returned no choices.", file=sys.stderr)
-        return 1
-    content = message_text(response.choices[0].message.content).strip()
-    print(content or "(model returned an empty answer)")
-    print(FAILURE_NOTE)
-    return 0
+if api_key:
+    key_status = "set"
+else:
+    key_status = "missing"
 
+print(f"MODEL={model}")
+print(f"OPENAI_API_KEY={key_status} (value hidden)")
+print(f"TEMPERATURE={TEMPERATURE}")
+print(f"MAX_TOKENS={MAX_TOKENS}")
+print("TOOLS=none")
+print(f"QUESTION: {question}\n")
 
-if __name__ == "__main__":
-    sys.exit(main())
+if not api_key:
+    print(
+        "OPENAI_API_KEY is empty. Copy .env.example to .env and paste a key "
+        "from https://platform.openai.com/api-keys. Never commit .env.",
+        file=sys.stderr,
+    )
+    sys.exit(1)
+
+# A wrong key should fail immediately instead of sleeping through retries.
+client = OpenAI(api_key=api_key, timeout=120, max_retries=0)
+
+try:
+    response = client.chat.completions.create(
+        model=model,
+        temperature=TEMPERATURE,
+        max_tokens=MAX_TOKENS,
+        messages=[
+            {"role": "system", "content": SYSTEM},
+            {"role": "user", "content": question},
+        ],
+    )
+except Exception as error:
+    detail = str(error).replace(api_key, "***")
+    print(f"Request failed: {type(error).__name__}: {detail}", file=sys.stderr)
+    print(
+        "Check OPENAI_API_KEY and MODEL in .env. "
+        "A 401 means the key is wrong. A 404 means MODEL is not a current id.",
+        file=sys.stderr,
+    )
+    sys.exit(1)
+
+if not response.choices:
+    print("The provider returned no choices.", file=sys.stderr)
+    sys.exit(1)
+
+answer = response.choices[0].message.content or ""
+print(answer.strip() or "(model returned an empty answer)")
+print(FAILURE_NOTE)
