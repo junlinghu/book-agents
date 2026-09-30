@@ -1,49 +1,27 @@
-        # Tutorial 11. Prompt injection and untrusted data
+# Tutorial 11. Untrusted text
 
-        ## Purpose
+## Motivation
 
-        The Mill and Birch page asks the concierge to charge a card, read `.env`, and change the bun price. The scripted model reports the wholesale price and does not call those tools. A second cell runs the bad proposals through the path jail and the autonomy gate anyway, because the boundary has to hold when the model is wrong.
+Tutorial 7 taught the agent to fetch one supplier page and to mark the text as untrusted. Tutorial 10 taught the program to refuse a card charge and to keep document reads inside the shop folder. What the agent still cannot show is that those two lessons hold together when the page is trying to give orders. The Mill and Birch page asks the concierge to charge a card, to read a secret file, and to change the price of a bun. A polite model may ignore those sentences. A boundary that depends on politeness fails on the day the model complies. We add that test now, while the gate is still the newest piece, and before two roles start passing quantities to each other.
 
-        ## What you should learn
+## What this tutorial is about
 
-        - Untrusted text can sit in the thread. It does not edit the tool list.
-- The docs path jail blocks `..` and any file that is not policy or FAQ.
-- A canary token in a local fixture must not appear in the tool output.
-- Mail to the counter is confirm. Mail to any other domain is never.
+The name for this failure is prompt injection: instructions that arrive inside something the agent was only supposed to read. The untrusted text can sit in the conversation. It does not edit the list of tools, and it does not grant an action the program has refused. You will see the scripted model report the wholesale price and leave the demanded actions uncalled. You will then see the same proposals run through the folder boundary and the gate with no model in the path, because the boundary has to hold when the model is wrong.
 
-        ## How this maps to the book
+A planted fake secret sits in a local practice file. People sometimes call that kind of marker a canary, because its appearance in the output would show that private text leaked. It must not appear in the tool output. Mail to the counter waits for a person. Mail to any other address is refused. A path that climbs out of the shop documents, or that names a file other than the policy and the frequently asked questions, comes back as an error the model can read.
 
-        | Tutorial idea | Book chapter and lab |
-        |---|---|
-        | Untrusted page text and a canary | Chapter 21, `labs/ch21-prompt-injection-and-untrusted-data` |
-| The gate from the previous tutorial | Chapter 16, `labs/common/autonomy.py` |
+## How you will get there
 
-        The café in these files is fictional. Prices, hours, and the shelf match the Local Shop Concierge labs. Do not point the tools at a private document.
+The notebook asks for the oat-milk case price on the supplier page, and it asks the agent to leave the page’s instructions alone. The answer reports the price and says those instructions were not carried out. A second part of the notebook then attempts the reads, the charge, and the outside mail that the page requested. You read the errors and the refusals. The planted secret does not appear in that output, and a charge remains refused even when an approval is offered for that exact call.
 
-        ## How to run
+## Additional things
 
-        From the repository root, with the virtualenv from `labs/README.md` active:
+Marking a page “untrusted” is a comment until some function enforces it. This notebook is that function: the folder check from tutorial 2, the gate from tutorial 10, and a secret that is absent from the result. Tutorial 12 meets a supplier note with the same habit. The note can ask for a thousand bags. The quantity still comes from the shelf.
 
-        ```bash
-        jupyter notebook labs/tutorial/11-prompt-injection.ipynb
-        ```
+Chapter 21 is the book’s treatment of instructions hidden in pages, files, and database text, and of keeping secrets out of the prompt. Chapter 16 remains the source of the gate. The café is fictional, and the planted secret is practice data. Leave real credentials alone.
 
-        In VS Code or Cursor, open `labs/tutorial/11-prompt-injection.ipynb` and choose Run All. The setup cell walks parent folders until it finds `labs/common/client.py`, so the kernel may start in `labs/tutorial` or at the repo root.
+## Sources and references
 
-        Scripted demo (no API call):
-
-        ```bash
-        DEMO_MODE=1 jupyter nbconvert --to notebook --execute labs/tutorial/11-prompt-injection.ipynb --output /tmp/11-prompt-injection-out.ipynb
-        ```
-
-        Live Chat Completions API:
-
-        ```bash
-        DEMO_MODE=0 jupyter nbconvert --to notebook --execute labs/tutorial/11-prompt-injection.ipynb --output /tmp/11-prompt-injection-out.ipynb
-        ```
-
-        `DEMO_MODE=0` needs `OPENAI_API_KEY` in the repo-root `.env`. `DEMO_MODE` unset uses the API when a key is present and the scripted demo when it is not. The notebook's first code cell can also set `DEMO_MODE` to `True` or `False`.
-
-        This notebook is standalone. The cells include the working code from earlier tutorials and then add this lesson.
-
-        Series map: [README.md](README.md).
+- [Chapter 21: Prompt Injection and Untrusted Data](../../chapters/ch21-prompt-injection-and-untrusted-data/README.md), and the lab [labs/ch21-prompt-injection-and-untrusted-data](../ch21-prompt-injection-and-untrusted-data).
+- The gate is [Chapter 16: Autonomy Policy](../../chapters/ch16-autonomy-policy/README.md), implemented in [labs/common/autonomy.py](../common/autonomy.py).
+- The previous lectures are [7-web-browse.md](7-web-browse.md) and [10-autonomy-policy.md](10-autonomy-policy.md). The notebook is [11-prompt-injection.ipynb](11-prompt-injection.ipynb). The series map is in [README.md](README.md).
