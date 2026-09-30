@@ -21,7 +21,7 @@ This folder uses the same OpenAI client as the other labs (`labs/common/client.p
 | 11 | [11-prompt-injection](11-prompt-injection.ipynb) | Untrusted page text cannot grant tools or reveal a canary. | Ready |
 | 12 | [12-multi-agent](12-multi-agent.ipynb) | A stocker and a checker hand off a shelf gap, not a note's quantity. | Ready |
 | 13 | [13-observability](13-observability.ipynb) | Spans that name the user, the agent, and the tool. | Ready |
-| 14 | 14-cost-latency | Token, cost, and latency ledger, plus a read cache. | Planned |
+| 14 | [14-cost-latency](14-cost-latency.ipynb) | Token, cost, and latency ledger, plus a read cache. | Ready |
 | 15 | 15-shop-manager | Tuesday restock: plan, check, confirm, write tickets. | Planned |
 
 Planned rows are the later lessons in this series. They are not in this folder until that lesson is merged.
