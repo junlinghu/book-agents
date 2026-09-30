@@ -1,10 +1,6 @@
 # A Practical Guide to Agents
 
-Agents that can read documents, call tools, and take actions are becoming a practical part of products and workflows. This book is a concise introduction for practitioners and product managers: what an agent is, how the loop around a language model works, and how to judge quality when the model, the harness, and the feedback loop each play a different role.
-
-The through-line is a Local Shop Concierge for a fictional café. Early chapters stay conceptual; matching labs under `labs/` let you run the same ideas on your machine with an OpenAI-compatible client (Ollama by default, or a hosted API). Later chapters grow the same agent—tools, memory, verification, autonomy, commerce patterns, and operations—without restarting the product story.
-
-**Agent quality = Model × Harness × Feedback loop.**
+Agents that can read documents, call tools, and take actions are becoming a practical part of products and workflows. This book is a concise introduction for practitioners and product managers. It explains what an agent is, how the loop around a language model works, and how to judge quality when the model, the harness, and the feedback loop each play a different role.
 
 ## Outline
 
@@ -149,6 +145,8 @@ The through-line is a Local Shop Concierge for a fictional café. Early chapters
 5. [Appendix E. Glossary](chapters/appendix-e-glossary/README.md)
 
    Shared definitions for harness, skill, MCP, grader, autonomy tier, and context rot.
+
+The through-line is a Local Shop Concierge for a fictional café. Early chapters stay conceptual. Matching labs under `labs/` let you run the same ideas on your machine with an OpenAI-compatible client, using Ollama by default or a hosted API. Later chapters grow the same agent—tools, memory, verification, autonomy, commerce patterns, and operations—without restarting the product story.
 
 ## Folders
 
