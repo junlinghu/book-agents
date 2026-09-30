@@ -150,12 +150,12 @@ The through-line is a Local Shop Concierge for a fictional café. Early chapters
 
 ## Folders
 
-- `chapters/` — manuscript. Chapters 1–18 are full prose. The other chapters are still outlines.
-- `labs/` — Chapters 1–6 and 16–18 are runnable scripts. Chapters 4–15 are assignment labs with starter files and no solution notes. Chapters 16–18 do not need a model for their required traces. The other labs are stubs. Shared setup is [labs/README.md](labs/README.md).
+- `chapters/` — manuscript. Chapters 1–18 and 24–25 are full prose. The other chapters are still outlines.
+- `labs/` — Chapters 1–6 and 16–18 are runnable scripts. Chapters 4–15 and 24–25 are assignment labs with starter files and no solution notes. Chapters 16–18 do not need a model for their required traces. Chapters 24–25 checks do not need a model. The other labs are stubs. Shared setup is [labs/README.md](labs/README.md).
 
 ## Running the labs
 
-Chapters 1–6 are runnable scripts. Chapters 4–10 are assignment labs (starter files, no `SOLUTION.md`). Chapters 11–15 are assignments with starter code; their checks run without a model server, and they have no `SOLUTION.md`. Chapters 16–18 are runnable; their required traces do not call the API, and they have no `SOLUTION.md`. The other labs are stubs. Install, `.env`, and the OpenAI API key are shared: do them once from [labs/README.md](labs/README.md), then follow the lab you are on.
+Chapters 1–6 are runnable scripts. Chapters 4–10 are assignment labs (starter files, no `SOLUTION.md`). Chapters 11–15 are assignments with starter code; their checks run without a model server, and they have no `SOLUTION.md`. Chapters 16–18 are runnable; their required traces do not call the API, and they have no `SOLUTION.md`. Chapters 24–25 are assignments with starter code; their checks run without a model server, and they have no `SOLUTION.md`. The other labs are stubs. Install, `.env`, and the OpenAI API key are shared: do them once from [labs/README.md](labs/README.md), then follow the lab you are on.
 
 From the repo root, with the virtualenv active:
 
@@ -184,3 +184,5 @@ Chapters 7–10 follow the lab README in each folder. Chapter 9's contract test 
 Chapters 11–15 follow the lab README in each folder. Their checks do not need a model.
 
 Chapters 16–18 follow the lab README in each folder. Their required traces do not call the API.
+
+Chapters 24 and 25 follow the lab README in each folder. Their checks do not need a model. On the starter, the Chapter 24 route and summary tests fail, and the Chapter 25 surface and merge tests fail, until the TODOs in that lab are done.
