@@ -19,7 +19,7 @@ This folder uses the same OpenAI client as the other labs (`labs/common/client.p
 | 9 | [9-evals](9-evals.ipynb) | A tiny grader, including one canned failure. | Ready |
 | 10 | [10-autonomy-policy](10-autonomy-policy.ipynb) | Auto, confirm, and never gates. | Ready |
 | 11 | [11-prompt-injection](11-prompt-injection.ipynb) | Untrusted page text cannot grant tools or reveal a canary. | Ready |
-| 12 | 12-multi-agent | A stocker and a checker hand off a shelf gap, not a note's quantity. | Planned |
+| 12 | [12-multi-agent](12-multi-agent.ipynb) | A stocker and a checker hand off a shelf gap, not a note's quantity. | Ready |
 | 13 | 13-observability | Spans that name the user, the agent, and the tool. | Planned |
 | 14 | 14-cost-latency | Token, cost, and latency ledger, plus a read cache. | Planned |
 | 15 | 15-shop-manager | Tuesday restock: plan, check, confirm, write tickets. | Planned |
