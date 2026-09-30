@@ -1,48 +1,24 @@
-        # Tutorial 12. Constrained roles and a handoff
+# Tutorial 12. Two roles and a handoff
 
-        ## Purpose
+## Motivation
 
-        Two roles pass a structured artifact. The supplier note says to order 1000 bags. The stocker sets quantity to par minus on_hand and stores the note as untrusted data. The checker rejects an artifact that copied 1000. The chat model can load inputs. It does not get the last word.
+The agent can read an untrusted page without obeying it, and a checker can reject a quantity the shelf did not ask for. Both of those checks still live inside one concierge that plays every part. What it still cannot do is pass a structured handoff between two roles with a contract, so that the role which proposes a quantity is not the role which accepts it. A supplier note in this lesson says to order a thousand bags and to ignore the shelf. We add the two roles now, after the checker and the boundary around untrusted text, because the handoff is where an untrusted sentence would otherwise become an order.
 
-        ## What you should learn
+## What this tutorial is about
 
-        - A handoff is a dict with a role, the shelf numbers, and the untrusted note.
-- The checker compares the artifact to the shelf row. It does not trust the note.
-- A failed check stops the handoff. It does not become an order.
-- The fetch tool, the gate, and the loop are still in this notebook.
+The two roles are ordinary functions with a contract, not a crowd of agents free to invent one another’s jobs. The stocker reads a shelf row and sets the quantity to the gap between the target stock and the amount on hand. It stores the supplier note as untrusted data attached to the handoff. The handoff itself is a small record: a role, the shelf numbers, the quantity, and a place for that note. The checker compares the record to the shelf row. It accepts the handoff when the quantity is the gap, and it rejects a record that copied a thousand from the note. A failed check stops the handoff. The chat model can load the shelf and the note. It does not get the last word.
 
-        ## How this maps to the book
+## How you will get there
 
-        | Tutorial idea | Book chapter and lab |
-        |---|---|
-        | Roles, contracts, and an untrusted supplier note | Chapter 23, `labs/ch23-multi-agent-patterns` |
+The notebook asks the agent to pull the house-blend shelf row and the supplier note so the two roles can hand off. You then watch a bad handoff, built by copying the note’s quantity, fail the checker. You watch the stocker’s own handoff pass. The note is still attached, and it still asks for a thousand bags, and the checker accepts the handoff because the quantity came from the shelf. The note remains in the record as data the checker was not allowed to treat as an order.
 
-        The café in these files is fictional. Prices, hours, and the shelf match the Local Shop Concierge labs. Do not point the tools at a private document.
+## Additional things
 
-        ## How to run
+Chapter 23 describes how an unconstrained group of agents, each free to improvise the next agent’s job, tends to disappoint. The constraint here is small and strict. The checker reads the shelf again, and a broken handoff stops. Tutorial 15 keeps that rule inside one restock. The supplier note still cannot set the quantity.
 
-        From the repository root, with the virtualenv from `labs/README.md` active:
+One agent is enough for many questions at the counter. The second role earns its place when a proposal would change an order. The fetch tool, the gate, and the loop are still in this notebook, so the handoff sits on top of the earlier lessons rather than replacing them. The café in these files is fictional.
 
-        ```bash
-        jupyter notebook labs/tutorial/12-multi-agent.ipynb
-        ```
+## Sources and references
 
-        In VS Code or Cursor, open `labs/tutorial/12-multi-agent.ipynb` and choose Run All. The setup cell walks parent folders until it finds `labs/common/client.py`, so the kernel may start in `labs/tutorial` or at the repo root.
-
-        Scripted demo (no API call):
-
-        ```bash
-        DEMO_MODE=1 jupyter nbconvert --to notebook --execute labs/tutorial/12-multi-agent.ipynb --output /tmp/12-multi-agent-out.ipynb
-        ```
-
-        Live Chat Completions API:
-
-        ```bash
-        DEMO_MODE=0 jupyter nbconvert --to notebook --execute labs/tutorial/12-multi-agent.ipynb --output /tmp/12-multi-agent-out.ipynb
-        ```
-
-        `DEMO_MODE=0` needs `OPENAI_API_KEY` in the repo-root `.env`. `DEMO_MODE` unset uses the API when a key is present and the scripted demo when it is not. The notebook's first code cell can also set `DEMO_MODE` to `True` or `False`.
-
-        This notebook is standalone. The cells include the working code from earlier tutorials and then add this lesson.
-
-        Series map: [README.md](README.md).
+- [Chapter 23: Multi-agent Patterns](../../chapters/ch23-multi-agent-patterns/README.md), and the lab [labs/ch23-multi-agent-patterns](../ch23-multi-agent-patterns).
+- The previous lecture is [11-prompt-injection.md](11-prompt-injection.md). The notebook is [12-multi-agent.ipynb](12-multi-agent.ipynb). The series map is in [README.md](README.md).
