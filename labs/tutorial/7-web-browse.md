@@ -1,48 +1,26 @@
-        # Tutorial 7. The web as an untrusted sensor
+# Tutorial 7. A page from the supplier
 
-        ## Purpose
+## Motivation
 
-        Treat a web page as a sensor, not as a manager. The only URL is a local Mill and Birch fixture. The page names a wholesale price and also tries to give orders. The answer may quote the price as untrusted. It may not obey the orders.
+The agent can follow a written procedure, using memory, notes, documents, and the shelf, and it can stop when the loop says the work is finished. Every fact it has used so far lives in this repository, in files the shop controls. What it still cannot do is read a page that someone else wrote. A supplier’s wholesale price is useful at the counter, and the same page can contain sentences that try to give orders: charge a card, read a secret, change the price of a bun. We add a single page now, fetched as a reading and marked as untrusted, before the checker and the gate. Tutorial 11 will test that the mark is a boundary the program enforces. This tutorial is where the agent first meets text it did not author.
 
-        ## What you should learn
+## What this tutorial is about
 
-        - Allow-list the URL. Everything else is an error.
-- Wrap the text so a person can see the boundary.
-- Page instructions are data. They do not add tools.
-- The shelf count still comes from SQLite, not from the page.
+This tutorial treats a web page as a sensor, a reading that reports something and leaves the shop unchanged. The only page on offer is a local stand-in for Mill and Birch, the café’s supplier, so the lesson does not depend on the public internet. The page names a wholesale price for oat milk and for the house blend. It also contains instructions aimed at the agent.
 
-        ## How this maps to the book
+You will learn to allow only that one address, so that any other address comes back as an error. You will learn to wrap the returned text so a person can see where the page begins, and to keep the shelf count in the shelf. The price may be quoted as a claim the page made. The orders on the page do not become tools, and they do not change a Hearth Lane price.
 
-        | Tutorial idea | Book chapter and lab |
-        |---|---|
-        | Fetch a page, do not treat it as instructions | Chapter 8, `labs/ch08-browsing-the-web` |
+## How you will get there
 
-        The café in these files is fictional. Prices, hours, and the shelf match the Local Shop Concierge labs. Do not point the tools at a private document.
+The notebook adds a fetch action for that one address. You ask what wholesale oat-milk price the page claims, and you ask that the claim stay separate from the shelf. The agent fetches the page and reads the shelf. The printed answer quotes the price and marks the page as untrusted. The record of the run shows the fetch and the shelf reading, and it does not show a charge. You can hold the answer next to the page and see which sentence was a price and which sentences were orders the agent left alone.
 
-        ## How to run
+## Additional things
 
-        From the repository root, with the virtualenv from `labs/README.md` active:
+An allow-list is the whole of the network policy in this lesson. There is no open client for the public web. When you later point a fetch tool at a real site, Chapter 8 is the place to read about pages whose layout changes, about blocked requests, and about the duty to respect the site’s terms. The page’s attempt to give orders is a preview of what tutorial 11 calls prompt injection. That later notebook runs the bad proposals through the file boundary and the action gate, so the result does not depend on the model happening to be polite.
 
-        ```bash
-        jupyter notebook labs/tutorial/7-web-browse.ipynb
-        ```
+The shelf count still comes from the database you met in tutorial 2. A sentence on a supplier page is a claim about a price. It is a poor source for how many cartons are on hand, which is why this notebook reads both and keeps them apart. The café in these files is fictional. Leave private files alone.
 
-        In VS Code or Cursor, open `labs/tutorial/7-web-browse.ipynb` and choose Run All. The setup cell walks parent folders until it finds `labs/common/client.py`, so the kernel may start in `labs/tutorial` or at the repo root.
+## Sources and references
 
-        Scripted demo (no API call):
-
-        ```bash
-        DEMO_MODE=1 jupyter nbconvert --to notebook --execute labs/tutorial/7-web-browse.ipynb --output /tmp/7-web-browse-out.ipynb
-        ```
-
-        Live Chat Completions API:
-
-        ```bash
-        DEMO_MODE=0 jupyter nbconvert --to notebook --execute labs/tutorial/7-web-browse.ipynb --output /tmp/7-web-browse-out.ipynb
-        ```
-
-        `DEMO_MODE=0` needs `OPENAI_API_KEY` in the repo-root `.env`. `DEMO_MODE` unset uses the API when a key is present and the scripted demo when it is not. The notebook's first code cell can also set `DEMO_MODE` to `True` or `False`.
-
-        This notebook is standalone. The cells include the working code from earlier tutorials and then add this lesson.
-
-        Series map: [README.md](README.md).
+- [Chapter 8: Browsing the Web](../../chapters/ch08-browsing-the-web/README.md), and the lab [labs/ch08-browsing-the-web](../ch08-browsing-the-web).
+- The previous lecture is [6-skills.md](6-skills.md). The notebook is [7-web-browse.ipynb](7-web-browse.ipynb). The series map is in [README.md](README.md).
