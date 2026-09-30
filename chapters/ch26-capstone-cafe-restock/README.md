@@ -244,7 +244,7 @@ Figure 26.2 is the order of authority. The model writes a proposal. The metric r
 
 ## 26.4 Demo packaging
 
-A portfolio review goes wrong in a predictable way. The reviewer sees a screen recording of a chat, hears that the agent has tools, and is left to trust the café on that impression. The reviewer should grade the folder. A portfolio, here, is that folder of records. Jules will look for where the numbers came from. Package the session so the sources travel with the claims.
+A portfolio is the folder of records. The reviewer should grade the folder. Jules will look for where the numbers came from. Package the session so the sources travel with the claims.
 
 The folder is one session. It contains the inputs as well as the outputs. A trace that cannot be tied to a fixture is a story about a morning nobody else can reconstruct.
 
