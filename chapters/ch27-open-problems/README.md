@@ -13,7 +13,7 @@ This chapter names four problems that stay open after a demo like that.
 - A job with many steps can fail in ways one short script never shows. 
 - When an AI helper helps with buying or ordering, it is not clear who is responsible when something goes wrong.
 
-The example is a small fictional café, Hearth Lane, because the records are small enough to point at. The same four problems appear in a large company. The café is simply small enough that you can see every row.
+The example is a small fictional café, Hearth Lane, because the records are small enough to point at. The same four problems appear in a large company. 
 
 Jules runs the shop and is the person who may confirm an order. Priya is a regular guest. She is allergic to almonds, and she takes oat milk in a pour-over, a coffee made at the counter. One recorded session is named `restock-tuesday`. The Tuesday note already decided the order: 12 cartons of oat milk and 12 bags of house-blend coffee. A product code, sometimes called a SKU, is a short id for one item. Oat milk cartons are OM-32. The 12-ounce bags are HB-12. Par is the count the shop wants on the shelf when it is fully stocked: 16 cartons of oat milk, and 18 of the 12-ounce bags. The catalog is the shop's list of items and prices. In that list the bag is $18.00. A competitor's page claims $14. The page is allowed as reading material. Untrusted means the shop did not write it, so the program must not obey it.
 
