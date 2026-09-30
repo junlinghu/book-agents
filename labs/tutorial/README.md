@@ -15,7 +15,7 @@ This folder uses the same OpenAI client as the other labs (`labs/common/client.p
 | 5 | [5-memory](5-memory.ipynb) | Session messages versus a JSON memory file. | Ready |
 | 6 | [6-skills](6-skills.ipynb) | A procedure file, separate from the system prompt and the tools. | Ready |
 | 7 | [7-web-browse](7-web-browse.ipynb) | One supplier page, treated as an untrusted sensor. | Ready |
-| 8 | 8-verification | A checker that does not trust the proposed quantity. | Planned |
+| 8 | [8-verification](8-verification.ipynb) | A checker that does not trust the proposed quantity. | Ready |
 | 9 | 9-evals | A tiny grader, including one canned failure. | Planned |
 | 10 | 10-autonomy-policy | Auto, confirm, and never gates. | Planned |
 | 11 | 11-prompt-injection | Untrusted page text cannot grant tools or reveal a canary. | Planned |
