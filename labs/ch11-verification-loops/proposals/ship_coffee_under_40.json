@@ -1,0 +1,11 @@
+{
+  "id": "ship_coffee_under_40",
+  "customer_id": "maya",
+  "budget_cents": 5000,
+  "avoid_allergens": [],
+  "fulfillment": "ship",
+  "items": [
+    {"sku": "house-coffee-12oz", "qty": 1, "citations": ["docs/faq.md", "docs/policy.md"]}
+  ],
+  "stated_total_cents": 2400
+}

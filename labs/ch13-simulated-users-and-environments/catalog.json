@@ -1,0 +1,27 @@
+{
+  "cardamom-bun": {
+    "unit_price_cents": 475,
+    "allergens": ["wheat", "butter", "almonds"],
+    "shippable": false
+  },
+  "house-coffee-12oz": {
+    "unit_price_cents": 1800,
+    "allergens": [],
+    "shippable": true
+  },
+  "house-espresso": {
+    "unit_price_cents": 350,
+    "allergens": [],
+    "shippable": false
+  },
+  "pour-over": {
+    "unit_price_cents": 425,
+    "allergens": [],
+    "shippable": false
+  },
+  "oat-milk": {
+    "unit_price_cents": 75,
+    "allergens": [],
+    "shippable": false
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "id": "over_budget",
+  "customer_id": "maya",
+  "budget_cents": 2000,
+  "avoid_allergens": [],
+  "fulfillment": "pickup",
+  "items": [
+    {"sku": "house-coffee-12oz", "qty": 3, "citations": ["docs/faq.md"]}
+  ],
+  "stated_total_cents": 5400
+}

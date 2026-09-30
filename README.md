@@ -150,12 +150,12 @@ The through-line is a Local Shop Concierge for a fictional café. Early chapters
 
 ## Folders
 
-- `chapters/` — manuscript. Chapters 1–3 are full prose. Later chapters are still outlines.
-- `labs/` — Chapters 1–3 are runnable. Later labs are stubs. Shared setup is [labs/README.md](labs/README.md).
+- `chapters/` — manuscript. Chapters 1–3 and 11–15 are full prose. Other chapters are still outlines.
+- `labs/` — Chapters 1–3 and 11–15 have assignments and starter code. Other labs are stubs. Shared setup is [labs/README.md](labs/README.md).
 
 ## Running the labs
 
-Chapters 1–3 are runnable scripts. Later labs are stubs. Install, `.env`, and Ollama / Groq / OpenRouter setup are shared: do them once from [labs/README.md](labs/README.md), then follow the lab you are on.
+Chapters 1–3 are runnable scripts that call a model. Chapters 11–15 are assignments with starter code; their checks run without a model server. Other labs are stubs. Install, `.env`, and Ollama / Groq / OpenRouter setup are shared: do them once from [labs/README.md](labs/README.md), then follow the lab you are on.
 
 From the repo root, with the virtualenv active:
 

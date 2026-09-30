@@ -1,0 +1,11 @@
+{
+  "id": "nut_allergy",
+  "customer_id": "sam",
+  "budget_cents": 2000,
+  "avoid_allergens": ["nuts"],
+  "fulfillment": "pickup",
+  "items": [
+    {"sku": "cardamom-bun", "qty": 2, "citations": ["docs/faq.md"]}
+  ],
+  "stated_total_cents": 950
+}

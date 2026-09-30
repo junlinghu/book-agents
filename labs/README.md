@@ -1,6 +1,6 @@
 # Labs
 
-Exercises for the Local Shop Concierge. Chapters 1–3 are scripts you can run. Later chapter folders are stubs.
+Exercises for the Local Shop Concierge. Chapters 1–3 are scripts you can run against a model. Chapters 11–15 are assignments with starter code; their tests do not need a model server. Other chapter folders are stubs.
 
 Do this setup once from the repo root. Then open the lab you are on and follow that README.
 
@@ -11,8 +11,13 @@ Do this setup once from the repo root. Then open the lab you are on and follow t
 | [Chapter 1. Hello Concierge](ch01-what-an-agent-is/README.md) | `labs/ch01-what-an-agent-is/hello_concierge.py` |
 | [Chapter 2. Your first loop](ch02-your-first-loop/README.md) | `labs/ch02-your-first-loop/file_agent.py` |
 | [Chapter 3. Swap the model](ch03-models-without-the-pain/README.md) | `labs/ch03-models-without-the-pain/swap_model.py` |
+| [Chapter 11. Verification loops](ch11-verification-loops/README.md) | `labs/ch11-verification-loops/run_check.py` |
+| [Chapter 12. Evals from real failures](ch12-evals-from-real-failures/README.md) | `labs/ch12-evals-from-real-failures/run_eval.py` |
+| [Chapter 13. Simulated users](ch13-simulated-users-and-environments/README.md) | `labs/ch13-simulated-users-and-environments/run_personas.py` |
+| [Chapter 14. Honest metrics](ch14-production-signals-and-honest-metrics/README.md) | `labs/ch14-production-signals-and-honest-metrics/report.py` |
+| [Chapter 15. Model lever](ch15-pulling-the-model-lever/README.md) | `labs/ch15-pulling-the-model-lever/bakeoff.py` |
 
-Each of Labs 1–3 has a `SOLUTION.md` in its folder. Those notes are for instructors and for checking your own write-up after you have finished it. If the lab is homework, finish the write-up before you open that file.
+Each of Labs 1–3 has a `SOLUTION.md` in its folder. Those notes are for instructors and for checking your own write-up after you have finished it. If the lab is homework, finish the write-up before you open that file. Labs 11–15 do not include solution files. Their checker and report tests fail on the starter until the TODOs in that lab are done.
 
 ## Requirements
 
