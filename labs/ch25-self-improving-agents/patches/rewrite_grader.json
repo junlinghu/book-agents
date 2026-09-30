@@ -1,0 +1,7 @@
+{
+  "id": "rewrite_grader",
+  "files": ["labs/ch12-evals-from-real-failures/grader.py"],
+  "proposal": "proposals/grader_note.md",
+  "answers": "good",
+  "summary": "Relax the Chapter 12 grader so keyword answers pass."
+}

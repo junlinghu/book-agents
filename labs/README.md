@@ -1,6 +1,6 @@
 # Labs
 
-Exercises for the Local Shop Concierge. Chapters 1–6 and 16–18 are scripts you can run. Chapters 4–15 and 21–23 are assignment labs with starter files. Chapters 11–15 and 21–23 tests do not need a model server. Chapters 16–18 required traces do not need a model server. The other chapter folders are stubs.
+Exercises for the Local Shop Concierge. Chapters 1–6 and 16–18 are scripts you can run. Chapters 4–15 and 21–25 are assignment labs with starter files. Chapters 11–15 and 21–25 tests do not need a model server. Chapters 16–18 required traces do not need a model server. The other chapter folders are stubs.
 
 Do this setup once from the repo root. Then open the lab you are on and follow that README.
 
@@ -29,8 +29,10 @@ Do this setup once from the repo root. Then open the lab you are on and follow t
 | [Chapter 21. Prompt injection](ch21-prompt-injection-and-untrusted-data/README.md) | `labs/ch21-prompt-injection-and-untrusted-data/harness.py` |
 | [Chapter 22. Identity and observability](ch22-identity-and-observability/README.md) | `labs/ch22-identity-and-observability/trace.py` |
 | [Chapter 23. Multi-agent patterns](ch23-multi-agent-patterns/README.md) | `labs/ch23-multi-agent-patterns/handoff.py` |
+| [Chapter 24. Cost, latency, and architecture](ch24-cost-latency-and-architecture/README.md) | `labs/ch24-cost-latency-and-architecture/router.py` |
+| [Chapter 25. Self-improving agents](ch25-self-improving-agents/README.md) | `labs/ch25-self-improving-agents/run_gate.py` |
 
-Each of Labs 1–3 has a `SOLUTION.md` in its folder. Those notes are for instructors and for checking your own write-up after you have finished it. If the lab is homework, finish the write-up before you open that file. Labs 4–18 and 21–23 do not include a solution file. Follow the assignment in that lab's README. The starter scripts are incomplete on purpose. Labs 11–15 and 21–23 tests fail on the starter until the TODOs in that lab are done.
+Each of Labs 1–3 has a `SOLUTION.md` in its folder. Those notes are for instructors and for checking your own write-up after you have finished it. If the lab is homework, finish the write-up before you open that file. Labs 4–18 and 21–25 do not include a solution file. Follow the assignment in that lab's README. The starter scripts are incomplete on purpose. Labs 11–15 and 21–23 tests fail on the starter until the TODOs in that lab are done. Lab 24's route and summary tests, and Lab 25's surface and merge tests, fail on the starter the same way.
 
 Chapters 16–18 do not have solution files. Their required traces run without a model server. `--self-check` on those three scripts does not call the OpenAI API.
 
@@ -112,6 +114,8 @@ Chapters 11–15 follow the lab README in each folder. Their tests do not call t
 Chapters 16–18 follow the lab README in each folder. Their required traces run without a model server.
 
 Chapters 21–23 follow the lab README in each folder. Their tests do not call the OpenAI API. On the starter, those tests fail until the TODOs are done.
+
+Chapters 24 and 25 follow the lab README in each folder. Their tests do not call the OpenAI API. On the starter, the Chapter 24 route and summary tests fail, and the Chapter 25 surface and merge tests fail, until the TODOs are done.
 
 ## Check the harness without a model
 
