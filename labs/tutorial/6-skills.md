@@ -1,48 +1,32 @@
-        # Tutorial 6. Skills as procedures
+# Tutorial 6. Skills as procedures
 
-        ## Purpose
+## Motivation
 
-        Keep a procedure out of the system prompt until the question needs it. The recommend skill says to search memory and read the FAQ. Priya's allergy is already on disk from a previous shift. The FAQ, not the skill, lists the bun.
+A system prompt that holds every procedure grows long, and it goes stale the moment a procedure changes. Recommending a pastry is one procedure. Restocking the shelf is another. Both can share the same tools. What differs is the order of steps and the promise the agent is allowed to make. This lesson keeps a procedure in its own document and loads it when the question matches, so the brief stays short and the steps stay editable.
 
-        ## What you should learn
+## What this tutorial is about
 
-        - A skill is a markdown procedure with a name. `load_skill` returns it.
-- The skill must not become a second copy of the menu.
-- Memory from tutorial 5 is an input to the procedure.
-- If the FAQ lists no safe pastry, the answer says so and refuses a nut-free promise.
+A skill is a written procedure with a name. It tells the agent which tools to use, and in what order, for one kind of question. It is separate from the system prompt, which is the standing brief, and separate from the tools, which are the actions the harness can perform. The skill is instructions. The tools are how those instructions touch the shop.
 
-        ## How this maps to the book
+You will learn to load one skill, the recommendation procedure, and then follow it. The procedure says to search durable memory and to read the FAQ. The guest’s allergy is already on disk from the memory lesson. The FAQ lists what the shop sells and what it contains. The skill only names the steps. If the FAQ offers no safe pastry, the answer says so and withholds a promise the menu does not support.
 
-        | Tutorial idea | Book chapter and lab |
-        |---|---|
-        | Skills as portable procedures | Chapter 7, `labs/ch07-skills-as-portable-procedures` |
+## How you will get there
 
-        The café in these files is fictional. Prices, hours, and the shelf match the Local Shop Concierge labs. Do not point the tools at a private document.
+The notebook registers a tool that returns the text of a named skill. You ask for a recommendation for the guest whose allergy was saved earlier. The agent loads the procedure, searches memory, and reads the FAQ. The reply follows those steps and cites the FAQ for the food itself.
 
-        ## How to run
+You will read the skill text and the answer side by side, and notice that the price and the allergen line come from the FAQ. The hands-on steps are in the notebook [6-skills](6-skills.ipynb).
 
-        From the repository root, with the virtualenv from `labs/README.md` active:
+## Additional things
 
-        ```bash
-        jupyter notebook labs/tutorial/6-skills.ipynb
-        ```
+A skill that copies the menu becomes a second menu. The next price change will update one copy and leave the other behind. Keep facts in the documents and the shelf. Keep the procedure as steps.
 
-        In VS Code or Cursor, open `labs/tutorial/6-skills.ipynb` and choose Run All. The setup cell walks parent folders until it finds `labs/common/client.py`, so the kernel may start in `labs/tutorial` or at the repo root.
+Loading a skill spends context, the same way loading a note does. Load the procedure the question needs. Leave the others on disk. The catalog of names can sit in the brief; the body arrives through the tool.
 
-        Scripted demo (no API call):
+The restock procedure appears again in the last tutorial. The same idea is at work: a skill names the steps, and the tools and the checker still decide what is true. Chapter 7 is the book’s treatment of skills as portable procedures.
 
-        ```bash
-        DEMO_MODE=1 jupyter nbconvert --to notebook --execute labs/tutorial/6-skills.ipynb --output /tmp/6-skills-out.ipynb
-        ```
+The café in these files is fictional. The guest constraint and the FAQ are practice data.
 
-        Live Chat Completions API:
+## Sources and references
 
-        ```bash
-        DEMO_MODE=0 jupyter nbconvert --to notebook --execute labs/tutorial/6-skills.ipynb --output /tmp/6-skills-out.ipynb
-        ```
-
-        `DEMO_MODE=0` needs `OPENAI_API_KEY` in the repo-root `.env`. `DEMO_MODE` unset uses the API when a key is present and the scripted demo when it is not. The notebook's first code cell can also set `DEMO_MODE` to `True` or `False`.
-
-        This notebook is standalone. The cells include the working code from earlier tutorials and then add this lesson.
-
-        Series map: [README.md](README.md).
+- [Chapter 7: Skills as portable procedures](../../chapters/ch07-skills-as-portable-procedures/README.md), and the lab [labs/ch07-skills-as-portable-procedures](../ch07-skills-as-portable-procedures).
+- The previous lecture is [5-memory.md](5-memory.md). The series map is in [README.md](README.md).
