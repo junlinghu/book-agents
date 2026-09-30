@@ -1,0 +1,13 @@
+{
+  "records": [
+    {
+      "id": "mem_buns_nutfree",
+      "text": "Cardamom buns are nut-free.",
+      "scope": "shop",
+      "kind": "belief",
+      "source": "unattributed note from last month",
+      "updated": "2026-08-02",
+      "status": "active"
+    }
+  ]
+}

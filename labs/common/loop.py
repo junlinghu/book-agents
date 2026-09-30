@@ -1,13 +1,16 @@
 """Perceive → reason → act → observe, with stop conditions.
 
-The model proposes ``read_file`` calls. This module executes them and
-appends the result. It does not invent a customer-facing answer when
-the loop stops early.
+``run_file_agent`` is the Chapter 2 loop: the model proposes ``read_file``
+calls, and this module executes them. ``run_tool_agent`` is the same loop
+for a tool list the caller supplies. Later labs use it for SQL, notes, and
+memory. Neither function invents a customer-facing answer when the loop
+stops early.
 """
 
 from __future__ import annotations
 
 import json
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -119,22 +122,31 @@ def _dispatch(docs_dir: Path, name: str, args: dict) -> str:
     return read_file(docs_dir, path)
 
 
-def run_file_agent(
+def run_tool_agent(
     client: object,
     model: str,
     user_text: str,
-    docs_dir: Path,
+    tools: list[dict],
+    dispatch: Callable[[str, dict], str],
     *,
+    system_prompt: str,
     max_steps: int = DEFAULT_MAX_STEPS,
     verbose: bool = True,
+    arguments_hint: str = '{"path": "policy.md"}',
+    repeat_note: str = (
+        "\n\nNOTE: You already read this file. "
+        "Answer the customer now without calling read_file again."
+    ),
 ) -> AgentResult:
-    """Run the tool loop until the model stops or a harness limit hits.
+    """Run a tool loop until the model stops or a harness limit hits.
 
-    ``stopped`` is one of ``final``, ``max_steps``, ``repeated_call``,
-    or ``max_tokens``.
+    ``dispatch`` receives the tool name and parsed arguments and returns
+    the tool message. It should return an error string, not raise, when
+    the call is refused. ``stopped`` is one of ``final``, ``max_steps``,
+    ``repeated_call``, or ``max_tokens``.
     """
     messages: list[dict] = [
-        {"role": "system", "content": SYSTEM_PROMPT},
+        {"role": "system", "content": system_prompt},
         {"role": "user", "content": user_text},
     ]
     seen: dict[str, int] = {}
@@ -144,7 +156,7 @@ def run_file_agent(
         response = client.chat.completions.create(  # type: ignore[attr-defined]
             model=model,
             messages=messages,
-            tools=[READ_FILE_TOOL],
+            tools=tools,
             temperature=TEMPERATURE,
             max_tokens=MAX_TOKENS,
         )
@@ -183,7 +195,7 @@ def run_file_agent(
             except ValueError as exc:
                 result = (
                     f"ERROR: {exc}. "
-                    'Pass a JSON object such as {"path": "policy.md"}.'
+                    f"Pass a JSON object such as {arguments_hint}."
                 )
                 log.append(f"step {step}: {name} invalid arguments")
             else:
@@ -203,12 +215,9 @@ def run_file_agent(
                         stopped="repeated_call",
                         tool_log=log,
                     )
-                result = _dispatch(docs_dir, name, args)
+                result = dispatch(name, args)
                 if seen[signature] == MAX_IDENTICAL_CALLS:
-                    result += (
-                        "\n\nNOTE: You already read this file. "
-                        "Answer the customer now without calling read_file again."
-                    )
+                    result += repeat_note
                 first_line = result.splitlines()[0] if result else "(empty)"
                 log.append(f"step {step}: {name} {json.dumps(args, sort_keys=True)} -> {first_line}")
 
@@ -228,6 +237,32 @@ def run_file_agent(
         steps=max_steps,
         stopped="max_steps",
         tool_log=log,
+    )
+
+
+def run_file_agent(
+    client: object,
+    model: str,
+    user_text: str,
+    docs_dir: Path,
+    *,
+    max_steps: int = DEFAULT_MAX_STEPS,
+    verbose: bool = True,
+) -> AgentResult:
+    """Run the Chapter 2 loop: ``read_file`` only, jailed to ``docs_dir``."""
+
+    def dispatch(name: str, args: dict) -> str:
+        return _dispatch(docs_dir, name, args)
+
+    return run_tool_agent(
+        client,
+        model,
+        user_text,
+        [READ_FILE_TOOL],
+        dispatch,
+        system_prompt=SYSTEM_PROMPT,
+        max_steps=max_steps,
+        verbose=verbose,
     )
 
 

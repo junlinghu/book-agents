@@ -7,6 +7,8 @@ __pycache__/
 *.egg-info/
 .DS_Store
 *.db
+labs/ch05-context-engineering/notes/
+labs/ch06-memory/memory/
 labs/ch10-runtime-for-long-running-agents/ledger.jsonl
 labs/ch10-runtime-for-long-running-agents/sessions/*
 !labs/ch10-runtime-for-long-running-agents/sessions/.gitkeep

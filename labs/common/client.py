@@ -1,6 +1,6 @@
 """OpenAI client shared by every lab.
 
-Chapters 1–3 keep this module stable. Set ``OPENAI_API_KEY`` in the
+The labs keep this module stable. Set ``OPENAI_API_KEY`` in the
 repo-root ``.env``. Optionally set ``MODEL``. The client uses the
 official SDK default API (``https://api.openai.com/v1``). Temperature
 and max tokens live here, in the harness, not in ``.env``.
