@@ -1,48 +1,24 @@
-        # Tutorial 8. A verification loop
+# Tutorial 8. Checking a proposal
 
-        ## Purpose
+## Motivation
 
-        Split proposing from checking. A proposal that orders 1000 cartons and ships dairy fails. A proposal whose quantity is par minus on_hand, that does not ship, and that cites the shelf, passes. The agent then calls the same checker as a tool.
+The agent can read the shop, follow a procedure, and quote a supplier page as a claim someone else made. It can also sound sure while the quantity is wrong. A note or a page can say to order a thousand units, and a fluent paragraph will repeat the number. What the agent still cannot do is separate the proposal from a check that recomputes the quantity for itself. We add that checker now, before we grade the agent and before we let it write anything down, because a restock that files a ticket should already know which proposals the checker will accept.
 
-        ## What you should learn
+## What this tutorial is about
 
-        - The checker recomputes the gap from the database.
-- Dairy and bakery do not ship, even if the proposal says they do.
-- A missing citation is a failure.
-- The agent's accepted plan is the one the checker accepted, not the boldest number.
+This tutorial splits proposing from checking. The checker is a second step, with the rules written in the program rather than left to the model’s confidence. It loads the shelf row itself. The quantity it accepts is the gap between the target stock and the amount on hand. Dairy and bakery stay in the shop: a proposal that asks to ship them fails, and so does a proposal that cites nothing. You will see a bad proposal rejected and a good one accepted before the model is involved, and you will then see the agent call the same checker as a tool. The plan you trust is the one the checker accepted.
 
-        ## How this maps to the book
+## How you will get there
 
-        | Tutorial idea | Book chapter and lab |
-        |---|---|
-        | A separate checker with hard findings | Chapter 11, `labs/ch11-verification-loops` |
+The notebook first scores two oat-milk proposals with no model in the path. One orders a thousand cartons, asks to ship them, and cites nothing. The checker rejects it, and the findings name both the shipping rule and the missing citation. One uses the shelf gap, does not ask to ship, and cites the inventory. The checker accepts it. The agent then proposes an oat-milk restock and calls the checker. The printed answer is the proposal the checker accepted. The record shows that the shelf was read, and that the checker ran as its own step.
 
-        The café in these files is fictional. Prices, hours, and the shelf match the Local Shop Concierge labs. Do not point the tools at a private document.
+## Additional things
 
-        ## How to run
+A checker that trusts the proposer’s arithmetic is a second copy of the proposal. The value of this one is that it recomputes the gap from the database you met in tutorial 2, where “low” and “how many to order” were kept apart. Tutorial 12 gives the same split to two roles, a stocker and a checker, and a supplier note that says to order a thousand bags fails there for the same reason. Tutorial 15 uses the checker on the house-blend and oat-milk gaps before any ticket is written.
 
-        From the repository root, with the virtualenv from `labs/README.md` active:
+Chapter 11 is the book’s treatment of a separate checker, of failures that stop the work, and of the point at which a person joins the check. The café in these files is fictional.
 
-        ```bash
-        jupyter notebook labs/tutorial/8-verification.ipynb
-        ```
+## Sources and references
 
-        In VS Code or Cursor, open `labs/tutorial/8-verification.ipynb` and choose Run All. The setup cell walks parent folders until it finds `labs/common/client.py`, so the kernel may start in `labs/tutorial` or at the repo root.
-
-        Scripted demo (no API call):
-
-        ```bash
-        DEMO_MODE=1 jupyter nbconvert --to notebook --execute labs/tutorial/8-verification.ipynb --output /tmp/8-verification-out.ipynb
-        ```
-
-        Live Chat Completions API:
-
-        ```bash
-        DEMO_MODE=0 jupyter nbconvert --to notebook --execute labs/tutorial/8-verification.ipynb --output /tmp/8-verification-out.ipynb
-        ```
-
-        `DEMO_MODE=0` needs `OPENAI_API_KEY` in the repo-root `.env`. `DEMO_MODE` unset uses the API when a key is present and the scripted demo when it is not. The notebook's first code cell can also set `DEMO_MODE` to `True` or `False`.
-
-        This notebook is standalone. The cells include the working code from earlier tutorials and then add this lesson.
-
-        Series map: [README.md](README.md).
+- [Chapter 11: Verification Loops](../../chapters/ch11-verification-loops/README.md), and the lab [labs/ch11-verification-loops](../ch11-verification-loops).
+- The previous lecture is [7-web-browse.md](7-web-browse.md). The notebook is [8-verification.ipynb](8-verification.ipynb). The series map is in [README.md](README.md).
