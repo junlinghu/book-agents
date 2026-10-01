@@ -106,9 +106,10 @@ def system_text():
         parts.append(fact_line)
     elif "query_inventory" in names:
         parts.append("Use query_inventory for the shelf. Do not invent stock counts.")
-    if "memory_search" in names:
+    if "get_preference" in names:
         parts.append(
-            "Guest and shop constraints live in memory_search. This message list is not durable memory."
+            "Guest preferences live in get_preference. Pass the guest's name, not a filename. "
+            "The tool returns that guest's entry only. This message list is not durable memory."
         )
     if "load_skill" in names:
         parts.append(

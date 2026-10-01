@@ -12,7 +12,7 @@ This folder carries its own OpenAI client (`common/client.py`), shop policy and 
 | 2 | [2-data-and-files](2-data-and-files.ipynb) | The SQLite shelf, beside a topic lookup for the shipping rule. | Ready |
 | 3 | [3-agent-loop](3-agent-loop.ipynb) | Perceive–reason–act–observe, with step and repeat stops. | Ready |
 | 4 | [4-context-engineering](4-context-engineering.ipynb) | Note titles in the prompt; bodies loaded on purpose. | Ready |
-| 5 | [5-memory](5-memory.ipynb) | Session messages versus a JSON memory file. | Ready |
+| 5 | [5-memory](5-memory.ipynb) | Session messages versus one shared customer preference file. | Ready |
 | 6 | [6-skills](6-skills.ipynb) | A procedure file, separate from the system prompt and the tools. | Ready |
 | 7 | [7-web-browse](7-web-browse.ipynb) | One supplier page, treated as an untrusted sensor. | Ready |
 | 8 | [8-verification](8-verification.ipynb) | A checker that does not trust the proposed quantity. | Ready |
@@ -110,7 +110,7 @@ The notebook does not print the API key.
 |---|---|
 | `runtime.py` | Loads the repository-root `.env` through `common/client.py` and exposes `chat`. Requires `OPENAI_API_KEY`. |
 | `docs/` | `policy.md` and `faq.md`. `get_shop_fact` maps a topic onto a section in these files. The model does not pass a path. |
-| `data/` | Notes, skills, the supplier page, the supplier note, and a fake canary. Not shop secrets. |
+| `data/` | Notes, the shared customer preference file, skills, the supplier page, the supplier note, and a fake canary. Not shop secrets. |
 | `common/colab.py` | Shared Colab clone, package install, and secret copy. Notebooks point at `setup_colab` here. |
 | `common/client.py` | API key, model, temperature, max tokens. |
 | `common/tools.py` | Chat Completions registry: schemas, `register`, and `call_tool`. Model-facing tools such as `get_shop_fact` and `query_inventory` register here. |
@@ -122,7 +122,7 @@ The notebook does not print the API key.
 | `common/loop.py` | `run_agent`. A gate, spans, and a cache turn on when those lessons are imported. |
 | `common/facts.py`, `shelf.py`, `notes.py`, `memory.py`, `skills.py`, `web.py`, `verify.py`, `evals.py`, `gate.py`, `injection.py`, `roles.py`, `trace.py`, `cost.py` | Lesson helpers. `facts.py` registers the topic lookup. `shelf.py` registers the inventory tool. Later notebooks import these. |
 
-Runtime files under `tutorial/var/` (memory JSON and tickets) are gitignored.
+Runtime files under `tutorial/var/` (tickets) are gitignored. Guest preferences live in `data/customer_preference.md`.
 
 ## Editing
 

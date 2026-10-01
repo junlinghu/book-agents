@@ -17,7 +17,7 @@ CACHEABLE = {
     "read_note",
     "load_skill",
     "fetch_page",
-    "memory_search",
+    "get_preference",
     "read_supplier_note",
 }
 CACHE = {}
