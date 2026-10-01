@@ -1,3 +1,9 @@
+import json
+
+from tutorial.common.harness import register
+from tutorial.common.shelf import gap_for, row_for
+
+
 def verify_proposal(args):
     """Separate checker. It does not trust qty, ship, or a citation written by the proposer."""
     sku = str(args.get("sku", "")).strip()

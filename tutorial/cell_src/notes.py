@@ -1,3 +1,5 @@
+from tutorial.common.harness import DATA, register
+
 NOTES = DATA / "notes"
 PER_NOTE_CAP = 500
 TURN_BUDGET = 600

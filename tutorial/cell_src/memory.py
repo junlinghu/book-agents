@@ -1,3 +1,7 @@
+import json
+
+from tutorial.common.harness import VAR, register
+
 MEMORY_PATH = VAR / "memory.json"
 
 

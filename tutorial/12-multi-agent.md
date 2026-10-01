@@ -16,7 +16,7 @@ The notebook asks the agent to pull the house-blend shelf row and the supplier n
 
 An unconstrained group of agents, each free to improvise the next agent’s job, tends to disappoint. The constraint here is small and strict. The checker reads the shelf again, and a broken handoff stops. Tutorial 15 keeps that rule inside one restock. The supplier note still cannot set the quantity.
 
-One agent is enough for many questions at the counter. The second role earns its place when a proposal would change an order. The fetch tool, the gate, and the loop are still in this notebook, so the handoff sits on top of the earlier lessons rather than replacing them. The café in these files is fictional.
+One agent is enough for many questions at the counter. The second role earns its place when a proposal would change an order. The shelf and the loop are imported, so this notebook runs on its own. The café in these files is fictional.
 
 ## Sources and references
 

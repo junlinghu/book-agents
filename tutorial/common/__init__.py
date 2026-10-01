@@ -1,1 +1,1 @@
-"""Client, document path jail, and autonomy gate for the tutorial notebooks."""
+"""Client, path jail, autonomy gate, and the lesson helpers notebooks import."""

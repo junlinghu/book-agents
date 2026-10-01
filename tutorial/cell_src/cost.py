@@ -1,5 +1,9 @@
 # Illustrative rates for this lab's ledger, in USD per million tokens.
 # They are not an invoice. Check current OpenAI pricing before you budget with them.
+import json
+
+from tutorial.common.harness import call_tool, set_hook
+
 INPUT_USD_PER_MILLION = 0.40
 OUTPUT_USD_PER_MILLION = 1.60
 
@@ -68,3 +72,7 @@ def cached_call(call):
     result = call_tool(call)
     CACHE[key] = result
     return result, False
+
+
+set_hook("route_task", route_task)
+set_hook("cached_call", cached_call)

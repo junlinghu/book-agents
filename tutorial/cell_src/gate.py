@@ -1,20 +1,13 @@
+import re
+
 from tutorial.common.autonomy import approval_token, decide, format_decision
+from tutorial.common.harness import HANDLERS, VAR, register, set_hook
+from tutorial.common.shelf import gap_for, row_for
 
 TICKETS = VAR / "tickets"
 
-# Reads and drafts are auto. A ticket waits. Charging and outside mail never run.
-AUTO_TOOLS = {
-    "get_shop_fact",
-    "read_shop_file",
-    "query_inventory",
-    "list_notes",
-    "read_note",
-    "memory_search",
-    "memory_set",
-    "load_skill",
-    "fetch_page",
-    "verify_proposal",
-}
+# A ticket waits. Charging and mail go through tutorial.common.autonomy.
+# Every other registered tool is a read or a draft, so it is auto.
 CONFIRM_TOOLS = {"write_ticket"}
 
 
@@ -30,10 +23,10 @@ def gate_call(name, arguments, confirmed_tokens):
         expected = approval_token(name, arguments)
         token = expected if expected in confirmed_tokens else None
         return decide(name, arguments, confirmed_token=token)
-    if name in AUTO_TOOLS:
-        tier = "auto"
-    elif name in CONFIRM_TOOLS:
+    if name in CONFIRM_TOOLS:
         tier = "confirm"
+    elif name in HANDLERS:
+        tier = "auto"
     else:
         tier = "never"
     token = approval_token(name, arguments)
@@ -149,3 +142,6 @@ register(
     ["to", "body"],
     send_email,
 )
+
+set_hook("gate_call", gate_call)
+set_hook("format_decision", format_decision)
