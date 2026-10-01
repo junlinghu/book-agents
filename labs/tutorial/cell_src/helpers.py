@@ -5,7 +5,7 @@ import time
 from pathlib import Path
 
 HERE = ROOT / "labs" / "tutorial"
-DOCS = ROOT / "labs" / "ch02-your-first-loop" / "docs"
+DOCS = HERE / "docs"
 DATA = HERE / "data"
 VAR = HERE / "var"
 

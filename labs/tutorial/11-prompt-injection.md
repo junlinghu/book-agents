@@ -18,10 +18,10 @@ The notebook asks for the oat-milk case price on the supplier page, and it asks 
 
 Marking a page “untrusted” is a comment until some function enforces it. This notebook is that function: the folder check from tutorial 2, the gate from tutorial 10, and a secret that is absent from the result. Tutorial 12 meets a supplier note with the same habit. The note can ask for a thousand bags. The quantity still comes from the shelf.
 
-Chapter 21 is the book’s treatment of instructions hidden in pages, files, and database text, and of keeping secrets out of the prompt. Chapter 16 remains the source of the gate. The café is fictional, and the planted secret is practice data. Leave real credentials alone.
+Instructions hidden in the page stay data. The planted secret stays out of the tool output. The gate in `common/autonomy.py` remains the source of the refusals. The café is fictional, and the planted secret is practice data. Leave real credentials alone.
 
 ## Sources and references
 
-- [Chapter 21: Prompt Injection and Untrusted Data](../../chapters/ch21-prompt-injection-and-untrusted-data/README.md), and the lab [labs/ch21-prompt-injection-and-untrusted-data](../ch21-prompt-injection-and-untrusted-data).
-- The gate is [Chapter 16: Autonomy Policy](../../chapters/ch16-autonomy-policy/README.md), implemented in [labs/common/autonomy.py](../common/autonomy.py).
+- The poisoned page is [data/pages/mill-and-birch.html](data/pages/mill-and-birch.html). The canary fixture is [data/canary.env](data/canary.env). The boundary check is [cell_src/injection.py](cell_src/injection.py).
+- The gate is [common/autonomy.py](common/autonomy.py).
 - The previous lectures are [7-web-browse.md](7-web-browse.md) and [10-autonomy-policy.md](10-autonomy-policy.md). The notebook is [11-prompt-injection.ipynb](11-prompt-injection.ipynb). The series map is in [README.md](README.md).

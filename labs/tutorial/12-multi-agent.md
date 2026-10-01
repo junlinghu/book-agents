@@ -14,11 +14,11 @@ The notebook asks the agent to pull the house-blend shelf row and the supplier n
 
 ## Additional things
 
-Chapter 23 describes how an unconstrained group of agents, each free to improvise the next agent’s job, tends to disappoint. The constraint here is small and strict. The checker reads the shelf again, and a broken handoff stops. Tutorial 15 keeps that rule inside one restock. The supplier note still cannot set the quantity.
+An unconstrained group of agents, each free to improvise the next agent’s job, tends to disappoint. The constraint here is small and strict. The checker reads the shelf again, and a broken handoff stops. Tutorial 15 keeps that rule inside one restock. The supplier note still cannot set the quantity.
 
 One agent is enough for many questions at the counter. The second role earns its place when a proposal would change an order. The fetch tool, the gate, and the loop are still in this notebook, so the handoff sits on top of the earlier lessons rather than replacing them. The café in these files is fictional.
 
 ## Sources and references
 
-- [Chapter 23: Multi-agent Patterns](../../chapters/ch23-multi-agent-patterns/README.md), and the lab [labs/ch23-multi-agent-patterns](../ch23-multi-agent-patterns).
+- The stocker and the checker are [cell_src/roles.py](cell_src/roles.py). The supplier note is [data/supplier-note.txt](data/supplier-note.txt).
 - The previous lecture is [11-prompt-injection.md](11-prompt-injection.md). The notebook is [12-multi-agent.ipynb](12-multi-agent.ipynb). The series map is in [README.md](README.md).

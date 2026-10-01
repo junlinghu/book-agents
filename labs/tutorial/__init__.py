@@ -1,5 +1,5 @@
 """Progressive Local Shop Concierge notebooks.
 
 The notebooks are the lessons. This package holds the chat runtime
-they share: repo-root ``.env`` loading and the scripted demo model.
+they share, the shop documents, and the local client, path jail, and gate.
 """

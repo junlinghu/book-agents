@@ -16,11 +16,11 @@ The notebook runs the two live questions through the agent and grades each reply
 
 ## Additional things
 
-A grader can be wrong, and an agent can learn to satisfy the phrases without satisfying the shop. Chapter 12 is where the book takes up graders that fail, the difference between a saved set and a live sample of real use, and the habit of turning a real miss into a new case. This notebook is the smallest version of that habit: two duties you already teach, and one bad answer you refuse to throw away.
+A grader can be wrong, and an agent can learn to satisfy the phrases without satisfying the shop. This notebook is the smallest version of that habit: two duties you already teach, and one bad answer you refuse to throw away.
 
 Tutorial 13 will make the tool record easier to read, which is the same record this grader already consults. The café in these files is fictional.
 
 ## Sources and references
 
-- [Chapter 12: Evals from Real Failures](../../chapters/ch12-evals-from-real-failures/README.md), and the lab [labs/ch12-evals-from-real-failures](../ch12-evals-from-real-failures).
+- The grader is [cell_src/evals.py](cell_src/evals.py).
 - The previous lecture is [8-verification.md](8-verification.md). The notebook is [9-evals.ipynb](9-evals.ipynb). The series map is in [README.md](README.md).

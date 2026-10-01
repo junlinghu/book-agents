@@ -1,4 +1,4 @@
-from labs.common.autonomy import approval_token, decide, format_decision
+from labs.tutorial.common.autonomy import approval_token, decide, format_decision
 
 TICKETS = VAR / "tickets"
 
@@ -25,7 +25,7 @@ def reset_tickets():
 
 
 def gate_call(name, arguments, confirmed_tokens):
-    """Same three outcomes as labs.common.autonomy.decide: allowed, confirm_required, denied."""
+    """Same three outcomes as labs.tutorial.common.autonomy.decide: allowed, confirm_required, denied."""
     if name in {"charge_card", "send_email"}:
         expected = approval_token(name, arguments)
         token = expected if expected in confirmed_tokens else None

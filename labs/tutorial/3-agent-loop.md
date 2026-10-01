@@ -22,12 +22,11 @@ The step limit is a safety rail. A short question should finish well inside it. 
 
 The repeated-call stop catches a model that asks for the same reading again and again. The third identical request ends the loop. When the tool is failing, the repair is the tool or the question. Another identical try will meet the same stop.
 
-Later tutorials add notes, memory, a checker, and a gate inside this same loop. The loop remains the place where a step is taken and where a stop is recorded. Chapter 2 builds the same pattern for a single file tool, and this notebook is that pattern with the shop’s shelf included. Tutorial 14 meets the repeated-call stop again: a cached second read of the same document is still a repeated request if the model asks a third time.
+Later tutorials add notes, memory, a checker, and a gate inside this same loop. The loop remains the place where a step is taken and where a stop is recorded. This notebook is that pattern with the shop’s shelf included. Tutorial 14 meets the repeated-call stop again: a cached second read of the same document is still a repeated request if the model asks a third time.
 
-The café in these files is fictional. The shelf matches the other labs in this book.
+The café in these files is fictional. The shelf is the seed in this folder.
 
 ## Sources and references
 
-- [Chapter 2: The Agent Loop](../../chapters/ch02-your-first-loop/README.md), and the lab [file_agent.py](../ch02-your-first-loop/file_agent.py).
-- The shared stop reasons live in [labs/common/loop.py](../common/loop.py).
-- The previous lectures are [1-using-tool.md](1-using-tool.md) and [2-data-and-files.md](2-data-and-files.md). The notebook is [3-agent-loop.ipynb](3-agent-loop.ipynb). The series map is in [README.md](README.md).
+- `run_agent` in [3-agent-loop.ipynb](3-agent-loop.ipynb) stops on `final`, `max_steps`, or `repeated_call`.
+- The previous lectures are [1-using-tool.md](1-using-tool.md) and [2-data-and-files.md](2-data-and-files.md). The series map is in [README.md](README.md).

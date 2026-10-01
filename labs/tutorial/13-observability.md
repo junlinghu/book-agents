@@ -16,9 +16,9 @@ The notebook asks the same low-stock question as tutorial 3: which products are 
 
 A trace that copies a tool’s full result will eventually copy a secret, because someone will point a tool at a file that contains one. Record the name, the status, and the identity. Leave the body in the tool result the model needed for that turn, and keep it out of the long-term record.
 
-Tutorial 14 hangs token counts, an illustrative cost, and elapsed time on this same trace, including runs that stop early. Chapter 22 is the book’s treatment of actor identity, spans, and the ability to replay a run for debugging and for an audit. The café in these files is fictional.
+Tutorial 14 hangs token counts, an illustrative cost, and elapsed time on this same trace, including runs that stop early. Actor identity, a span per tool, and a record you can replay without a collector are the whole of the trace in this lesson. The café in these files is fictional.
 
 ## Sources and references
 
-- [Chapter 22: Identity and Observability](../../chapters/ch22-identity-and-observability/README.md), and the lab [labs/ch22-identity-and-observability](../ch22-identity-and-observability).
+- Spans are recorded in [cell_src/trace.py](cell_src/trace.py).
 - The previous lecture is [12-multi-agent.md](12-multi-agent.md). The notebook is [13-observability.ipynb](13-observability.ipynb). The series map is in [README.md](README.md).

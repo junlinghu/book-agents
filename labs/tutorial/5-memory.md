@@ -20,9 +20,9 @@ Write the smallest fact that changes a later answer. A guest constraint is that 
 
 Search should return a short match. The budget from tutorial 4 still applies, and a memory tool that dumps every row on every question recreates the crowding you just learned to avoid. Forgetting belongs in the design even when this notebook only shows saving and finding. A constraint that is no longer true should be removable, or the file becomes a record of guests the shop no longer knows.
 
-Chapter 6 is the book’s treatment of session memory, durable memory, and beliefs that have gone stale. Tutorial 6 uses Priya’s saved allergy as an input to a recommendation procedure. The café and the guest constraint are practice data.
+Session messages die with the list. The JSON file does not. Tutorial 6 uses Priya’s saved allergy as an input to a recommendation procedure. The café and the guest constraint are practice data.
 
 ## Sources and references
 
-- [Chapter 6: Memory](../../chapters/ch06-memory/README.md), and the lab [labs/ch06-memory](../ch06-memory).
+- Durable memory is [cell_src/memory.py](cell_src/memory.py). The file it writes is `labs/tutorial/var/memory.json`.
 - The previous lecture is [4-context-engineering.md](4-context-engineering.md). The notebook is [5-memory.ipynb](5-memory.ipynb). The series map is in [README.md](README.md).

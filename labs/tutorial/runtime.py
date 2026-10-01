@@ -7,8 +7,8 @@ environment chooses the path:
 - ``False`` / ``0``: OpenAI Chat Completions. Requires ``OPENAI_API_KEY``.
 - unset: scripted when the key is missing, live when it is set.
 
-The key is read from the repo-root ``.env`` by ``labs.common.client``,
-the same helper the other labs use. This module never prints the key.
+The key is read from the repository-root ``.env`` by
+``labs.tutorial.common.client``. This module never prints the key.
 """
 
 from __future__ import annotations
@@ -16,7 +16,7 @@ from __future__ import annotations
 import json
 import time
 
-from labs.common.client import (
+from labs.tutorial.common.client import (
     MAX_TOKENS,
     TEMPERATURE,
     describe_runtime,

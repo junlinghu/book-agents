@@ -20,9 +20,9 @@ A skill that copies the menu becomes a second menu. The next price change update
 
 Loading a skill spends the same kind of room in the prompt that loading a note does. Load the procedure the question needs, and leave the others on disk. A catalog of names can sit in the brief. The body arrives through the tool, which is the same habit tutorial 4 taught for staff notes.
 
-The restock procedure appears again in tutorial 15. The same idea is at work there. A skill names the steps, and the tools, the checker, and the gate still decide what is true and what may be written down. Chapter 7 is the book’s treatment of skills as portable procedures. The guest constraint and the menu are practice data.
+The restock procedure appears again in tutorial 15. The same idea is at work there. A skill names the steps, and the tools, the checker, and the gate still decide what is true and what may be written down. The guest constraint and the menu are practice data.
 
 ## Sources and references
 
-- [Chapter 7: Skills as Portable Procedures](../../chapters/ch07-skills-as-portable-procedures/README.md), and the lab [labs/ch07-skills-as-portable-procedures](../ch07-skills-as-portable-procedures).
+- The procedures are [data/skills/recommend.md](data/skills/recommend.md) and [data/skills/restock.md](data/skills/restock.md). `load_skill` is in [cell_src/skills.py](cell_src/skills.py).
 - The previous lecture is [5-memory.md](5-memory.md). The notebook is [6-skills.ipynb](6-skills.ipynb). The series map is in [README.md](README.md).

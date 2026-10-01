@@ -16,15 +16,13 @@ The notebook runs the restock once without approvals. You read the answer, the t
 
 ## Additional things
 
-When a step in this notebook surprises you, the repair is in the earlier tutorial that introduced that step. Wrapping the capstone in another layer would only move the surprise. Chapter 26 is the book’s longer account of a Tuesday restock at the same café, including what a saved recording of the run has to show a reviewer. That chapter also keeps a huddle note’s quantities separate from the live shelf. This notebook is specific about the tickets it files: they use the gap on the shelf it was given, fourteen bags of house blend and thirteen cartons of oat milk.
+When a step in this notebook surprises you, the repair is in the earlier tutorial that introduced that step. Wrapping the capstone in another layer would only move the surprise. A saved recording of the run still has to show a reviewer which tool ran, and a huddle note’s quantities stay separate from the live shelf. This notebook is specific about the tickets it files: they use the gap on the shelf it was given, fourteen bags of house blend and thirteen cartons of oat milk.
 
-Chapter 27 is the honest sequel. A morning that looks finished is one shop on one day. Rules written for that day go out of date. A passing score can hide a wrong answer. A long job fails in ways a short script hides. A tidy receipt does not settle who is responsible. The series stops at a working restock. It does not stop the problems.
+A morning that looks finished is one shop on one day. Rules written for that day go out of date. A passing score can hide a wrong answer. A long job fails in ways a short script hides. A tidy receipt does not settle who is responsible. The series stops at a working restock. It does not stop the problems.
 
-The café is fictional. Prices, hours, and the shelf match the other labs in this book. Leave private files alone.
+The café is fictional. Prices, hours, and the shelf live in this folder. Leave private files alone.
 
 ## Sources and references
 
-- [Chapter 26: Capstone: Café Restock End to End](../../chapters/ch26-capstone-cafe-restock/README.md), and the lab [labs/ch26-capstone-cafe-restock](../ch26-capstone-cafe-restock).
-- [Chapter 27: Open Problems](../../chapters/ch27-open-problems/README.md).
-- The pieces this notebook composes are [Chapter 2](../../chapters/ch02-your-first-loop/README.md), [Chapter 4](../../chapters/ch04-tools-and-sensors/README.md), [Chapter 5](../../chapters/ch05-context-engineering/README.md), [Chapter 6](../../chapters/ch06-memory/README.md), [Chapter 7](../../chapters/ch07-skills-as-portable-procedures/README.md), [Chapter 8](../../chapters/ch08-browsing-the-web/README.md), [Chapter 11](../../chapters/ch11-verification-loops/README.md), [Chapter 12](../../chapters/ch12-evals-from-real-failures/README.md), [Chapter 14](../../chapters/ch14-production-signals-and-honest-metrics/README.md), [Chapter 16](../../chapters/ch16-autonomy-policy/README.md), [Chapter 21](../../chapters/ch21-prompt-injection-and-untrusted-data/README.md), [Chapter 22](../../chapters/ch22-identity-and-observability/README.md), [Chapter 23](../../chapters/ch23-multi-agent-patterns/README.md), and [Chapter 24](../../chapters/ch24-cost-latency-and-architecture/README.md).
-- The previous lecture is [14-cost-latency.md](14-cost-latency.md). The notebook is [15-shop-manager.ipynb](15-shop-manager.ipynb). The series map is in [README.md](README.md).
+- The restock workflow is [15-shop-manager.ipynb](15-shop-manager.ipynb). It composes the tools in [cell_src](cell_src), the documents in [docs](docs), the fixtures in [data](data), and the gate in [common/autonomy.py](common/autonomy.py).
+- The previous lectures are [1-using-tool.md](1-using-tool.md) through [14-cost-latency.md](14-cost-latency.md). The series map is in [README.md](README.md).

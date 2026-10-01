@@ -12,17 +12,16 @@ A cache keeps the result of a read-only tool, keyed by the tool together with it
 
 ## How you will get there
 
-The notebook asks for the café’s hours. The route for that question is recorded as a short lookup on the same model the other labs use. The agent reads the frequently asked questions, and the scripted run reads that file a second time inside the same loop. You should see a miss and then a hit, a ledger with totals and an illustrative cost, and the hours taken from the document, including the day the café is closed. The spans from tutorial 13 are still on the run, so cost and identity share one record.
+The notebook asks for the café’s hours. The route for that question is recorded as a short lookup on the model named in `common/client.py`. The agent reads the frequently asked questions, and the scripted run reads that file a second time inside the same loop. You should see a miss and then a hit, a ledger with totals and an illustrative cost, and the hours taken from the document, including the day the café is closed. The spans from tutorial 13 are still on the run, so cost and identity share one record.
 
 ## Additional things
 
 The second read is also the repeated-call situation from tutorial 3. The cache can serve the file on that second request. A third identical call would stop the loop. Saving a result does not repeal the stop. It only keeps the second read from doing the work again.
 
-Choosing a different model is the change Chapter 3 isolates, and Chapter 15 discusses when a model change is the wrong repair for a problem in the surrounding program. Chapter 14 asks you to report cost and time for a finished task, and to prefer an honest total over a number that flatters the run. Chapter 24 is the book’s wider discussion of cost, delay, and the shape of the system. The café in these files is fictional.
+Swapping the model is a change to `MODEL` in `common/client.py`. A model change is the wrong repair when the surrounding program is what failed. Report cost and time for the finished task, and prefer an honest total over a number that flatters the run. The café in these files is fictional.
 
 ## Sources and references
 
-- [Chapter 14: Production Signals and Honest Metrics](../../chapters/ch14-production-signals-and-honest-metrics/README.md), and the lab [labs/ch14-production-signals-and-honest-metrics](../ch14-production-signals-and-honest-metrics).
-- [Chapter 24: Cost, latency, and architecture](../../chapters/ch24-cost-latency-and-architecture/README.md), and the lab [labs/ch24-cost-latency-and-architecture](../ch24-cost-latency-and-architecture).
-- [Chapter 3: Local and Hosted Models](../../chapters/ch03-models-without-the-pain/README.md) is the place where swapping the model is the only change.
+- The ledger and the read cache are [cell_src/cost.py](cell_src/cost.py).
+- The default model id lives in [common/client.py](common/client.py). The model card is the [OpenAI gpt-4.1-mini documentation](https://developers.openai.com/api/docs/models/gpt-4.1-mini).
 - The previous lecture is [13-observability.md](13-observability.md). The notebook is [14-cost-latency.ipynb](14-cost-latency.ipynb). The series map is in [README.md](README.md).

@@ -18,14 +18,14 @@ You compare the printed answer with the document and the shelf, so a number or a
 
 ## Additional things
 
-A file tool with a wide path is an open door. The check in this lesson is the same one Chapter 2 uses: the path has to stay inside the shop documents. That boundary becomes urgent again in tutorial 11, when a supplier page asks the agent to read a file outside the folder.
+A file tool with a wide path is an open door. The path has to stay inside `docs/`. That boundary becomes urgent again in tutorial 11, when a supplier page asks the agent to read a file outside the folder.
 
 Tutorial 3 puts these calls inside a loop, because a question at the counter often needs the shelf and then the policy before it is ready to answer. Tutorial 8 uses the gap between the target stock and the amount on hand as the quantity a restock may propose. The distinction you meet here, between “low” and “how many to order,” is what that later checker recomputes for itself.
 
-The café in these files is fictional. The documents and the shelf match the other labs in this book. Leave private files alone.
+The café in these files is fictional. The documents and the shelf live in this folder. Leave private files alone.
 
 ## Sources and references
 
-- [Chapter 2: The Agent Loop](../../chapters/ch02-your-first-loop/README.md). The path check is [labs/common/tools.py](../common/tools.py). The shop documents are in [labs/ch02-your-first-loop/docs](../ch02-your-first-loop/docs).
-- [Chapter 4: Tools and Sensors](../../chapters/ch04-tools-and-sensors/README.md), and the shelf lab [sql_tools.py](../ch04-tools-and-sensors/sql_tools.py).
+- The path check is [common/tools.py](common/tools.py). The shop documents are [docs/policy.md](docs/policy.md) and [docs/faq.md](docs/faq.md).
+- The shelf rows live in [cell_src/shelf.py](cell_src/shelf.py).
 - The previous lecture is [1-using-tool.md](1-using-tool.md). The notebook is [2-data-and-files.ipynb](2-data-and-files.ipynb). The series map is in [README.md](README.md).

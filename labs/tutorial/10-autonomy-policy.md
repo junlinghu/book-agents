@@ -6,7 +6,7 @@ The agent can read the shop, check a proposal, and show that a few important ans
 
 ## What this tutorial is about
 
-Readings of the shop, the notes, the memory, the supplier page, and the checker may run on their own. Writing a restock ticket waits for a person. Charging a card is refused, and an approval that matches that exact charge does not promote it into an allowed action. You will learn that the program decides. The wording of the user’s message does not. An approval matches one action and one set of arguments, so a different quantity is a different approval. The same grades cover mail. A message to the counter can wait for a person. A message to any other address is refused. This lesson uses the approval rules from Chapter 16 for cards and mail.
+Readings of the shop, the notes, the memory, the supplier page, and the checker may run on their own. Writing a restock ticket waits for a person. Charging a card is refused, and an approval that matches that exact charge does not promote it into an allowed action. You will learn that the program decides. The wording of the user’s message does not. An approval matches one action and one set of arguments, so a different quantity is a different approval. The same grades cover mail. A message to the counter can wait for a person. A message to any other address is refused. This lesson uses the approval rules in `common/autonomy.py` for cards and mail.
 
 ## How you will get there
 
@@ -16,9 +16,9 @@ The notebook asks for an oat-milk restock ticket and asks that no card be charge
 
 A gate that treats a polite request as permission will confirm whatever the model was persuaded to ask. Tutorial 11 is the case that makes this concrete. The supplier page demands a charge and a look at a secret file, and the gate and the folder boundary have to hold when the model is wrong. Tutorial 15 writes two tickets, and each ticket needs its own approval, because confirmation is per call.
 
-Chapter 16 is the book’s treatment of the three grades, of mapping actions to risk, and of approvals a person will actually use. The café in these files is fictional. Leave private files alone.
+The three grades, the mapping of actions to risk, and an approval a person can match to one call are the whole of the gate in this lesson. The café in these files is fictional. Leave private files alone.
 
 ## Sources and references
 
-- [Chapter 16: Autonomy Policy](../../chapters/ch16-autonomy-policy/README.md). The shared gate is [labs/common/autonomy.py](../common/autonomy.py), and the lab is [labs/ch16-autonomy-policy](../ch16-autonomy-policy).
+- Cards and mail use [common/autonomy.py](common/autonomy.py). The ticket gate is [cell_src/gate.py](cell_src/gate.py).
 - The previous lecture is [9-evals.md](9-evals.md). The notebook is [10-autonomy-policy.ipynb](10-autonomy-policy.ipynb). The series map is in [README.md](README.md).

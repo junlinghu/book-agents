@@ -16,9 +16,9 @@ The notebook first scores two oat-milk proposals with no model in the path. One 
 
 A checker that trusts the proposer’s arithmetic is a second copy of the proposal. The value of this one is that it recomputes the gap from the database you met in tutorial 2, where “low” and “how many to order” were kept apart. Tutorial 12 gives the same split to two roles, a stocker and a checker, and a supplier note that says to order a thousand bags fails there for the same reason. Tutorial 15 uses the checker on the house-blend and oat-milk gaps before any ticket is written.
 
-Chapter 11 is the book’s treatment of a separate checker, of failures that stop the work, and of the point at which a person joins the check. The café in these files is fictional.
+A separate checker, a failure that stops the work, and a person who joins only when the checker asks are the whole of the check in this lesson. The café in these files is fictional.
 
 ## Sources and references
 
-- [Chapter 11: Verification Loops](../../chapters/ch11-verification-loops/README.md), and the lab [labs/ch11-verification-loops](../ch11-verification-loops).
+- The checker is [cell_src/verify.py](cell_src/verify.py).
 - The previous lecture is [7-web-browse.md](7-web-browse.md). The notebook is [8-verification.ipynb](8-verification.ipynb). The series map is in [README.md](README.md).

@@ -1,4 +1,4 @@
-# Same shelf as labs/ch04-tools-and-sensors/sql_tools.py.
+# Shelf seed for this tutorial. The model never writes the SQL.
 # sku, name, category, unit, reorder_point, on_hand, par.
 SEED_ROWS = (
     ("HB-12", "House blend 12oz", "coffee", "bag", 6, 4, 18),

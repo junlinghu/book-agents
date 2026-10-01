@@ -24,13 +24,12 @@ The description you attach to a tool is part of the tool. The model chooses amon
 
 A model may also skip the tool and answer at once. When that happens, the record of the run shows no tool result. Treat the paragraph as an answer that never consulted the shop, however sure it sounds. The skip is easier to notice when the program allows it to happen and then shows you an empty record, which is the behavior this lesson keeps.
 
-This tutorial stops after a single round trip. Tutorial 2 gives the agent the shop’s documents and the shelf, because a return rule is only one kind of fact. Tutorial 3 places the same exchange inside a loop that can take several steps and that knows when to stop. Much later, the series puts a gate in front of actions that change the shop, so that reading a rule and charging a card are different kinds of permission. If you want the comparison with a prompt and no tool at all, Chapter 1 asks a question of the same kind and lets the model answer from the brief alone.
+This tutorial stops after a single round trip. Tutorial 2 gives the agent the shop’s documents and the shelf, because a return rule is only one kind of fact. Tutorial 3 places the same exchange inside a loop that can take several steps and that knows when to stop. Much later, the series puts a gate in front of actions that change the shop, so that reading a rule and charging a card are different kinds of permission. A prompt with no tool at all would answer from the brief. This notebook refuses that shortcut by reading the policy first.
 
-The café in these files is fictional. Point the tool at the shop documents in this repository, and leave private files alone.
+The café in these files is fictional. Point the tool at `docs/` in this folder, and leave private files alone.
 
 ## Sources and references
 
-- [Chapter 1: What an Agent Is](../../chapters/ch01-what-an-agent-is/README.md) asks the café question with a prompt alone. The lab is [hello_concierge.py](../ch01-what-an-agent-is/hello_concierge.py).
-- [Chapter 2: The Agent Loop](../../chapters/ch02-your-first-loop/README.md) develops the program around the model, the tool result, and the reasons a run may stop. The shared loop is [labs/common/loop.py](../common/loop.py). The policy this tutorial reads lives in [labs/ch02-your-first-loop/docs](../ch02-your-first-loop/docs).
-- [Chapter 4: Tools and Sensors](../../chapters/ch04-tools-and-sensors/README.md) treats tools as the way an agent touches the shop. The lab folder is [labs/ch04-tools-and-sensors](../ch04-tools-and-sensors).
+- The return rule is read from [docs/policy.md](docs/policy.md). The path jail is [common/tools.py](common/tools.py).
+- API settings live in [common/client.py](common/client.py). Live calls use the [OpenAI Chat Completions API](https://platform.openai.com/docs/api-reference/chat).
 - The notebook is [1-using-tool.ipynb](1-using-tool.ipynb). The series map and the run commands are in [README.md](README.md).

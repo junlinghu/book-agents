@@ -16,11 +16,11 @@ The notebook adds a fetch action for that one address. You ask what wholesale oa
 
 ## Additional things
 
-An allow-list is the whole of the network policy in this lesson. There is no open client for the public web. When you later point a fetch tool at a real site, Chapter 8 is the place to read about pages whose layout changes, about blocked requests, and about the duty to respect the site’s terms. The page’s attempt to give orders is a preview of what tutorial 11 calls prompt injection. That later notebook runs the bad proposals through the file boundary and the action gate, so the result does not depend on the model happening to be polite.
+An allow-list is the whole of the network policy in this lesson. There is no open client for the public web. The page in this folder is a fixture, so the lesson does not depend on a live site, a changing layout, or a blocked request. The page’s attempt to give orders is a preview of what tutorial 11 calls prompt injection. That later notebook runs the bad proposals through the file boundary and the action gate, so the result does not depend on the model happening to be polite.
 
 The shelf count still comes from the database you met in tutorial 2. A sentence on a supplier page is a claim about a price. It is a poor source for how many cartons are on hand, which is why this notebook reads both and keeps them apart. The café in these files is fictional. Leave private files alone.
 
 ## Sources and references
 
-- [Chapter 8: Browsing the Web](../../chapters/ch08-browsing-the-web/README.md), and the lab [labs/ch08-browsing-the-web](../ch08-browsing-the-web).
+- The supplier page is [data/pages/mill-and-birch.html](data/pages/mill-and-birch.html). `fetch_page` is in [cell_src/web.py](cell_src/web.py).
 - The previous lecture is [6-skills.md](6-skills.md). The notebook is [7-web-browse.ipynb](7-web-browse.ipynb). The series map is in [README.md](README.md).

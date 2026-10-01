@@ -20,9 +20,9 @@ A bigger prompt is a poor repair for a missing fact. When the fact lives in a fi
 
 The refusal of an oversized note is useful information. It tells you the note should be split, or that the question should name a smaller piece. Tutorial 5 treats durable memory the same way. A search should return a short match, because dumping every saved row recreates the crowding you just watched. Tutorial 6 loads one procedure by name, when the question matches, and leaves the other procedures on disk.
 
-Chapter 5 is the book’s treatment of budgets, rot, and a map of notes in place of a paste. The café’s notes are practice documents, not a record of a real shop.
+A map of titles, a cap on each body, and a refusal of the oversized picnic note are the whole of the budget in this lesson. The café’s notes are practice documents, not a record of a real shop.
 
 ## Sources and references
 
-- [Chapter 5: Context Engineering](../../chapters/ch05-context-engineering/README.md), and the lab [labs/ch05-context-engineering](../ch05-context-engineering).
+- Note titles, caps, and bodies live in [cell_src/notes.py](cell_src/notes.py) and [data/notes](data/notes).
 - The previous lecture is [3-agent-loop.md](3-agent-loop.md). The notebook is [4-context-engineering.ipynb](4-context-engineering.ipynb). The series map is in [README.md](README.md).
