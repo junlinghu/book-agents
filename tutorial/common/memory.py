@@ -1,106 +1,92 @@
-"""Durable memory in tutorial/var/memory.json."""
+"""Durable guest preferences in tutorial/data/customer_preference.md.
 
-import json
+The model passes a guest name. This module returns that heading's section.
+The path never appears in the tool schema.
+"""
 
-from tutorial.common.harness import VAR
+from tutorial.common.harness import DATA
 from tutorial.common.tools import register
 
-MEMORY_PATH = VAR / "memory.json"
+PREFERENCE_PATH = DATA / "customer_preference.md"
 
 
-def reset_memory():
-    """Start this lesson from an empty durable store. Session messages are separate."""
-    MEMORY_PATH.parent.mkdir(parents=True, exist_ok=True)
-    MEMORY_PATH.write_text("[]\n", encoding="utf-8")
+def _headings(markdown):
+    names = []
+    for line in markdown.splitlines():
+        if line.startswith("## "):
+            names.append(line[3:].strip())
+    return names
 
 
-def _load_memory():
-    if not MEMORY_PATH.is_file():
-        return []
-    return json.loads(MEMORY_PATH.read_text(encoding="utf-8"))
+def _section(markdown, heading):
+    lines = markdown.splitlines()
+    start = None
+    prefix = "## " + heading
+    for index, line in enumerate(lines):
+        if line.strip() == prefix:
+            start = index + 1
+            break
+    if start is None:
+        return ""
+    body = []
+    for line in lines[start:]:
+        if line.startswith("## "):
+            break
+        body.append(line)
+    return "\n".join(body).strip()
 
 
-def _save_memory(rows):
-    MEMORY_PATH.parent.mkdir(parents=True, exist_ok=True)
-    MEMORY_PATH.write_text(json.dumps(rows, indent=2) + "\n", encoding="utf-8")
+def guest_list():
+    """Comma-separated guest names, in file order."""
+    if not PREFERENCE_PATH.is_file():
+        return "(none)"
+    names = _headings(PREFERENCE_PATH.read_text(encoding="utf-8"))
+    if not names:
+        return "(none)"
+    return ", ".join(names)
 
 
-def memory_set(args):
-    text = str(args.get("text", "")).strip()
-    scope = str(args.get("scope", "")).strip()
-    kind = str(args.get("kind", "")).strip()
-    source = str(args.get("source", "")).strip()
-    if kind not in {"preference", "constraint", "belief"}:
-        return "ERROR: kind must be preference, constraint, or belief."
-    if not text or not scope or not source:
-        return "ERROR: text, scope, and source are required."
-    if len(text) > 500:
-        return "ERROR: text is too long."
-    rows = _load_memory()
-    record = {
-        "id": "mem_" + str(len(rows) + 1),
-        "text": text,
-        "scope": scope,
-        "kind": kind,
-        "source": source,
-        "forgotten": False,
-    }
-    rows.append(record)
-    _save_memory(rows)
-    return "SAVED id=" + record["id"] + " kind=" + kind + " scope=" + scope
-
-
-def memory_search(args):
-    query = str(args.get("query", "")).strip().lower()
-    scope = str(args.get("scope", "")).strip()
-    rows = [row for row in _load_memory() if not row.get("forgotten")]
-    if scope:
-        rows = [row for row in rows if row["scope"] == scope]
-    if query:
-        rows = [
-            row for row in rows
-            if query in row["text"].lower() or query in row["scope"].lower()
-        ]
-    if not rows:
-        return "MATCHES\n(none)"
-    lines = ["MATCHES"]
-    for row in rows:
-        lines.append(
-            "- id=" + row["id"]
-            + " kind=" + row["kind"]
-            + " scope=" + row["scope"]
-            + " text=" + row["text"]
+def get_preference(args):
+    """Return one guest's entry. The model names the guest; this function opens the file."""
+    name = str(args.get("name", "")).strip()
+    if not name:
+        return "ERROR: name is required. Example: Priya."
+    if not PREFERENCE_PATH.is_file():
+        return "ERROR: customer_preference.md is missing."
+    document = PREFERENCE_PATH.read_text(encoding="utf-8")
+    match = None
+    for heading in _headings(document):
+        if heading.lower() == name.lower():
+            match = heading
+            break
+    if match is None:
+        return (
+            "ERROR: no preference entry for " + name
+            + ". Known guests: " + guest_list() + "."
         )
-    return "\n".join(lines)
+    body = _section(document, match)
+    if not body:
+        return "ERROR: " + match + " has an empty entry."
+    return "CUSTOMER: " + match + "\nSOURCE: data/customer_preference.md\n\n" + body
 
 
 register(
-    "memory_set",
-    "Append one durable memory row to JSON. scope is customer:<name> or shop. "
-    "kind is preference, constraint, or belief. This survives a new message list.",
+    "get_preference",
+    "Look up one guest in the shared preference file. Pass a name, not a filename. "
+    "name is one of: " + guest_list() + ". "
+    "The result is that guest's entry only.",
     {
-        "text": {"type": "string"},
-        "scope": {"type": "string"},
-        "kind": {"type": "string"},
-        "source": {"type": "string"},
+        "name": {
+            "type": "string",
+            "description": "One guest name: " + guest_list() + ".",
+        }
     },
-    ["text", "scope", "kind", "source"],
-    memory_set,
-)
-register(
-    "memory_search",
-    "Search durable memory. Session chat is not searched. Forgotten rows are skipped.",
-    {
-        "query": {"type": "string"},
-        "scope": {"type": "string", "description": "Optional exact scope, such as customer:priya or shop."},
-    },
-    [],
-    memory_search,
+    ["name"],
+    get_preference,
 )
 
 __all__ = [
-    "MEMORY_PATH",
-    "memory_search",
-    "memory_set",
-    "reset_memory",
+    "PREFERENCE_PATH",
+    "get_preference",
+    "guest_list",
 ]

@@ -18,7 +18,7 @@ The notebook adds a small catalog of staff notes. Titles sit in the brief. Bodie
 
 A bigger prompt is a poor repair for a missing fact. When the fact lives in a file, a tool can fetch it on the turn that needs it. Loading every file on every question spends the budget on text the question never uses.
 
-The refusal of an oversized note is useful information. It tells you the note should be split, or that the question should name a smaller piece. Tutorial 5 treats durable memory the same way. A search should return a short match, because dumping every saved row recreates the crowding you just watched. Tutorial 6 loads one procedure by name, when the question matches, and leaves the other procedures on disk.
+The refusal of an oversized note is useful information. It tells you the note should be split, or that the question should name a smaller piece. Tutorial 5 treats durable memory the same way. A lookup returns one guest, because dumping every preference recreates the crowding you just watched. Tutorial 6 loads one procedure by name, when the question matches, and leaves the other procedures on disk.
 
 A map of titles, a cap on each body, and a refusal of the oversized picnic note are the whole of the budget in this lesson. The café’s notes are practice documents, not a record of a real shop.
 
