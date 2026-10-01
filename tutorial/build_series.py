@@ -917,13 +917,6 @@ def notebook_for(lesson: dict):
             "It does not write a customer answer when it stops early."
         ))
         cells.append(new_code_cell(loop_source(n)))
-    if n == 1:
-        cells.append(new_markdown_cell(
-            "## Test chat\n\n"
-            "One Chat Completions call, with no tools. "
-            "This confirms `OPENAI_API_KEY` and the model before the tool-calling run."
-        ))
-        cells.append(new_code_cell(read_src("test_chat.py")))
     cells.append(new_markdown_cell(
         "## Run\n\n"
         "Run this cell after the ones above. Each model turn calls the Chat Completions API. "
