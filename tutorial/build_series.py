@@ -6,8 +6,8 @@ Tutorial 1 is maintained by hand. This script does not rewrite it.
 Companion notes (``N-slug.md``) are lecture prose maintained by hand.
 This script does not rewrite them.
 
-Each notebook calls ``tutorial.common.colab.setup_colab`` and shows the
-code that lesson introduces. Earlier helpers are imported from
+Each notebook points at ``tutorial/common/colab.py`` for Colab setup and
+shows the code that lesson introduces. Earlier helpers are imported from
 ``tutorial.common``. A rebuild does not paste earlier lessons back in.
 
 From the repo root:
@@ -537,7 +537,7 @@ def bootstrap(lesson: dict) -> str:
 
 
 def colab_markdown(slug: str) -> str:
-    """Badge plus a short label for the Colab setup cell."""
+    """Badge plus word instructions. The setup code stays in common/colab.py."""
     url = (
         "https://colab.research.google.com/github/junlinghu/book-agents/blob/main/tutorial/"
         + slug
@@ -552,103 +552,19 @@ def colab_markdown(slug: str) -> str:
         badge
         + "\n\n"
         + "## Colab setup\n\n"
-        + "Run the next cell first on Google Colab. "
-        + "It sparse-checkouts this public repo and installs packages only when the kernel is Colab. "
-        + "Local Jupyter and VS Code skip that work.\n\n"
+        + "On Google Colab, use the setup in `tutorial/common/colab.py`. "
+        + "A fresh Colab runtime does not have this repository, so clone the repo into the session first. "
+        + "Then, before the lesson cells, run `setup_colab` from that module "
+        + "(import it from `tutorial.common.colab` and call it, or open the file and run `setup_colab` from there). "
+        + "The helper installs the tutorial packages, checks the repo out under `/content/book-agents` when it is still missing, "
+        + "and copies a Colab secret named `OPENAI_API_KEY`. "
+        + "Local Jupyter and VS Code can skip it when you already have the repo.\n\n"
         + "An API key is required. Set `OPENAI_API_KEY` in Colab secrets "
-        + "(the key icon, secret name `OPENAI_API_KEY`) or in an environment cell: "
-        + '`os.environ["OPENAI_API_KEY"] = "sk-..."`. '
-        + "Do that before the lesson setup cell. "
+        + "(the key icon, secret name `OPENAI_API_KEY`) before you run `setup_colab`. "
         + "Locally, put the same name in the repository-root `.env`. "
         + "A missing key stops the notebook. The key is not printed.\n\n"
         + "Edits you make in Colab stay in that session. They do not push to GitHub."
     )
-
-
-# First code cell. A fresh Colab runtime cannot import tutorial.common until
-# this cell checks the repo out. setup_colab() does the install, the secret,
-# and a second checkout if the marker is still missing.
-COLAB_SETUP_CODE = textwrap.dedent(
-    """\
-    # Colab setup. Run this cell before the other code cells.
-    # A fresh Colab runtime cannot import tutorial.common yet, so this cell
-    # sparse-checkouts the repo first. Local Jupyter and VS Code skip that.
-    #
-    # An API key is required. On Google Colab, set OPENAI_API_KEY in one of these ways:
-    #   * Secrets (the key icon): a secret named OPENAI_API_KEY
-    #   * an environment cell: os.environ["OPENAI_API_KEY"] = "sk-..."
-    # Locally, put the key in the repository-root .env.
-    # Do not commit a key. This cell does not print the value.
-    # Edits you make in Colab stay in the session. They do not push to GitHub.
-
-    import sys
-    from pathlib import Path
-
-
-    def _on_colab():
-        try:
-            import google.colab
-        except ImportError:
-            return False
-        return Path("/content").is_dir() and google.colab is not None
-
-
-    def _use(root):
-        if not (Path(root) / "tutorial" / "common" / "colab.py").is_file():
-            return False
-        text = str(root)
-        if text not in sys.path:
-            sys.path.insert(0, text)
-        return True
-
-
-    ready = False
-    if _on_colab():
-        repo = Path("/content/book-agents")
-        if not _use(repo):
-            import shutil
-            import subprocess
-
-            if repo.exists() and not (repo / ".git").exists():
-                raise RuntimeError(
-                    str(repo) + " exists but is not a git checkout. "
-                    "Move that folder aside and run this cell again."
-                )
-            if repo.exists():
-                shutil.rmtree(repo)
-            url = "https://github.com/junlinghu/book-agents.git"
-            try:
-                subprocess.check_call([
-                    "git", "clone", "--depth", "1", "--filter=blob:none", "--sparse",
-                    url, str(repo),
-                ])
-                subprocess.check_call([
-                    "git", "-C", str(repo), "sparse-checkout", "set", "tutorial",
-                ])
-            except subprocess.CalledProcessError:
-                if repo.exists():
-                    shutil.rmtree(repo)
-                subprocess.check_call(["git", "clone", "--depth", "1", url, str(repo)])
-            if not _use(repo):
-                raise RuntimeError(
-                    "Colab setup could not find tutorial/common/colab.py after cloning."
-                )
-        ready = True
-    else:
-        here = Path.cwd().resolve()
-        for candidate in [here, *here.parents]:
-            if _use(candidate):
-                ready = True
-                break
-        if not ready:
-            print("Not Colab. Skipped clone and pip install.")
-
-    if ready:
-        from tutorial.common.colab import setup_colab
-
-        setup_colab()
-    """
-)
 
 
 
@@ -846,13 +762,12 @@ def notebook_for(lesson: dict):
         raise RuntimeError("Tutorial 1 is maintained by hand and is not regenerated.")
     cells = [
         new_markdown_cell(colab_markdown(lesson["slug"])),
-        new_code_cell(COLAB_SETUP_CODE),
         new_markdown_cell(textwrap.dedent(lesson["intro"]).strip() + "\n\n" + standalone_note()),
         new_markdown_cell(
             "## Setup\n\n"
             "This notebook calls the OpenAI Chat Completions API. `OPENAI_API_KEY` is required. "
             "Locally the key is loaded from the repository-root `.env` by `tutorial/common/client.py`. "
-            "On Colab, the setup cell above reads a secret of the same name. "
+            "On Colab, `setup_colab` in `tutorial/common/colab.py` reads a secret of the same name. "
             "The value is not printed. A missing key stops the run.\n\n"
             "Companion notes: `" + lesson["slug"] + ".md`."
         ),
@@ -953,11 +868,22 @@ def check_series() -> None:
             except SyntaxError:
                 print("FAILED cell", index, "in", lesson["slug"])
                 raise
+        opening = notebook.cells[0].source if notebook.cells else ""
+        if (
+            not notebook.cells
+            or notebook.cells[0].cell_type != "markdown"
+            or "tutorial/common/colab.py" not in opening
+            or "setup_colab" not in opening
+        ):
+            raise SystemExit(lesson["slug"] + " Colab instructions do not point at tutorial/common/colab.py")
         code_cells = [cell.source for cell in notebook.cells if cell.cell_type == "code"]
-        if code_cells[0].strip() != COLAB_SETUP_CODE.strip():
-            raise SystemExit(lesson["slug"] + " Colab cell does not call tutorial.common.colab")
-        if "def in_colab(" in code_cells[0]:
-            raise SystemExit(lesson["slug"] + " still inlines the Colab setup")
+        for source in code_cells:
+            if (
+                "setup_colab" in source
+                or "def in_colab(" in source
+                or "def _on_colab(" in source
+            ):
+                raise SystemExit(lesson["slug"] + " still embeds the Colab setup code")
         if lesson["n"] == 1:
             continue
         code = "\n".join(code_cells)

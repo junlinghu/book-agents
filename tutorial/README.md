@@ -78,7 +78,7 @@ https://colab.research.google.com/github/junlinghu/book-agents/blob/main/tutoria
 
 Tutorial 1, for example, is [1-using-tool.ipynb](https://colab.research.google.com/github/junlinghu/book-agents/blob/main/tutorial/1-using-tool.ipynb).
 
-Run the Colab setup cell first (it is the first code cell). On a fresh Colab runtime that cell sparse-checkouts this repository so it can import `tutorial.common.colab`, then calls `setup_colab()`. The helper:
+The notebooks do not embed a Colab setup code cell. The setup lives in `tutorial/common/colab.py`. On a fresh Colab runtime, clone this repository into the session first, then run `setup_colab` from that module before the lesson cells. The helper:
 
 - Detects Colab (`google.colab` and a `/content` directory).
 - Sparse-checkouts the public repository so `tutorial/` is on disk (`tutorial.common`, `docs/`, and the rest of the lesson). If the sparse checkout fails, it falls back to a shallow clone.
@@ -86,7 +86,7 @@ Run the Colab setup cell first (it is the first code cell). On a fresh Colab run
 - Sets the working directory and `sys.path` so `import tutorial` works.
 - Copies a Colab secret named `OPENAI_API_KEY` when that variable is empty. The value is not printed.
 
-The same cell runs in local Jupyter and VS Code and skips the clone and the install. A checkout you already have does not need another clone.
+Local Jupyter and VS Code can skip `setup_colab` when you already have the checkout. The helper itself skips the clone and the install when the kernel is not Colab.
 
 Edits you make in Colab stay in the Colab session. They do not push to GitHub.
 
@@ -113,7 +113,7 @@ The notebook does not print the API key.
 | `data/` | Notes, skills, the supplier page, the supplier note, and a fake canary. Not shop secrets. |
 | `cell_src/` | Authoring copy of each lesson's code. The notebook that introduces a piece shows that file. Later notebooks import it from `common/`. |
 | `build_series.py` | Rewrites notebooks 2–15. Tutorial 1 and the companion notes are edited by hand. You do not need the script to study. |
-| `common/colab.py` | Shared Colab clone, package install, and secret copy. Notebooks call `setup_colab()`. |
+| `common/colab.py` | Shared Colab clone, package install, and secret copy. Notebooks point at `setup_colab` here. |
 | `common/client.py` | API key, model, temperature, max tokens. |
 | `common/tools.py` | Path jail used by `read_shop_file`. |
 | `common/autonomy.py` | Confirm tokens, and the never-tier for cards and outside mail. |

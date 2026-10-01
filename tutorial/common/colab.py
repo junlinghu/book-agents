@@ -1,15 +1,13 @@
 """Google Colab setup shared by the tutorial notebooks.
 
-Notebooks call :func:`setup_colab` from the first code cell. On Colab that
+The notebooks point here instead of embedding a setup cell. On Colab, clone
+this repository into the session first (a fresh runtime cannot import this
+module until the repo is on disk), then call :func:`setup_colab`. That
 installs the tutorial packages, clones this repository into
 ``/content/book-agents`` when it is missing, and copies a secret named
 ``OPENAI_API_KEY`` into the environment. The key is not printed.
 
 Local Jupyter and VS Code print a skip line and do not clone or install.
-
-A fresh Colab runtime cannot import this module until the notebook cell
-has checked the repo out. That bootstrap stays in the notebook. This
-module is the setup that runs once the import works.
 """
 
 import os

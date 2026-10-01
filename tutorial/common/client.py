@@ -22,7 +22,7 @@ DEFAULT_MODEL = "gpt-4.1-mini"
 MISSING_KEY = (
     "OPENAI_API_KEY is empty. Copy .env.example to .env and paste a key "
     "from https://platform.openai.com/api-keys. On Colab, add a secret named "
-    "OPENAI_API_KEY (the key icon) and rerun the Colab setup cell. "
+    "OPENAI_API_KEY (the key icon) and run setup_colab from tutorial/common/colab.py. "
     "Never commit .env."
 )
 
