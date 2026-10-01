@@ -22,10 +22,10 @@ DEFAULT_MODEL = "gpt-4.1-mini"
 def repo_root():
     """Repository root (the folder that contains `.env.example`).
 
-    This file is `labs/tutorial/common/client.py`, so the root is three folders up.
+    This file is `tutorial/common/client.py`, so the root is two folders up.
     """
     this_folder = os.path.dirname(os.path.abspath(__file__))
-    return os.path.dirname(os.path.dirname(os.path.dirname(this_folder)))
+    return os.path.dirname(os.path.dirname(this_folder))
 
 
 def ensure_env_loaded():

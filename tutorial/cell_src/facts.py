@@ -1,8 +1,8 @@
-from labs.tutorial.common.tools import read_file as read_docs_file
+from tutorial.common.tools import read_file as read_docs_file
 
 
 def _read_docs(path):
-    """Read one shop document. The path jail lives in ``labs.tutorial.common.tools``."""
+    """Read one shop document. The path jail lives in ``tutorial.common.tools``."""
     if not isinstance(path, str):
         return "ERROR: path must be a string. Example: policy.md"
     return read_docs_file(str(DOCS), path)

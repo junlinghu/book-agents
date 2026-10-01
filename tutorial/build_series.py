@@ -10,8 +10,8 @@ earlier code instead of pointing at it.
 
 From the repo root:
 
-    python labs/tutorial/build_series.py
-    DEMO_MODE=1 python labs/tutorial/build_series.py --check
+    python tutorial/build_series.py
+    DEMO_MODE=1 python tutorial/build_series.py --check
 """
 
 from __future__ import annotations
@@ -25,7 +25,7 @@ from pathlib import Path
 import nbformat
 from nbformat.v4 import new_code_cell, new_markdown_cell, new_notebook
 
-ROOT = Path(__file__).resolve().parents[2]
+ROOT = Path(__file__).resolve().parents[1]
 SRC = Path(__file__).resolve().parent / "cell_src"
 OUT = Path(__file__).resolve().parent
 
@@ -35,7 +35,7 @@ FRAGMENTS = [
     (1, "Tutorial 1 — one tool", "facts.py",
      "`get_shop_fact` opens the shop document. The model only sees the string you return."),
     (2, "Tutorial 2 — files and the shelf", "shelf.py",
-     "`read_shop_file` uses the path jail in `labs/tutorial/common/tools.py`. `query_inventory` reads the shelf seeded in this notebook. The SQL stays in the function."),
+     "`read_shop_file` uses the path jail in `tutorial/common/tools.py`. `query_inventory` reads the shelf seeded in this notebook. The SQL stays in the function."),
     (4, "Tutorial 4 — notes under a budget", "notes.py",
      "The prompt gets titles. `read_note` returns one short body. The picnic note is over the cap on purpose."),
     (5, "Tutorial 5 — durable memory", "memory.py",
@@ -49,7 +49,7 @@ FRAGMENTS = [
     (9, "Tutorial 9 — graders", "evals.py",
      "A tiny grader over the answer and the tool log. Keep a failure in the set."),
     (10, "Tutorial 10 — autonomy gate", "gate.py",
-     "Auto, confirm, and never. Cards and mail use `labs/tutorial/common/autonomy.py`."),
+     "Auto, confirm, and never. Cards and mail use `tutorial/common/autonomy.py`."),
     (11, "Tutorial 11 — injection boundary", "injection.py",
      "Proposals copied from the page still have to pass the path jail and the gate."),
     (12, "Tutorial 12 — two roles", "roles.py",
@@ -80,9 +80,9 @@ LESSONS = [
             "A shop rule in the answer should come from that tool result.",
         ],
         "maps": [
-            ("One completion, no tools, as the contrast", "`labs/tutorial/1-using-tool.ipynb`"),
-            ("Tool result goes back into the thread", "`labs/tutorial/3-agent-loop.ipynb` (`run_agent`)"),
-            ("Tools are how the agent touches the shop", "`labs/tutorial/common/tools.py` and `labs/tutorial/docs`"),
+            ("One completion, no tools, as the contrast", "`tutorial/1-using-tool.ipynb`"),
+            ("Tool result goes back into the thread", "`tutorial/3-agent-loop.ipynb` (`run_agent`)"),
+            ("Tools are how the agent touches the shop", "`tutorial/common/tools.py` and `tutorial/docs`"),
         ],
         "intro": """\
 # 1. Tool calling
@@ -111,15 +111,15 @@ Later notebooks keep this tool and add more. Run this file from top to bottom. S
             "Low stock means on_hand is at or below the reorder point. The gap to par is a separate number.",
         ],
         "maps": [
-            ("`read_file` path jail", "`labs/tutorial/common/tools.py` and `labs/tutorial/docs`"),
-            ("Shelf rows and low stock", "`labs/tutorial/cell_src/shelf.py`"),
+            ("`read_file` path jail", "`tutorial/common/tools.py` and `tutorial/docs`"),
+            ("Shelf rows and low stock", "`tutorial/cell_src/shelf.py`"),
         ],
         "intro": """\
 # 2. Shop data and files
 
 Tutorial 1 returned one policy section. This notebook keeps that tool and adds two sensors the counter actually needs.
 
-`read_shop_file` reads `policy.md` or `faq.md` from `labs/tutorial/docs`. The path check is `labs.tutorial.common.tools.read_file`. `query_inventory` reads the shelf seeded in this notebook from SQLite. The model passes a filter, not a SQL string.
+`read_shop_file` reads `policy.md` or `faq.md` from `tutorial/docs`. The path check is `tutorial.common.tools.read_file`. `query_inventory` reads the shelf seeded in this notebook from SQLite. The model passes a filter, not a SQL string.
 
 The demo asks which items are low and whether oat milk can ship. Both answers have to come from tools.
 """,
@@ -141,8 +141,8 @@ The demo asks which items are low and whether oat milk can ship. Both answers ha
             "A final answer is the turn where the model calls no tool.",
         ],
         "maps": [
-            ("Perceive, reason, act, observe", "`labs/tutorial/3-agent-loop.ipynb` (`run_agent`)"),
-            ("Stop reasons", "`labs/tutorial/3-agent-loop.ipynb` (`final`, `max_steps`, `repeated_call`)"),
+            ("Perceive, reason, act, observe", "`tutorial/3-agent-loop.ipynb` (`run_agent`)"),
+            ("Stop reasons", "`tutorial/3-agent-loop.ipynb` (`final`, `max_steps`, `repeated_call`)"),
         ],
         "intro": """\
 # 3. The agent loop
@@ -169,7 +169,7 @@ Tutorials 1 and 2 ran one exchange by hand: model, tools, model. A real question
             "The shelf tool still confirms a number that also appears in a note.",
         ],
         "maps": [
-            ("Notes, caps, and a map instead of a paste", "`labs/tutorial/cell_src/notes.py` and `labs/tutorial/data/notes`"),
+            ("Notes, caps, and a map instead of a paste", "`tutorial/cell_src/notes.py` and `tutorial/data/notes`"),
         ],
         "intro": """\
 # 4. Context engineering
@@ -198,14 +198,14 @@ Inventory and the policy tools are still here. The oat-milk count is checked aga
             "The earlier tools and the loop still run in this same notebook.",
         ],
         "maps": [
-            ("JSON memory that survives the process", "`labs/tutorial/cell_src/memory.py`"),
+            ("JSON memory that survives the process", "`tutorial/cell_src/memory.py`"),
         ],
         "intro": """\
 # 5. Session and durable memory
 
 The message list is the session. Close it and the sentences are gone. A guest allergy has to outlive that.
 
-This notebook adds `memory_set` and `memory_search`. They read and write `labs/tutorial/var/memory.json`. Turn 1 saves a constraint. Turn 2 builds a new message list on purpose, then searches the file. The note catalog, the shelf, and the loop are in the cells above.
+This notebook adds `memory_set` and `memory_search`. They read and write `tutorial/var/memory.json`. Turn 1 saves a constraint. Turn 2 builds a new message list on purpose, then searches the file. The note catalog, the shelf, and the loop are in the cells above.
 """,
     },
     {
@@ -225,7 +225,7 @@ This notebook adds `memory_set` and `memory_search`. They read and write `labs/t
             "If the FAQ lists no safe pastry, the answer says so and refuses a nut-free promise.",
         ],
         "maps": [
-            ("Skills as portable procedures", "`labs/tutorial/cell_src/skills.py` and `labs/tutorial/data/skills`"),
+            ("Skills as portable procedures", "`tutorial/cell_src/skills.py` and `tutorial/data/skills`"),
         ],
         "intro": """\
 # 6. Skills
@@ -252,7 +252,7 @@ A system prompt that contains every procedure gets long and stale. A skill is a 
             "The shelf count still comes from SQLite, not from the page.",
         ],
         "maps": [
-            ("Fetch a page, do not treat it as instructions", "`labs/tutorial/cell_src/web.py` and `labs/tutorial/data/pages`"),
+            ("Fetch a page, do not treat it as instructions", "`tutorial/cell_src/web.py` and `tutorial/data/pages`"),
         ],
         "intro": """\
 # 7. The web as a sensor
@@ -279,7 +279,7 @@ The result starts with `UNTRUSTED PAGE TEXT`. The demo asks for the oat-milk cas
             "The agent's accepted plan is the one the checker accepted, not the boldest number.",
         ],
         "maps": [
-            ("A separate checker with hard findings", "`labs/tutorial/cell_src/verify.py`"),
+            ("A separate checker with hard findings", "`tutorial/cell_src/verify.py`"),
         ],
         "intro": """\
 # 8. Verification
@@ -306,7 +306,7 @@ The loop can sound sure and still be wrong. A checker is a second function with 
             "The same agent loop from earlier tutorials produces the two live cases.",
         ],
         "maps": [
-            ("Graders over traces, including a failure you keep", "`labs/tutorial/cell_src/evals.py`"),
+            ("Graders over traces, including a failure you keep", "`tutorial/cell_src/evals.py`"),
         ],
         "intro": """\
 # 9. Evals
@@ -330,17 +330,17 @@ You already know two answers the concierge must get right, and one answer it onc
             "The harness decides. The wording of the user message does not.",
             "A confirm token matches one tool name plus one argument object.",
             "A token never promotes a never-tier tool.",
-            "This gate uses `labs/tutorial/common/autonomy.py` for cards and email.",
+            "This gate uses `tutorial/common/autonomy.py` for cards and email.",
         ],
         "maps": [
-            ("auto / confirm / never", "`labs/tutorial/common/autonomy.py` and `labs/tutorial/cell_src/gate.py`"),
+            ("auto / confirm / never", "`tutorial/common/autonomy.py` and `tutorial/cell_src/gate.py`"),
         ],
         "intro": """\
 # 10. Autonomy policy
 
 A tool call is a proposal until the harness agrees. Reads can run. A restock ticket waits. A card charge does not run.
 
-`gate_call` returns allowed, confirm_required, or denied. Confirm uses `approval_token` from `labs.tutorial.common.autonomy`, so a different quantity is a different token. The demo writes an oat-milk ticket only on the second run, after you pass the token from the first run. `charge_card` stays denied. The checker and the eval helpers are still above.
+`gate_call` returns allowed, confirm_required, or denied. Confirm uses `approval_token` from `tutorial.common.autonomy`, so a different quantity is a different token. The demo writes an oat-milk ticket only on the second run, after you pass the token from the first run. `charge_card` stays denied. The checker and the eval helpers are still above.
 """,
     },
     {
@@ -361,8 +361,8 @@ A tool call is a proposal until the harness agrees. Reads can run. A restock tic
             "Mail to the counter is confirm. Mail to any other domain is never.",
         ],
         "maps": [
-            ("Untrusted page text and a canary", "`labs/tutorial/data/pages` and `labs/tutorial/data/canary.env`"),
-            ("The gate from the previous tutorial", "`labs/tutorial/common/autonomy.py`"),
+            ("Untrusted page text and a canary", "`tutorial/data/pages` and `tutorial/data/canary.env`"),
+            ("The gate from the previous tutorial", "`tutorial/common/autonomy.py`"),
         ],
         "intro": """\
 # 11. Prompt injection
@@ -389,7 +389,7 @@ The page says to ignore instructions, charge a card, and read a secret. The agen
             "The fetch tool, the gate, and the loop are still in this notebook.",
         ],
         "maps": [
-            ("Roles, contracts, and an untrusted supplier note", "`labs/tutorial/cell_src/roles.py` and `labs/tutorial/data/supplier-note.txt`"),
+            ("Roles, contracts, and an untrusted supplier note", "`tutorial/cell_src/roles.py` and `tutorial/data/supplier-note.txt`"),
         ],
         "intro": """\
 # 12. Multi-agent handoff
@@ -416,7 +416,7 @@ The stocker reads a shelf row and returns quantity as the gap. The checker accep
             "The answer is still grounded in the shelf and the policy file.",
         ],
         "maps": [
-            ("Spans you can replay without a collector", "`labs/tutorial/cell_src/trace.py`"),
+            ("Spans you can replay without a collector", "`tutorial/cell_src/trace.py`"),
         ],
         "intro": """\
 # 13. Observability
@@ -443,8 +443,8 @@ Each span has a trace id, a status, and three identities: the user (`counter-lea
             "The rates in the notebook are illustrative. They are not an invoice.",
         ],
         "maps": [
-            ("Honest totals, not a proxy that flatters the run", "`labs/tutorial/cell_src/cost.py`"),
-            ("Cost, latency, and a read cache", "`labs/tutorial/14-cost-latency.ipynb`"),
+            ("Honest totals, not a proxy that flatters the run", "`tutorial/cell_src/cost.py`"),
+            ("Cost, latency, and a read cache", "`tutorial/14-cost-latency.ipynb`"),
         ],
         "intro": """\
 # 14. Cost and latency
@@ -453,7 +453,7 @@ A loop that hides its token count will surprise you on the second week. This not
 
 It also caches read-only tools. The hours question reads `faq.md` twice. The second read should say `cache: HIT`. That second call is also the repeat nudge from tutorial 3. The cache still serves the file. A third identical call would stop the loop.
 
-`route_task` prints whether the question looks like a short lookup or a shop decision. Both routes name `gpt-4.1-mini` here. Swapping the id is a change to `MODEL` in `labs/tutorial/common/client.py`. The trace from tutorial 13 is still recorded.
+`route_task` prints whether the question looks like a short lookup or a shop decision. Both routes name `gpt-4.1-mini` here. Swapping the id is a change to `MODEL` in `tutorial/common/client.py`. The trace from tutorial 13 is still recorded.
 """,
     },
     {
@@ -474,8 +474,8 @@ It also caches read-only tools. The hours question reads `faq.md` twice. The sec
             "The supplier note still cannot set the quantity, and the page still cannot grant a charge.",
         ],
         "maps": [
-            ("One recorded restock from plan to ticket", "`labs/tutorial/15-shop-manager.ipynb`"),
-            ("The pieces above", "`labs/tutorial/1-using-tool.ipynb` through `labs/tutorial/14-cost-latency.ipynb`"),
+            ("One recorded restock from plan to ticket", "`tutorial/15-shop-manager.ipynb`"),
+            ("The pieces above", "`tutorial/1-using-tool.ipynb` through `tutorial/14-cost-latency.ipynb`"),
         ],
         "intro": """\
 # 15. Shop manager
@@ -506,15 +506,15 @@ def bootstrap(lesson: dict) -> str:
 
 
         def find_root():
-            \"\"\"Repo root, whether the kernel started here or in labs/tutorial.\"\"\"
+            \"\"\"Repo root, whether the kernel started here or in tutorial.\"\"\"
             here = Path.cwd().resolve()
             for candidate in [here, *here.parents]:
-                marker = candidate / "labs" / "tutorial" / "common" / "client.py"
+                marker = candidate / "tutorial" / "common" / "client.py"
                 if marker.is_file():
                     return candidate
             raise RuntimeError(
                 "Open this notebook inside the book-agents repository. "
-                "The setup cell looks for labs/tutorial/common/client.py."
+                "The setup cell looks for tutorial/common/client.py."
             )
 
 
@@ -522,7 +522,7 @@ def bootstrap(lesson: dict) -> str:
         if str(ROOT) not in sys.path:
             sys.path.insert(0, str(ROOT))
 
-        from labs.tutorial.runtime import chat, describe_mode, using_demo
+        from tutorial.runtime import chat, describe_mode, using_demo
 
         LESSON = {lesson["slug"]!r}
         LESSON_NUMBER = {lesson["n"]}
@@ -767,7 +767,7 @@ def notebook_for(lesson: dict):
             "`DEMO_MODE = None` follows the environment variable of the same name. "
             "If that variable is unset, a missing `OPENAI_API_KEY` selects the scripted demo "
             "and a present key selects the Chat Completions API. "
-            "The key is loaded from the repository-root `.env` by `labs/tutorial/common/client.py`. The value is not printed.\n\n"
+            "The key is loaded from the repository-root `.env` by `tutorial/common/client.py`. The value is not printed.\n\n"
             "Companion notes: `" + lesson["slug"] + ".md`."
         ),
         new_code_cell(bootstrap(lesson)),

@@ -4,7 +4,7 @@ import sqlite3
 import time
 from pathlib import Path
 
-HERE = ROOT / "labs" / "tutorial"
+HERE = ROOT / "tutorial"
 DOCS = HERE / "docs"
 DATA = HERE / "data"
 VAR = HERE / "var"
