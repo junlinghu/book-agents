@@ -1,10 +1,13 @@
 """The tutorial 1 shop-fact tool, importable by later lessons.
 
 The model passes a topic. This module maps that topic to a file and a
-section. The path never appears in the tool schema.
+section. The path never appears in the tool schema. The path jail is
+``tutorial.common.read_file``, which is not itself a tool.
 """
 
-from tutorial.common.harness import read_docs, register
+from tutorial.common.harness import DOCS
+from tutorial.common.read_file import read_file
+from tutorial.common.tools import register
 
 # topic -> (filename under tutorial/docs, markdown heading)
 TOPICS = {
@@ -48,7 +51,7 @@ def get_shop_fact(args):
     if topic not in TOPICS:
         return "ERROR: topic must be one of: " + topic_list() + "."
     path, heading = TOPICS[topic]
-    document = read_docs(path)
+    document = read_file(str(DOCS), path)
     if document.startswith("ERROR:"):
         return document
     body = _section(document, heading)

@@ -1,7 +1,8 @@
 """Stocker and checker. Quantity comes from the shelf, not the note."""
 
-from tutorial.common.harness import DATA, register
-from tutorial.common.shelf import gap_for
+from tutorial.common.harness import DATA
+from tutorial.common.read_db import gap_for
+from tutorial.common.tools import register
 
 SUPPLIER_NOTE = DATA / "supplier-note.txt"
 

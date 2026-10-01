@@ -1,77 +1,54 @@
-"""Path jail for shop documents.
+"""Schemas, registration, and call dispatch for Chat Completions tools.
 
-``read_file`` is not a tool the model can call. ``get_shop_fact`` maps a
-topic to a section and calls this function with a path the program chose.
+Lesson modules register model-facing tools here. ``get_shop_fact`` is
+registered from ``tutorial.common.facts``. ``query_inventory`` is
+registered from ``tutorial.common.shelf``.
+
+Reading a document and opening the shelf are not tools. Those live in
+``read_file``, ``get_db``, and ``read_db``.
 """
 
-import os
-
-# Keep tool results small enough that one read cannot fill the context.
-MAX_FILE_CHARS = 12000
+HANDLERS = {}
+TOOLS = []
 
 
-def read_file(docs_dir, path):
-    """Read `path` if it stays inside `docs_dir`.
+def register(name, description, properties, required, fn):
+    """Add one Chat Completions tool. ``fn`` runs only if the harness allows it."""
+    spec = {
+        "type": "function",
+        "function": {
+            "name": name,
+            "description": description,
+            "parameters": {
+                "type": "object",
+                "properties": properties,
+                "required": required,
+            },
+        },
+    }
+    # Re-running a cell replaces the previous schema instead of stacking a second copy.
+    TOOLS[:] = [tool for tool in TOOLS if tool["function"]["name"] != name]
+    TOOLS.append(spec)
+    HANDLERS[name] = fn
 
-    Failures return an `ERROR:` string. They do not raise. Callers such as
-    ``get_shop_fact`` may pass that string back as a tool result. The model
-    does not choose `path`.
-    """
-    root = os.path.realpath(docs_dir)
 
-    if not isinstance(path, str) or not path.strip():
-        return "ERROR: path is required. Use policy.md or faq.md."
+def call_tool(call):
+    """Run one handler. Bad arguments become an ERROR string, not a crash."""
+    name = call["name"]
+    args = call["arguments"]
+    if not isinstance(args, dict):
+        return "ERROR: arguments must be a JSON object."
+    if args.get("_error"):
+        return "ERROR: " + str(args["_error"])
+    fn = HANDLERS.get(name)
+    if fn is None:
+        return "ERROR: unknown tool " + repr(name) + "."
+    return fn(args)
 
-    cleaned = path.strip().replace("\\", "/")
-    if os.path.isabs(cleaned):
-        return "ERROR: path must stay inside docs/. Example: policy.md"
 
-    # Split the path and drop "." pieces. ".." is a jail break.
-    pieces = []
-    for piece in cleaned.split("/"):
-        if piece == "" or piece == ".":
-            continue
-        if piece == "..":
-            return "ERROR: path must stay inside docs/. Example: policy.md"
-        pieces.append(piece)
-
-    # Allow "docs/policy.md" as well as "policy.md".
-    if pieces and pieces[0] == "docs":
-        pieces = pieces[1:]
-
-    hidden = False
-    for piece in pieces:
-        if piece.startswith("."):
-            hidden = True
-    if not pieces or hidden:
-        return (
-            "ERROR: path must name a file inside docs/, such as policy.md or faq.md."
-        )
-
-    # realpath follows symlinks. If the real file sits outside docs/, refuse it.
-    candidate = os.path.realpath(os.path.join(root, *pieces))
-    if os.path.commonpath([root, candidate]) != root:
-        return "ERROR: path escapes docs/."
-
-    display = "docs/" + "/".join(pieces)
-    if not os.path.isfile(candidate):
-        names = []
-        if os.path.isdir(root):
-            for name in os.listdir(root):
-                if name.endswith(".md"):
-                    names.append(name)
-        if names:
-            available = ", ".join(sorted(names))
-        else:
-            available = "(none)"
-        return "ERROR: " + display + " not found. Available markdown: " + available + "."
-
-    try:
-        with open(candidate, encoding="utf-8") as handle:
-            text = handle.read()
-    except UnicodeDecodeError:
-        return "ERROR: " + display + " is not UTF-8 text."
-
-    if len(text) > MAX_FILE_CHARS:
-        text = text[:MAX_FILE_CHARS] + "\n\n[truncated by harness]"
-    return "PATH: " + display + "\n\n" + text
+__all__ = [
+    "HANDLERS",
+    "TOOLS",
+    "call_tool",
+    "register",
+]

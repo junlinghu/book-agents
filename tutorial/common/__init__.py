@@ -1,1 +1,1 @@
-"""Client, path jail, autonomy gate, and the lesson helpers notebooks import."""
+"""Client, document reader, shelf database, tool registry, and lesson helpers."""

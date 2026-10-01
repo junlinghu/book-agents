@@ -3,8 +3,9 @@
 import re
 
 from tutorial.common.autonomy import approval_token, decide, format_decision
-from tutorial.common.harness import HANDLERS, VAR, register, set_hook
-from tutorial.common.shelf import gap_for, row_for
+from tutorial.common.harness import VAR, set_hook
+from tutorial.common.read_db import gap_for, row_for
+from tutorial.common.tools import HANDLERS, register
 
 TICKETS = VAR / "tickets"
 

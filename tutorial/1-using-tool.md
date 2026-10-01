@@ -30,6 +30,6 @@ The café in these files is fictional. The lookup reads one section under `docs/
 
 ## Sources and references
 
-- The returns section is read from [docs/policy.md](docs/policy.md). The model passes the topic `returns`. The path jail in [common/tools.py](common/tools.py) stays inside the lookup.
+- The returns section is read from [docs/policy.md](docs/policy.md). The model passes the topic `returns`. The path jail in [common/read_file.py](common/read_file.py) stays inside the lookup. It is not a Chat Completions tool. The lookup is registered through [common/tools.py](common/tools.py).
 - API settings live in [common/client.py](common/client.py). Live calls use the [OpenAI Chat Completions API](https://platform.openai.com/docs/api-reference/chat).
 - The notebook is [1-using-tool.ipynb](1-using-tool.ipynb). The series map and the run commands are in [README.md](README.md).
