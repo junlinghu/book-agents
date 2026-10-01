@@ -2,7 +2,7 @@
 
 Fifteen notebooks that build one shop agent for the fictional Hearth Lane Café. Each lesson adds one idea from the book. From tutorial 2 on, a notebook imports the earlier helpers it uses, so you can run any notebook by itself.
 
-This folder carries its own OpenAI client (`common/client.py`), shop policy and FAQ (`docs/`), path jail (`common/tools.py`), and autonomy gate (`common/autonomy.py`). The shelf rows are seeded in `cell_src/shelf.py`. Nothing here imports a file outside `tutorial/`.
+This folder carries its own OpenAI client (`common/client.py`), shop policy and FAQ (`docs/`), path jail (`common/tools.py`), and autonomy gate (`common/autonomy.py`). The shelf rows are seeded in `common/shelf.py`. Nothing here imports a file outside `tutorial/`. Runtime helpers live in `common/`.
 
 ## Status
 
@@ -111,24 +111,16 @@ The notebook does not print the API key.
 | `runtime.py` | Loads the repository-root `.env` through `common/client.py` and exposes `chat`. Requires `OPENAI_API_KEY`. |
 | `docs/` | `policy.md` and `faq.md`. The only shop documents `read_shop_file` may open. |
 | `data/` | Notes, skills, the supplier page, the supplier note, and a fake canary. Not shop secrets. |
-| `cell_src/` | Authoring copy of each lesson's code. The notebook that introduces a piece shows that file. Later notebooks import it from `common/`. |
-| `build_series.py` | Rewrites notebooks 2–15. Tutorial 1 and the companion notes are edited by hand. You do not need the script to study. |
 | `common/colab.py` | Shared Colab clone, package install, and secret copy. Notebooks point at `setup_colab` here. |
 | `common/client.py` | API key, model, temperature, max tokens. |
 | `common/tools.py` | Path jail used by `read_shop_file`. |
 | `common/autonomy.py` | Confirm tokens, and the never-tier for cards and outside mail. |
 | `common/harness.py` | Tool list, `system_text`, and checks. Notebooks import this instead of copying earlier cells. |
 | `common/loop.py` | `run_agent`. A gate, spans, and a cache turn on when those lessons are imported. |
+| `common/facts.py`, `shelf.py`, `notes.py`, `memory.py`, `skills.py`, `web.py`, `verify.py`, `evals.py`, `gate.py`, `injection.py`, `roles.py`, `trace.py`, `cost.py` | Lesson helpers. Later notebooks import these. |
 
 Runtime files under `tutorial/var/` (memory JSON and tickets) are gitignored.
 
-## Rebuild
+## Editing
 
-From the repo root, after editing `cell_src/`:
-
-```bash
-python tutorial/build_series.py
-python tutorial/build_series.py --check
-```
-
-`--check` rewrites notebooks 2–15, compiles every code cell, and fails if a demo flag is still in the tree or a later notebook defines an earlier lesson's functions. It leaves tutorial 1 as it is. It does not call the API. Running a notebook does.
+Edit the notebooks and the modules in `common/` directly. The notebook that introduces a helper shows that code in the notebook. Later notebooks import it from `common/`. Companion notes (`N-slug.md`) are edited by hand.

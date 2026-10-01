@@ -24,5 +24,5 @@ A map of titles, a cap on each body, and a refusal of the oversized picnic note 
 
 ## Sources and references
 
-- Note titles, caps, and bodies live in [cell_src/notes.py](cell_src/notes.py) and [data/notes](data/notes).
+- Note titles, caps, and bodies live in [common/notes.py](common/notes.py) and [data/notes](data/notes).
 - The previous lecture is [3-agent-loop.md](3-agent-loop.md). The notebook is [4-context-engineering.ipynb](4-context-engineering.ipynb). The series map is in [README.md](README.md).

@@ -22,6 +22,6 @@ Instructions hidden in the page stay data. The planted secret stays out of the t
 
 ## Sources and references
 
-- The poisoned page is [data/pages/mill-and-birch.html](data/pages/mill-and-birch.html). The canary fixture is [data/canary.env](data/canary.env). The boundary check is [cell_src/injection.py](cell_src/injection.py).
+- The poisoned page is [data/pages/mill-and-birch.html](data/pages/mill-and-birch.html). The canary fixture is [data/canary.env](data/canary.env). The boundary check is [common/injection.py](common/injection.py).
 - The gate is [common/autonomy.py](common/autonomy.py).
 - The previous lectures are [7-web-browse.md](7-web-browse.md) and [10-autonomy-policy.md](10-autonomy-policy.md). The notebook is [11-prompt-injection.ipynb](11-prompt-injection.ipynb). The series map is in [README.md](README.md).

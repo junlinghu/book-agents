@@ -27,5 +27,5 @@ The café in these files is fictional. The documents and the shelf live in this 
 ## Sources and references
 
 - The path check is [common/tools.py](common/tools.py). The shop documents are [docs/policy.md](docs/policy.md) and [docs/faq.md](docs/faq.md).
-- The shelf rows live in [cell_src/shelf.py](cell_src/shelf.py).
+- The shelf rows live in [common/shelf.py](common/shelf.py).
 - The previous lecture is [1-using-tool.md](1-using-tool.md). The notebook is [2-data-and-files.ipynb](2-data-and-files.ipynb). The series map is in [README.md](README.md).

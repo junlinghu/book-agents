@@ -24,5 +24,5 @@ Session messages die with the list. The JSON file does not. Tutorial 6 uses Priy
 
 ## Sources and references
 
-- Durable memory is [cell_src/memory.py](cell_src/memory.py). The file it writes is `tutorial/var/memory.json`.
+- Durable memory is [common/memory.py](common/memory.py). The file it writes is `tutorial/var/memory.json`.
 - The previous lecture is [4-context-engineering.md](4-context-engineering.md). The notebook is [5-memory.ipynb](5-memory.ipynb). The series map is in [README.md](README.md).

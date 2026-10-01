@@ -20,5 +20,5 @@ Tutorial 14 hangs token counts, an illustrative cost, and elapsed time on this s
 
 ## Sources and references
 
-- Spans are recorded in [cell_src/trace.py](cell_src/trace.py).
+- Spans are recorded in [common/trace.py](common/trace.py).
 - The previous lecture is [12-multi-agent.md](12-multi-agent.md). The notebook is [13-observability.ipynb](13-observability.ipynb). The series map is in [README.md](README.md).

@@ -22,6 +22,6 @@ Swapping the model is a change to `MODEL` in `common/client.py`. A model change 
 
 ## Sources and references
 
-- The ledger and the read cache are [cell_src/cost.py](cell_src/cost.py).
+- The ledger and the read cache are [common/cost.py](common/cost.py).
 - The default model id lives in [common/client.py](common/client.py). The model card is the [OpenAI gpt-4.1-mini documentation](https://developers.openai.com/api/docs/models/gpt-4.1-mini).
 - The previous lecture is [13-observability.md](13-observability.md). The notebook is [14-cost-latency.ipynb](14-cost-latency.ipynb). The series map is in [README.md](README.md).
