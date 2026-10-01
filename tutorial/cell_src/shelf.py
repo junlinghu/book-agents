@@ -1,5 +1,10 @@
 # Shelf seed for this tutorial. The model never writes the SQL.
 # sku, name, category, unit, reorder_point, on_hand, par.
+import json
+import sqlite3
+
+from tutorial.common.harness import read_docs, register
+
 SEED_ROWS = (
     ("HB-12", "House blend 12oz", "coffee", "bag", 6, 4, 18),
     ("HB-2LB", "House blend 2lb", "coffee", "bag", 4, 9, 10),
@@ -104,7 +109,7 @@ def query_inventory(args):
 
 def read_shop_file(args):
     """Model-facing file tool. Only docs/policy.md and docs/faq.md resolve."""
-    return _read_docs(args.get("path", ""))
+    return read_docs(args.get("path", ""))
 
 
 register(

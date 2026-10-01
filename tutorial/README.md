@@ -1,6 +1,6 @@
 # Local Shop Concierge tutorial
 
-Fifteen notebooks that build one shop agent for the fictional Hearth Lane Café. Each lesson keeps the previous agent's code, then adds one idea from the book. You can run a notebook by itself.
+Fifteen notebooks that build one shop agent for the fictional Hearth Lane Café. Each lesson adds one idea from the book. From tutorial 2 on, a notebook imports the earlier helpers it uses, so you can run any notebook by itself.
 
 This folder carries its own OpenAI client (`common/client.py`), shop policy and FAQ (`docs/`), path jail (`common/tools.py`), and autonomy gate (`common/autonomy.py`). The shelf rows are seeded in `cell_src/shelf.py`. Nothing here imports a file outside `tutorial/`.
 
@@ -24,7 +24,7 @@ This folder carries its own OpenAI client (`common/client.py`), shop policy and 
 | 14 | [14-cost-latency](14-cost-latency.ipynb) | Token, cost, and latency ledger, plus a read cache. | Ready |
 | 15 | [15-shop-manager](15-shop-manager.ipynb) | Tuesday restock: plan, check, confirm, write tickets. | Ready |
 
-Every row in the table is ready. Run the notebooks in order, or open any one on its own. Each file still contains the earlier lessons' code.
+Every row in the table is ready. Run the notebooks in order, or open any one on its own. From tutorial 2 on, each notebook imports the earlier helpers it uses.
 
 ## Prerequisites
 
@@ -110,11 +110,13 @@ The notebook does not print the API key.
 | `runtime.py` | Loads the repository-root `.env` through `common/client.py` and exposes `chat`. Requires `OPENAI_API_KEY`. |
 | `docs/` | `policy.md` and `faq.md`. The only shop documents `read_shop_file` may open. |
 | `data/` | Notes, skills, the supplier page, the supplier note, and a fake canary. Not shop secrets. |
-| `cell_src/` | Authoring copy of the cells. Notebooks inline this code so each file still runs alone. |
-| `build_series.py` | Rewrites the notebooks from `cell_src/`. Companion notes are edited by hand. You do not need the script to study. |
+| `cell_src/` | Authoring copy of each lesson's code. The notebook that introduces a piece shows that file. Later notebooks import it from `common/`. |
+| `build_series.py` | Rewrites notebooks 2–15. Tutorial 1 and the companion notes are edited by hand. You do not need the script to study. |
 | `common/client.py` | API key, model, temperature, max tokens. |
 | `common/tools.py` | Path jail used by `read_shop_file`. |
 | `common/autonomy.py` | Confirm tokens, and the never-tier for cards and outside mail. |
+| `common/harness.py` | Tool list, `system_text`, and checks. Notebooks import this instead of copying earlier cells. |
+| `common/loop.py` | `run_agent`. A gate, spans, and a cache turn on when those lessons are imported. |
 
 Runtime files under `tutorial/var/` (memory JSON and tickets) are gitignored.
 
@@ -127,4 +129,4 @@ python tutorial/build_series.py
 python tutorial/build_series.py --check
 ```
 
-`--check` rewrites the notebooks, compiles every code cell, and fails if a demo flag is still in the tree. It does not call the API. Running a notebook does.
+`--check` rewrites notebooks 2–15, compiles every code cell, and fails if a demo flag is still in the tree or a later notebook defines an earlier lesson's functions. It leaves tutorial 1 as it is. It does not call the API. Running a notebook does.

@@ -1,3 +1,7 @@
+import re
+
+from tutorial.common.harness import DATA, register
+
 PAGE_URL = "https://suppliers.example/mill-and-birch"
 PAGE_PATH = DATA / "pages" / "mill-and-birch.html"
 UNTRUSTED_BANNER = (

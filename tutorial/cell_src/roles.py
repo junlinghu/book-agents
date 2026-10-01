@@ -1,3 +1,6 @@
+from tutorial.common.harness import DATA, register
+from tutorial.common.shelf import gap_for
+
 SUPPLIER_NOTE = DATA / "supplier-note.txt"
 
 
@@ -41,8 +44,6 @@ def checker(artifact, row):
         "errors": errors,
     }
 
-
-AUTO_TOOLS.add("read_supplier_note")
 
 register(
     "read_supplier_note",

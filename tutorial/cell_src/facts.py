@@ -1,11 +1,4 @@
-from tutorial.common.tools import read_file as read_docs_file
-
-
-def _read_docs(path):
-    """Read one shop document. The path jail lives in ``tutorial.common.tools``."""
-    if not isinstance(path, str):
-        return "ERROR: path must be a string. Example: policy.md"
-    return read_docs_file(str(DOCS), path)
+from tutorial.common.harness import read_docs, register
 
 
 def _section(markdown, heading):
@@ -38,7 +31,7 @@ def get_shop_fact(args):
     if topic not in mapping:
         return "ERROR: topic must be returns, shipping, hours, or allergens."
     path, heading = mapping[topic]
-    document = _read_docs(path)
+    document = read_docs(path)
     if document.startswith("ERROR:"):
         return document
     body = _section(document, heading)

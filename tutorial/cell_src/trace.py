@@ -1,3 +1,6 @@
+from tutorial.common.harness import set_hook
+
+
 def span_status(result):
     if result.startswith("ERROR") or result.startswith("DENIED") or result.startswith("CONFIRM_REQUIRED"):
         if result.startswith("CONFIRM_REQUIRED"):
@@ -34,3 +37,7 @@ def root_span(trace_id):
         "agent": {"kind": "agent", "id": "shop-concierge"},
         "actor": {"kind": "agent", "id": "shop-concierge"},
     }
+
+
+set_hook("make_span", make_span)
+set_hook("root_span", root_span)
