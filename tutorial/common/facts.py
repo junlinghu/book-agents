@@ -1,6 +1,27 @@
-"""The tutorial 1 shop-fact tool, importable by later lessons."""
+"""The tutorial 1 shop-fact tool, importable by later lessons.
+
+The model passes a topic. This module maps that topic to a file and a
+section. The path never appears in the tool schema.
+"""
 
 from tutorial.common.harness import read_docs, register
+
+# topic -> (filename under tutorial/docs, markdown heading)
+TOPICS = {
+    "returns": ("policy.md", "Returns"),
+    "shipping": ("policy.md", "Shipping"),
+    "damage": ("policy.md", "Damage in transit"),
+    "delivery": ("policy.md", "Local delivery"),
+    "hours": ("faq.md", "Where and when"),
+    "menu": ("faq.md", "Counter menu (dine-in and takeaway)"),
+    "allergens": ("faq.md", "Allergens"),
+    "wifi": ("faq.md", "Wi-Fi and payment"),
+}
+
+
+def topic_list():
+    """Comma-separated topic names, in the order the tool accepts them."""
+    return ", ".join(TOPICS)
 
 
 def _section(markdown, heading):
@@ -24,33 +45,35 @@ def _section(markdown, heading):
 def get_shop_fact(args):
     """Return one policy or FAQ section. The model names a topic; this function opens the file."""
     topic = str(args.get("topic", "")).strip().lower()
-    mapping = {
-        "returns": ("policy.md", "Returns"),
-        "shipping": ("policy.md", "Shipping"),
-        "hours": ("faq.md", "Where and when"),
-        "allergens": ("faq.md", "Allergens"),
-    }
-    if topic not in mapping:
-        return "ERROR: topic must be returns, shipping, hours, or allergens."
-    path, heading = mapping[topic]
+    if topic not in TOPICS:
+        return "ERROR: topic must be one of: " + topic_list() + "."
+    path, heading = TOPICS[topic]
     document = read_docs(path)
     if document.startswith("ERROR:"):
         return document
     body = _section(document, heading)
     if not body:
-        return "ERROR: " + heading + " is missing from " + path + "."
+        return "ERROR: " + heading + " is missing from the shop documents."
     return "TOPIC: " + topic + "\nSOURCE: docs/" + path + "\n\n" + body
 
 
 register(
     "get_shop_fact",
-    "Look up one Hearth Lane rule. topic is returns, shipping, hours, or allergens. "
-    "The result quotes docs/policy.md or docs/faq.md.",
-    {"topic": {"type": "string", "description": "returns, shipping, hours, or allergens"}},
+    "Look up one Hearth Lane rule. Pass a topic, not a filename. "
+    "topic is one of: " + topic_list() + ". "
+    "The result is the shop's text for that topic.",
+    {
+        "topic": {
+            "type": "string",
+            "description": "One topic: " + topic_list() + ".",
+        }
+    },
     ["topic"],
     get_shop_fact,
 )
 
 __all__ = [
+    "TOPICS",
     "get_shop_fact",
+    "topic_list",
 ]

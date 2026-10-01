@@ -11,7 +11,6 @@ OUTPUT_USD_PER_MILLION = 1.60
 
 CACHEABLE = {
     "get_shop_fact",
-    "read_shop_file",
     "query_inventory",
     "list_notes",
     "read_note",

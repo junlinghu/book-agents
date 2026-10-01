@@ -126,18 +126,18 @@ def system_text():
     names = {tool["function"]["name"] for tool in TOOLS}
     parts = [base_rules()]
     if "get_shop_fact" in names:
-        parts.append(
-            "Use get_shop_fact before you state a return, shipping, hours, or allergen rule."
+        from tutorial.common.facts import topic_list
+
+        fact_line = (
+            "Use get_shop_fact before you state a shop rule. "
+            "Pass a topic (" + topic_list() + "), not a filename."
         )
-    if "read_shop_file" in names and "query_inventory" in names:
-        parts.append(
-            "Use read_shop_file for policy.md and faq.md, and query_inventory for the shelf. "
-            "Do not invent stock counts."
-        )
-    elif "read_shop_file" in names:
-        parts.append(
-            "Use read_shop_file for policy.md and faq.md. Do not invent shop rules."
-        )
+        if "query_inventory" in names:
+            fact_line += (
+                " Use query_inventory for the shelf. Do not invent stock counts. "
+                "When a question needs both a count and a rule, call both tools before you answer."
+            )
+        parts.append(fact_line)
     elif "query_inventory" in names:
         parts.append("Use query_inventory for the shelf. Do not invent stock counts.")
     if "memory_search" in names:
@@ -185,7 +185,7 @@ def system_text():
         )
     if "cached_call" in HOOKS:
         parts.append(
-            "A repeated read of the same document may be cached. Still cite the document."
+            "A repeated lookup of the same topic may be cached. Still cite the topic."
         )
     return "\n\n".join(parts)
 

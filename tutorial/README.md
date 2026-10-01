@@ -9,7 +9,7 @@ This folder carries its own OpenAI client (`common/client.py`), shop policy and 
 | # | Notebook | Summary | Status |
 |---|---|---|---|
 | 1 | [1-using-tool](1-using-tool.ipynb) | Define a tool, let the model request it, run it, and send the result back. | Ready |
-| 2 | [2-data-and-files](2-data-and-files.ipynb) | Tools that read shop documents and the SQLite shelf. | Ready |
+| 2 | [2-data-and-files](2-data-and-files.ipynb) | The SQLite shelf, beside a topic lookup for the shipping rule. | Ready |
 | 3 | [3-agent-loop](3-agent-loop.ipynb) | Perceive–reason–act–observe, with step and repeat stops. | Ready |
 | 4 | [4-context-engineering](4-context-engineering.ipynb) | Note titles in the prompt; bodies loaded on purpose. | Ready |
 | 5 | [5-memory](5-memory.ipynb) | Session messages versus a JSON memory file. | Ready |
@@ -109,11 +109,11 @@ The notebook does not print the API key.
 | Path | Role |
 |---|---|
 | `runtime.py` | Loads the repository-root `.env` through `common/client.py` and exposes `chat`. Requires `OPENAI_API_KEY`. |
-| `docs/` | `policy.md` and `faq.md`. The only shop documents `read_shop_file` may open. |
+| `docs/` | `policy.md` and `faq.md`. `get_shop_fact` maps a topic onto a section in these files. The model does not pass a path. |
 | `data/` | Notes, skills, the supplier page, the supplier note, and a fake canary. Not shop secrets. |
 | `common/colab.py` | Shared Colab clone, package install, and secret copy. Notebooks point at `setup_colab` here. |
 | `common/client.py` | API key, model, temperature, max tokens. |
-| `common/tools.py` | Path jail used by `read_shop_file`. |
+| `common/tools.py` | Path jail used inside the topic lookup. Not a tool the model can call. |
 | `common/autonomy.py` | Confirm tokens, and the never-tier for cards and outside mail. |
 | `common/harness.py` | Tool list, `system_text`, and checks. Notebooks import this instead of copying earlier cells. |
 | `common/loop.py` | `run_agent`. A gate, spans, and a cache turn on when those lessons are imported. |
