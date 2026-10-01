@@ -3,7 +3,7 @@
 import json
 import sqlite3
 
-from tutorial.common.harness import read_docs, register
+from tutorial.common.harness import register
 
 # Shelf seed for this tutorial. The model never writes the SQL.
 # sku, name, category, unit, reorder_point, on_hand, par.
@@ -109,21 +109,6 @@ def query_inventory(args):
     return json.dumps(payload)
 
 
-def read_shop_file(args):
-    """Model-facing file tool. Only docs/policy.md and docs/faq.md resolve."""
-    return read_docs(args.get("path", ""))
-
-
-register(
-    "read_shop_file",
-    "Read a shop document. path is policy.md or faq.md. "
-    "policy.md has returns, shipping, damage, and local delivery. "
-    "faq.md has hours, the menu, and allergens. "
-    "Paths outside docs/ return ERROR.",
-    {"path": {"type": "string", "description": "policy.md or faq.md"}},
-    ["path"],
-    read_shop_file,
-)
 register(
     "query_inventory",
     "Read the café shelf from SQLite. Low stock means on_hand <= reorder_point. "
@@ -140,7 +125,6 @@ __all__ = [
     "SEED_ROWS",
     "gap_for",
     "query_inventory",
-    "read_shop_file",
     "reset_db",
     "row_for",
 ]

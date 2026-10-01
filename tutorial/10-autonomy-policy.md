@@ -14,7 +14,7 @@ The notebook asks for an oat-milk restock ticket, as shop staff, and asks that n
 
 ## Additional things
 
-A gate that treats a polite request as permission will confirm whatever the model was persuaded to ask. Tutorial 11 is the case that makes this concrete. The supplier page demands a charge and a look at a secret file, and the gate and the folder boundary have to hold when the model is wrong. Tutorial 15 writes two tickets, and each ticket needs its own approval, because confirmation is per call.
+A gate that treats a polite request as permission will confirm whatever the model was persuaded to ask. Tutorial 11 is the case that makes this concrete. The supplier page demands a charge and a look at a secret file. The gate refuses the charge. The document tool accepts a topic, and the folder boundary inside the reader refuses the path. Tutorial 15 writes two tickets, and each ticket needs its own approval, because confirmation is per call.
 
 The three grades, the mapping of actions to risk, and an approval a person can match to one call are the whole of the gate in this lesson. The café in these files is fictional. Leave private files alone.
 

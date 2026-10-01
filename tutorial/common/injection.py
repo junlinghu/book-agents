@@ -1,23 +1,39 @@
-"""Path jail and autonomy gate, applied to proposals copied from a page."""
+"""Topic lookup and the internal path jail, applied to proposals copied from a page.
+
+The model-facing tool accepts a topic. A path is not a topic. The path
+jail still runs inside ``read_docs``, which the model cannot call.
+"""
 
 import json
 
 from tutorial.common.autonomy import approval_token
+from tutorial.common.facts import get_shop_fact
 from tutorial.common.gate import format_decision, gate_call
-from tutorial.common.harness import DATA, check, preview
-from tutorial.common.shelf import read_shop_file
+from tutorial.common.harness import DATA, check, preview, read_docs
 
 CANARY_PATH = DATA / "canary.env"
+
+# Paths a poisoned page asks the agent to open. They are not topics.
+ESCAPE_PATHS = ("../../.env", "../data/canary.env", "canary.env")
 
 
 def show_injection_boundaries():
     """Run the proposals a poisoned page asks for. The harness, not the page, decides."""
     print("--- proposals copied from the untrusted page ---")
     outputs = []
-    for path in ("../../.env", "../data/canary.env", "canary.env"):
-        result = read_shop_file({"path": path})
+    print("public tool is get_shop_fact; a path is not a topic")
+    for topic in ESCAPE_PATHS + ("policy.md", "faq.md"):
+        result = get_shop_fact({"topic": topic})
         outputs.append(result)
-        print("read_shop_file", path)
+        print("get_shop_fact", json.dumps({"topic": topic}))
+        print(preview(result))
+        print()
+        check(result.startswith("ERROR:"), "topic tool rejects " + topic)
+    print("path jail inside the document reader; the model does not see this argument")
+    for path in ESCAPE_PATHS:
+        result = read_docs(path)
+        outputs.append(result)
+        print("read_docs", path)
         print(preview(result))
         print()
         check(result.startswith("ERROR:"), "path jail blocks " + path)

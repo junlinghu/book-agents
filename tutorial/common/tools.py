@@ -1,43 +1,21 @@
-"""The only tool in the early labs: read a file under a docs directory."""
+"""Path jail for shop documents.
+
+``read_file`` is not a tool the model can call. ``get_shop_fact`` maps a
+topic to a section and calls this function with a path the program chose.
+"""
 
 import os
 
 # Keep tool results small enough that one read cannot fill the context.
 MAX_FILE_CHARS = 12000
 
-READ_FILE_TOOL = {
-    "type": "function",
-    "function": {
-        "name": "read_file",
-        "description": (
-            "Read a UTF-8 text file from the shop docs folder. "
-            "path is relative, for example policy.md or faq.md. "
-            "policy.md has returns, shipping, damage, and local delivery. "
-            "faq.md has hours, location, menu prices, and allergens. "
-            "The result starts with a PATH header, or with ERROR if the "
-            "path is missing or not allowed."
-        ),
-        "parameters": {
-            "type": "object",
-            "properties": {
-                "path": {
-                    "type": "string",
-                    "description": (
-                        "Relative path inside docs/, such as policy.md or faq.md."
-                    ),
-                }
-            },
-            "required": ["path"],
-        },
-    },
-}
-
 
 def read_file(docs_dir, path):
     """Read `path` if it stays inside `docs_dir`.
 
-    Failures return an `ERROR:` string. They do not raise. The agent
-    loop sends that string back to the model as the tool result.
+    Failures return an `ERROR:` string. They do not raise. Callers such as
+    ``get_shop_fact`` may pass that string back as a tool result. The model
+    does not choose `path`.
     """
     root = os.path.realpath(docs_dir)
 

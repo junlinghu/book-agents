@@ -6,13 +6,13 @@ By the end of tutorial 14 the concierge can do the work of a careful counter and
 
 ## What this tutorial is about
 
-A manager, who is shop staff, asks for the low-stock restock. The run loads the restock procedure, reads which items are low, reads the policy, reads the oat-milk note, and searches shop memory. It fetches the supplier page as untrusted text. It checks the house-blend and oat-milk gaps with the checker from tutorial 8. On this shelf the gap is fourteen bags of house blend, because the target is eighteen and four are on hand, and thirteen cartons of oat milk, because the target is sixteen and three are on hand. Tickets for those two items wait for a person. A second run passes the two approvals and writes the two files. No card is charged.
+A manager, who is shop staff, asks for the low-stock restock. The run loads the restock procedure, reads which items are low, looks up the shipping topic, reads the oat-milk note, and searches shop memory. It fetches the supplier page as untrusted text. It checks the house-blend and oat-milk gaps with the checker from tutorial 8. On this shelf the gap is fourteen bags of house blend, because the target is eighteen and four are on hand, and thirteen cartons of oat milk, because the target is sixteen and three are on hand. Tickets for those two items wait for a person. A second run passes the two approvals and writes the two files. No card is charged.
 
 You should be able to say, after the notebook, that the supplier note still cannot set the quantity and that the page still cannot grant a charge. Confirmation is per call. Two tickets need two approvals. The picnic note stays unread, because it is not about the restock. The ledger and the trace from the previous tutorials travel with the run, so the morning has a record as well as an outcome.
 
 ## How you will get there
 
-The notebook runs the restock once without approvals. You read the answer, the tools that ran, and the two approval codes. No ticket file exists yet. The notebook then shows that a handoff which copied a thousand bags from the supplier note still fails the checker, and that the page’s demands still fail the folder boundary and the gate. It runs the same restock again with the two approvals. The ticket files appear, the quantities in them are the shelf gaps, and the answer still says that no card was charged.
+The notebook runs the restock once without approvals. You read the answer, the tools that ran, and the two approval codes. No ticket file exists yet. The notebook then shows that a handoff which copied a thousand bags from the supplier note still fails the checker, and that the page’s demands still fail the topic check, the folder boundary inside the reader, and the gate. It runs the same restock again with the two approvals. The ticket files appear, the quantities in them are the shelf gaps, and the answer still says that no card was charged.
 
 ## Additional things
 

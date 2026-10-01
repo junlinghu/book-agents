@@ -25,7 +25,6 @@ SHOP_EMAIL_DOMAIN = "hearthlane.example"
 
 # Tools whose tier does not depend on arguments. Unknown names are never.
 _FIXED = {
-    "read_file": AUTO,
     "price_check": AUTO,
     "lookup_catalog": AUTO,
     "add_to_cart": AUTO,

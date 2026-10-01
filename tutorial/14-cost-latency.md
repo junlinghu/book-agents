@@ -2,7 +2,7 @@
 
 ## Motivation
 
-The agent can now leave a trace that names the user, the agent, and the tool. What it still cannot do is say what that turn cost, how long it took, or whether a second read of the same document did any new work. A loop that hides its usage will surprise you in the second week, and a loop that re-reads the same file on every step spends both time and money on a fact it already holds. We add a small ledger and a saved copy of read-only results now, after the trace exists to attach them to, and before the shop manager runs a restock long enough for the totals to matter.
+The agent can now leave a trace that names the user, the agent, and the tool. What it still cannot do is say what that turn cost, how long it took, or whether a second lookup of the same topic did any new work. A loop that hides its usage will surprise you in the second week, and a loop that looks up the same topic on every step spends both time and money on a fact it already holds. We add a small ledger and a saved copy of read-only results now, after the trace exists to attach them to, and before the shop manager runs a restock long enough for the totals to matter.
 
 ## What this tutorial is about
 
@@ -12,11 +12,11 @@ A cache keeps the result of a read-only tool, keyed by the tool together with it
 
 ## How you will get there
 
-The notebook is staff looking up the café’s hours for a guest at the counter. The route for that question is recorded as a short lookup on the model named in `common/client.py`. The agent reads the frequently asked questions, and the run reads that file a second time inside the same loop. You should see a miss and then a hit, a ledger with totals and an illustrative cost, and the hours taken from the document, including the day the café is closed. The spans from tutorial 13 are still on the run, so cost and identity share one record.
+The notebook is staff looking up the café’s hours for a guest at the counter. The route for that question is recorded as a short lookup on the model named in `common/client.py`. The agent calls `get_shop_fact` with the topic `hours`, and the run looks that topic up a second time inside the same loop. You should see a miss and then a hit, a ledger with totals and an illustrative cost, and the hours taken from that topic, including the day the café is closed. The spans from tutorial 13 are still on the run, so cost and identity share one record.
 
 ## Additional things
 
-The second read is also the repeated-call situation from tutorial 3. The cache can serve the file on that second request. A third identical call would stop the loop. Saving a result does not repeal the stop. It only keeps the second read from doing the work again.
+The second lookup is also the repeated-call situation from tutorial 3. The cache can serve the topic on that second request. A third identical call would stop the loop. Saving a result does not repeal the stop. It only keeps the second lookup from doing the work again.
 
 Swapping the model is a change to `MODEL` in `common/client.py`. A model change is the wrong repair when the surrounding program is what failed. Report cost and time for the finished task, and prefer an honest total over a number that flatters the run. The café in these files is fictional.
 
