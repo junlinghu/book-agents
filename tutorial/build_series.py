@@ -6,9 +6,9 @@ Tutorial 1 is maintained by hand. This script does not rewrite it.
 Companion notes (``N-slug.md``) are lecture prose maintained by hand.
 This script does not rewrite them.
 
-Each notebook keeps the Colab setup and the code that lesson introduces.
-Earlier helpers are imported from ``tutorial.common``. A rebuild does not
-paste earlier lessons back in.
+Each notebook calls ``tutorial.common.colab.setup_colab`` and shows the
+code that lesson introduces. Earlier helpers are imported from
+``tutorial.common``. A rebuild does not paste earlier lessons back in.
 
 From the repo root:
 
@@ -565,12 +565,14 @@ def colab_markdown(slug: str) -> str:
     )
 
 
-# Inlined into every notebook. Keep this cell free of tutorial imports so it can
-# run before the lesson setup cell, including on a fresh Colab runtime.
+# First code cell. A fresh Colab runtime cannot import tutorial.common until
+# this cell checks the repo out. setup_colab() does the install, the secret,
+# and a second checkout if the marker is still missing.
 COLAB_SETUP_CODE = textwrap.dedent(
     """\
     # Colab setup. Run this cell before the other code cells.
-    # Local Jupyter and VS Code skip the clone and the install.
+    # A fresh Colab runtime cannot import tutorial.common yet, so this cell
+    # sparse-checkouts the repo first. Local Jupyter and VS Code skip that.
     #
     # An API key is required. On Google Colab, set OPENAI_API_KEY in one of these ways:
     #   * Secrets (the key icon): a secret named OPENAI_API_KEY
@@ -579,13 +581,11 @@ COLAB_SETUP_CODE = textwrap.dedent(
     # Do not commit a key. This cell does not print the value.
     # Edits you make in Colab stay in the session. They do not push to GitHub.
 
-    import os
     import sys
     from pathlib import Path
 
 
-    def in_colab():
-        \"\"\"True on Google Colab. False in local Jupyter and VS Code.\"\"\"
+    def _on_colab():
         try:
             import google.colab
         except ImportError:
@@ -593,28 +593,22 @@ COLAB_SETUP_CODE = textwrap.dedent(
         return Path("/content").is_dir() and google.colab is not None
 
 
-    if not in_colab():
-        print("Not Colab. Skipped clone and pip install.")
-    else:
-        import shutil
-        import subprocess
+    def _use(root):
+        if not (Path(root) / "tutorial" / "common" / "colab.py").is_file():
+            return False
+        text = str(root)
+        if text not in sys.path:
+            sys.path.insert(0, text)
+        return True
 
-        missing = []
-        for module_name, requirement in (
-            ("openai", "openai>=1.40.0"),
-            ("dotenv", "python-dotenv>=1.0.1"),
-            ("httpx", "httpx>=0.27.0"),
-        ):
-            try:
-                __import__(module_name)
-            except ImportError:
-                missing.append(requirement)
-        if missing:
-            subprocess.check_call([sys.executable, "-m", "pip", "install", "-q", *missing])
 
+    ready = False
+    if _on_colab():
         repo = Path("/content/book-agents")
-        marker = repo / "tutorial" / "common" / "client.py"
-        if not marker.is_file():
+        if not _use(repo):
+            import shutil
+            import subprocess
+
             if repo.exists() and not (repo / ".git").exists():
                 raise RuntimeError(
                     str(repo) + " exists but is not a git checkout. "
@@ -635,31 +629,24 @@ COLAB_SETUP_CODE = textwrap.dedent(
                 if repo.exists():
                     shutil.rmtree(repo)
                 subprocess.check_call(["git", "clone", "--depth", "1", url, str(repo)])
-            if not marker.is_file():
+            if not _use(repo):
                 raise RuntimeError(
-                    "Colab setup could not find tutorial/common/client.py after cloning."
+                    "Colab setup could not find tutorial/common/colab.py after cloning."
                 )
+        ready = True
+    else:
+        here = Path.cwd().resolve()
+        for candidate in [here, *here.parents]:
+            if _use(candidate):
+                ready = True
+                break
+        if not ready:
+            print("Not Colab. Skipped clone and pip install.")
 
-        os.chdir(repo)
-        if str(repo) not in sys.path:
-            sys.path.insert(0, str(repo))
+    if ready:
+        from tutorial.common.colab import setup_colab
 
-        if not os.environ.get("OPENAI_API_KEY", "").strip():
-            try:
-                from google.colab import userdata
-                secret = userdata.get("OPENAI_API_KEY")
-            except Exception:
-                secret = ""
-            if secret and str(secret).strip():
-                os.environ["OPENAI_API_KEY"] = str(secret).strip()
-
-        if not os.environ.get("OPENAI_API_KEY", "").strip():
-            raise RuntimeError(
-                "OPENAI_API_KEY is empty. On Colab, add a secret named OPENAI_API_KEY "
-                "(the key icon) and rerun this cell. Locally, copy .env.example to .env "
-                "and paste a key from https://platform.openai.com/api-keys. Never commit .env."
-            )
-        print("Colab: tutorial/ is ready. OPENAI_API_KEY is set (value hidden).")
+        setup_colab()
     """
 )
 
@@ -966,9 +953,14 @@ def check_series() -> None:
             except SyntaxError:
                 print("FAILED cell", index, "in", lesson["slug"])
                 raise
+        code_cells = [cell.source for cell in notebook.cells if cell.cell_type == "code"]
+        if code_cells[0].strip() != COLAB_SETUP_CODE.strip():
+            raise SystemExit(lesson["slug"] + " Colab cell does not call tutorial.common.colab")
+        if "def in_colab(" in code_cells[0]:
+            raise SystemExit(lesson["slug"] + " still inlines the Colab setup")
         if lesson["n"] == 1:
             continue
-        code = "\n".join(cell.source for cell in notebook.cells if cell.cell_type == "code")
+        code = "\n".join(code_cells)
         prose = "\n".join(cell.source for cell in notebook.cells)
         if "copied forward" in prose:
             raise SystemExit(lesson["slug"] + " still says earlier lessons were copied forward")
