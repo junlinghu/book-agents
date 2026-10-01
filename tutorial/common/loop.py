@@ -10,13 +10,8 @@ Those stay off until the lesson imports them.
 
 import json
 
-from tutorial.common.harness import (
-    HOOKS,
-    TOOLS,
-    assistant_message,
-    call_tool,
-    preview,
-)
+from tutorial.common.harness import HOOKS, assistant_message, preview
+from tutorial.common.tools import TOOLS, call_tool
 from tutorial.runtime import chat
 
 MAX_IDENTICAL_CALLS = 2

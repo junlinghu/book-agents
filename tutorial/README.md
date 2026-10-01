@@ -2,7 +2,7 @@
 
 Fifteen notebooks that build one shop agent for the fictional Hearth Lane Café. The person in the chat is shop staff. The agent helps staff. Staff may ask on behalf of a guest, for example whether an opened bag of house coffee can be returned. Each lesson adds one idea from the book. From tutorial 2 on, a notebook imports the earlier helpers it uses, so you can run any notebook by itself.
 
-This folder carries its own OpenAI client (`common/client.py`), shop policy and FAQ (`docs/`), path jail (`common/tools.py`), and autonomy gate (`common/autonomy.py`). The shelf rows are seeded in `common/shelf.py`. Nothing here imports a file outside `tutorial/`. Runtime helpers live in `common/`.
+This folder carries its own OpenAI client (`common/client.py`), shop policy and FAQ (`docs/`), path jail (`common/read_file.py`), shelf database (`common/get_db.py` and `common/read_db.py`), tool registry (`common/tools.py`), and autonomy gate (`common/autonomy.py`). Nothing here imports a file outside `tutorial/`. Runtime helpers live in `common/`.
 
 ## Status
 
@@ -113,11 +113,14 @@ The notebook does not print the API key.
 | `data/` | Notes, skills, the supplier page, the supplier note, and a fake canary. Not shop secrets. |
 | `common/colab.py` | Shared Colab clone, package install, and secret copy. Notebooks point at `setup_colab` here. |
 | `common/client.py` | API key, model, temperature, max tokens. |
-| `common/tools.py` | Path jail used inside the topic lookup. Not a tool the model can call. |
+| `common/tools.py` | Chat Completions registry: schemas, `register`, and `call_tool`. Model-facing tools such as `get_shop_fact` and `query_inventory` register here. |
+| `common/read_file.py` | Path jail and document reading. Not a Chat Completions tool. The topic lookup calls it with a path the program chose. |
+| `common/get_db.py` | Shelf seed, `reset_db`, and the database connection. |
+| `common/read_db.py` | Shelf reads: `gap_for`, `row_for`, and the inventory query. The SQL stays here. |
 | `common/autonomy.py` | Confirm tokens, and the never-tier for cards and outside mail. |
-| `common/harness.py` | Tool list, `system_text`, and checks. Notebooks import this instead of copying earlier cells. |
+| `common/harness.py` | Paths, `system_text`, and checks. Notebooks import this instead of copying earlier cells. |
 | `common/loop.py` | `run_agent`. A gate, spans, and a cache turn on when those lessons are imported. |
-| `common/facts.py`, `shelf.py`, `notes.py`, `memory.py`, `skills.py`, `web.py`, `verify.py`, `evals.py`, `gate.py`, `injection.py`, `roles.py`, `trace.py`, `cost.py` | Lesson helpers. Later notebooks import these. |
+| `common/facts.py`, `shelf.py`, `notes.py`, `memory.py`, `skills.py`, `web.py`, `verify.py`, `evals.py`, `gate.py`, `injection.py`, `roles.py`, `trace.py`, `cost.py` | Lesson helpers. `facts.py` registers the topic lookup. `shelf.py` registers the inventory tool. Later notebooks import these. |
 
 Runtime files under `tutorial/var/` (memory JSON and tickets) are gitignored.
 

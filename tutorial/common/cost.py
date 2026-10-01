@@ -2,7 +2,8 @@
 
 import json
 
-from tutorial.common.harness import call_tool, set_hook
+from tutorial.common.harness import set_hook
+from tutorial.common.tools import call_tool
 
 # Illustrative rates for this lab's ledger, in USD per million tokens.
 # They are not an invoice. Check current OpenAI pricing before you budget with them.

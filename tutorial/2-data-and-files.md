@@ -18,7 +18,7 @@ You compare the printed answer with the document and the shelf, so a number or a
 
 ## Additional things
 
-The model never chooses a filename. Python maps the topic onto a section under `docs/`, and the path check in `common/tools.py` stays inside that function. Tutorial 11 shows a supplier page that tries to climb out of the folder. That escape is refused inside the reader. The public tool still only accepts a topic.
+The model never chooses a filename. Python maps the topic onto a section under `docs/`, and the path check in `common/read_file.py` stays inside that function. Tutorial 11 shows a supplier page that tries to climb out of the folder. That escape is refused inside the reader. The public tool still only accepts a topic.
 
 Tutorial 3 puts these calls inside a loop, because a question at the counter often needs the shelf and then the policy before it is ready to answer. Tutorial 8 uses the gap between the target stock and the amount on hand as the quantity a restock may propose. The distinction you meet here, between “low” and “how many to order,” is what that later checker recomputes for itself.
 
@@ -26,6 +26,6 @@ The café in these files is fictional. The documents and the shelf live in this 
 
 ## Sources and references
 
-- The path check is [common/tools.py](common/tools.py), called from the topic lookup, not offered as a tool. The shop documents are [docs/policy.md](docs/policy.md) and [docs/faq.md](docs/faq.md).
-- The shelf rows live in [common/shelf.py](common/shelf.py).
+- The path check is [common/read_file.py](common/read_file.py), called from the topic lookup, not offered as a tool. The shop documents are [docs/policy.md](docs/policy.md) and [docs/faq.md](docs/faq.md).
+- The shelf is created in [common/get_db.py](common/get_db.py) and read in [common/read_db.py](common/read_db.py). `query_inventory` is registered from [common/shelf.py](common/shelf.py) through [common/tools.py](common/tools.py).
 - The previous lecture is [1-using-tool.md](1-using-tool.md). The notebook is [2-data-and-files.ipynb](2-data-and-files.ipynb). The series map is in [README.md](README.md).

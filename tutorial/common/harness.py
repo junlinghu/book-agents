@@ -1,21 +1,21 @@
-"""Tool registration, checks, and the system prompt.
+"""Paths, checks, and the system prompt.
 
 Notebooks import this module instead of copying earlier lesson cells.
-Paths, tool registration, and the optional hooks later lessons attach
-to the agent loop live here.
+Tool schemas and call dispatch live in ``tutorial.common.tools``.
+The path jail lives in ``tutorial.common.read_file``. The shelf database
+lives in ``tutorial.common.get_db`` and ``tutorial.common.read_db``.
 """
 
 import json
 from pathlib import Path
+
+from tutorial.common.tools import HANDLERS, TOOLS, call_tool, register
 
 ROOT = Path(__file__).resolve().parents[2]
 HERE = ROOT / "tutorial"
 DOCS = HERE / "docs"
 DATA = HERE / "data"
 VAR = HERE / "var"
-
-HANDLERS = {}
-TOOLS = []
 
 # Later lessons register a gate, trace spans, or a read cache here.
 # The loop in tutorial.common.loop checks this dict and skips what is missing.
@@ -27,29 +27,9 @@ def set_hook(name, fn):
     HOOKS[name] = fn
 
 
-def register(name, description, properties, required, fn):
-    """Add one Chat Completions tool. ``fn`` runs only if the harness allows it."""
-    spec = {
-        "type": "function",
-        "function": {
-            "name": name,
-            "description": description,
-            "parameters": {
-                "type": "object",
-                "properties": properties,
-                "required": required,
-            },
-        },
-    }
-    # Re-running a cell replaces the previous schema instead of stacking a second copy.
-    TOOLS[:] = [tool for tool in TOOLS if tool["function"]["name"] != name]
-    TOOLS.append(spec)
-    HANDLERS[name] = fn
-
-
 def read_docs(path):
-    """Read one shop document. The path jail lives in ``tutorial.common.tools``."""
-    from tutorial.common.tools import read_file
+    """Read one shop document. The path jail lives in ``tutorial.common.read_file``."""
+    from tutorial.common.read_file import read_file
 
     if not isinstance(path, str):
         return "ERROR: path must be a string. Example: policy.md"
@@ -101,20 +81,6 @@ def base_rules():
         "Do not invent a Wi-Fi password, a refund, or a shipping exception. "
         "Do not charge a card or send email yourself."
     )
-
-
-def call_tool(call):
-    """Run one handler. Bad arguments become an ERROR string, not a crash."""
-    name = call["name"]
-    args = call["arguments"]
-    if not isinstance(args, dict):
-        return "ERROR: arguments must be a JSON object."
-    if args.get("_error"):
-        return "ERROR: " + str(args["_error"])
-    fn = HANDLERS.get(name)
-    if fn is None:
-        return "ERROR: unknown tool " + repr(name) + "."
-    return fn(args)
 
 
 def system_text():

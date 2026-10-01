@@ -2,7 +2,8 @@
 
 import re
 
-from tutorial.common.harness import DATA, register
+from tutorial.common.harness import DATA
+from tutorial.common.tools import register
 
 PAGE_URL = "https://suppliers.example/mill-and-birch"
 PAGE_PATH = DATA / "pages" / "mill-and-birch.html"

@@ -2,8 +2,8 @@
 
 import json
 
-from tutorial.common.harness import register
-from tutorial.common.shelf import gap_for, row_for
+from tutorial.common.read_db import gap_for, row_for
+from tutorial.common.tools import register
 
 
 def verify_proposal(args):

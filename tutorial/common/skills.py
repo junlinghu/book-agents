@@ -2,7 +2,8 @@
 
 import re
 
-from tutorial.common.harness import DATA, register
+from tutorial.common.harness import DATA
+from tutorial.common.tools import register
 
 SKILLS = DATA / "skills"
 

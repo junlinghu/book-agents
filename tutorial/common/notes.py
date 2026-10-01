@@ -1,6 +1,7 @@
 """Huddle notes: titles in the prompt, bodies on request."""
 
-from tutorial.common.harness import DATA, register
+from tutorial.common.harness import DATA
+from tutorial.common.tools import register
 
 NOTES = DATA / "notes"
 PER_NOTE_CAP = 500
