@@ -743,6 +743,130 @@ def loop_source(n: int) -> str:
     return "\n".join(lines)
 
 
+def colab_markdown(slug: str) -> str:
+    """Badge plus a short label for the Colab setup cell."""
+    url = (
+        "https://colab.research.google.com/github/junlinghu/book-agents/blob/main/tutorial/"
+        + slug
+        + ".ipynb"
+    )
+    badge = (
+        "[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)]("
+        + url
+        + ")"
+    )
+    return (
+        badge
+        + "\n\n"
+        + "## Colab setup\n\n"
+        + "Run the next cell first on Google Colab. "
+        + "It sparse-checkouts this public repo and installs packages only when the kernel is Colab. "
+        + "Local Jupyter and VS Code skip that work.\n\n"
+        + "For a live model, set `OPENAI_API_KEY` in Colab secrets "
+        + "(the key icon, secret name `OPENAI_API_KEY`) or in an environment cell: "
+        + '`os.environ["OPENAI_API_KEY"] = "sk-..."`. '
+        + "Do that before the lesson setup cell, which is the one that sets `DEMO_MODE`. "
+        + "With no key, `DEMO_MODE` still runs the scripted demo. The key is not printed.\n\n"
+        + "Edits you make in Colab stay in that session. They do not push to GitHub."
+    )
+
+
+# Inlined into every notebook. Keep this cell free of tutorial imports so it can
+# run before the lesson setup cell, including on a fresh Colab runtime.
+COLAB_SETUP_CODE = textwrap.dedent(
+    """\
+    # Colab setup. Run this cell before the other code cells.
+    # Local Jupyter and VS Code skip the clone and the install.
+    #
+    # On Google Colab, set OPENAI_API_KEY in one of these ways:
+    #   * Secrets (the key icon): a secret named OPENAI_API_KEY
+    #   * an environment cell: os.environ["OPENAI_API_KEY"] = "sk-..."
+    # Leave the key unset to run DEMO_MODE (scripted model, no API call).
+    # Do not commit a key. This cell does not print the value.
+    # Edits you make in Colab stay in the session. They do not push to GitHub.
+
+    import os
+    import sys
+    from pathlib import Path
+
+
+    def in_colab():
+        \"\"\"True on Google Colab. False in local Jupyter and VS Code.\"\"\"
+        try:
+            import google.colab
+        except ImportError:
+            return False
+        return Path("/content").is_dir() and google.colab is not None
+
+
+    if not in_colab():
+        print("Not Colab. Skipped clone and pip install.")
+    else:
+        import shutil
+        import subprocess
+
+        missing = []
+        for module_name, requirement in (
+            ("openai", "openai>=1.40.0"),
+            ("dotenv", "python-dotenv>=1.0.1"),
+            ("httpx", "httpx>=0.27.0"),
+        ):
+            try:
+                __import__(module_name)
+            except ImportError:
+                missing.append(requirement)
+        if missing:
+            subprocess.check_call([sys.executable, "-m", "pip", "install", "-q", *missing])
+
+        repo = Path("/content/book-agents")
+        marker = repo / "tutorial" / "common" / "client.py"
+        if not marker.is_file():
+            if repo.exists() and not (repo / ".git").exists():
+                raise RuntimeError(
+                    str(repo) + " exists but is not a git checkout. "
+                    "Move that folder aside and run this cell again."
+                )
+            if repo.exists():
+                shutil.rmtree(repo)
+            url = "https://github.com/junlinghu/book-agents.git"
+            try:
+                subprocess.check_call([
+                    "git", "clone", "--depth", "1", "--filter=blob:none", "--sparse",
+                    url, str(repo),
+                ])
+                subprocess.check_call([
+                    "git", "-C", str(repo), "sparse-checkout", "set", "tutorial",
+                ])
+            except subprocess.CalledProcessError:
+                if repo.exists():
+                    shutil.rmtree(repo)
+                subprocess.check_call(["git", "clone", "--depth", "1", url, str(repo)])
+            if not marker.is_file():
+                raise RuntimeError(
+                    "Colab setup could not find tutorial/common/client.py after cloning."
+                )
+
+        os.chdir(repo)
+        if str(repo) not in sys.path:
+            sys.path.insert(0, str(repo))
+
+        if not os.environ.get("OPENAI_API_KEY", "").strip():
+            try:
+                from google.colab import userdata
+                secret = userdata.get("OPENAI_API_KEY")
+            except Exception:
+                secret = ""
+            if secret and str(secret).strip():
+                os.environ["OPENAI_API_KEY"] = str(secret).strip()
+
+        if os.environ.get("OPENAI_API_KEY", "").strip():
+            print("Colab: tutorial/ is ready. OPENAI_API_KEY is set (value hidden).")
+        else:
+            print("Colab: tutorial/ is ready. OPENAI_API_KEY is unset, so DEMO_MODE can run.")
+    """
+)
+
+
 def carried_forward(n: int) -> str:
     if n == 1:
         return (
@@ -761,6 +885,8 @@ def carried_forward(n: int) -> str:
 def notebook_for(lesson: dict):
     n = lesson["n"]
     cells = [
+        new_markdown_cell(colab_markdown(lesson["slug"])),
+        new_code_cell(COLAB_SETUP_CODE),
         new_markdown_cell(textwrap.dedent(lesson["intro"]).strip() + "\n\n" + carried_forward(n)),
         new_markdown_cell(
             "## Setup\n\n"

@@ -64,7 +64,32 @@ jupyter notebook tutorial/1-using-tool.ipynb
 
 The setup cell looks for `tutorial/common/client.py` in the current directory and its parents. The kernel can start in the repo root or in `tutorial/`.
 
+To run a notebook on Google Colab instead, use the **Open in Colab** badge at the top of the file. See [Open in Colab](#open-in-colab).
+
 Each lesson has a companion note, `N-slug.md`, that places the lesson on the path from a single tool to the shop manager and points to the matching chapter. How to run a notebook is in the sections above.
+
+## Open in Colab
+
+Each notebook has an **Open in Colab** badge at the top. The badge opens that file on Google Colab from the `main` branch:
+
+```text
+https://colab.research.google.com/github/junlinghu/book-agents/blob/main/tutorial/<notebook>.ipynb
+```
+
+Tutorial 1, for example, is [1-using-tool.ipynb](https://colab.research.google.com/github/junlinghu/book-agents/blob/main/tutorial/1-using-tool.ipynb).
+
+Run the Colab setup cell first (it is the first code cell). On Colab that cell:
+
+- Detects Colab (`google.colab` and a `/content` directory).
+- Sparse-checkouts the public repository so `tutorial/` is on disk (`tutorial.common`, `docs/`, and the rest of the lesson). If the sparse checkout fails, it falls back to a shallow clone.
+- Installs `openai`, `python-dotenv`, and `httpx` when those imports are missing.
+- Sets the working directory and `sys.path` so `import tutorial` works.
+
+The same cell runs in local Jupyter and VS Code and skips the clone and the install. A checkout you already have does not need another clone.
+
+Edits you make in Colab stay in the Colab session. They do not push to GitHub.
+
+`DEMO_MODE` still runs the scripted lesson when `OPENAI_API_KEY` is unset. For a live call, add a Colab secret named `OPENAI_API_KEY` (the key icon), or set `os.environ["OPENAI_API_KEY"]` in a cell before the lesson setup cell that assigns `DEMO_MODE`. The notebooks do not print the key.
 
 ## DEMO_MODE and the live API
 
