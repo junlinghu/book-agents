@@ -20,5 +20,5 @@ A separate checker, a failure that stops the work, and a person who joins only w
 
 ## Sources and references
 
-- The checker is [cell_src/verify.py](cell_src/verify.py).
+- The checker is [common/verify.py](common/verify.py).
 - The previous lecture is [7-web-browse.md](7-web-browse.md). The notebook is [8-verification.ipynb](8-verification.ipynb). The series map is in [README.md](README.md).

@@ -24,5 +24,5 @@ The café is fictional. Prices, hours, and the shelf live in this folder. Leave 
 
 ## Sources and references
 
-- The restock workflow is [15-shop-manager.ipynb](15-shop-manager.ipynb). It composes the tools in [cell_src](cell_src), the documents in [docs](docs), the fixtures in [data](data), and the gate in [common/autonomy.py](common/autonomy.py).
+- The restock workflow is [15-shop-manager.ipynb](15-shop-manager.ipynb). It composes the helpers in [common](common), the documents in [docs](docs), the fixtures in [data](data), and the gate in [common/autonomy.py](common/autonomy.py).
 - The previous lectures are [1-using-tool.md](1-using-tool.md) through [14-cost-latency.md](14-cost-latency.md). The series map is in [README.md](README.md).

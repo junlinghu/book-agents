@@ -24,5 +24,5 @@ The restock procedure appears again in tutorial 15. The same idea is at work the
 
 ## Sources and references
 
-- The procedures are [data/skills/recommend.md](data/skills/recommend.md) and [data/skills/restock.md](data/skills/restock.md). `load_skill` is in [cell_src/skills.py](cell_src/skills.py).
+- The procedures are [data/skills/recommend.md](data/skills/recommend.md) and [data/skills/restock.md](data/skills/restock.md). `load_skill` is in [common/skills.py](common/skills.py).
 - The previous lecture is [5-memory.md](5-memory.md). The notebook is [6-skills.ipynb](6-skills.ipynb). The series map is in [README.md](README.md).

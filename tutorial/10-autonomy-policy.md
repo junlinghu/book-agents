@@ -20,5 +20,5 @@ The three grades, the mapping of actions to risk, and an approval a person can m
 
 ## Sources and references
 
-- Cards and mail use [common/autonomy.py](common/autonomy.py). The ticket gate is [cell_src/gate.py](cell_src/gate.py).
+- Cards and mail use [common/autonomy.py](common/autonomy.py). The ticket gate is [common/gate.py](common/gate.py).
 - The previous lecture is [9-evals.md](9-evals.md). The notebook is [10-autonomy-policy.ipynb](10-autonomy-policy.ipynb). The series map is in [README.md](README.md).

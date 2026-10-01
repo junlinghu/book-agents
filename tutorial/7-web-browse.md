@@ -22,5 +22,5 @@ The shelf count still comes from the database you met in tutorial 2. A sentence 
 
 ## Sources and references
 
-- The supplier page is [data/pages/mill-and-birch.html](data/pages/mill-and-birch.html). `fetch_page` is in [cell_src/web.py](cell_src/web.py).
+- The supplier page is [data/pages/mill-and-birch.html](data/pages/mill-and-birch.html). `fetch_page` is in [common/web.py](common/web.py).
 - The previous lecture is [6-skills.md](6-skills.md). The notebook is [7-web-browse.ipynb](7-web-browse.ipynb). The series map is in [README.md](README.md).

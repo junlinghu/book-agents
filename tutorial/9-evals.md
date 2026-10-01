@@ -22,5 +22,5 @@ Tutorial 13 will make the tool record easier to read, which is the same record t
 
 ## Sources and references
 
-- The grader is [cell_src/evals.py](cell_src/evals.py).
+- The grader is [common/evals.py](common/evals.py).
 - The previous lecture is [8-verification.md](8-verification.md). The notebook is [9-evals.ipynb](9-evals.ipynb). The series map is in [README.md](README.md).

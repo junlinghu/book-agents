@@ -20,5 +20,5 @@ One agent is enough for many questions at the counter. The second role earns its
 
 ## Sources and references
 
-- The stocker and the checker are [cell_src/roles.py](cell_src/roles.py). The supplier note is [data/supplier-note.txt](data/supplier-note.txt).
+- The stocker and the checker are [common/roles.py](common/roles.py). The supplier note is [data/supplier-note.txt](data/supplier-note.txt).
 - The previous lecture is [11-prompt-injection.md](11-prompt-injection.md). The notebook is [12-multi-agent.ipynb](12-multi-agent.ipynb). The series map is in [README.md](README.md).
