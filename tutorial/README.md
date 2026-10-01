@@ -1,6 +1,6 @@
 # Local Shop Concierge tutorial
 
-Fifteen notebooks that build one shop agent for the fictional Hearth Lane Café. Each lesson adds one idea from the book. From tutorial 2 on, a notebook imports the earlier helpers it uses, so you can run any notebook by itself.
+Fifteen notebooks that build one shop agent for the fictional Hearth Lane Café. The person in the chat is shop staff. The agent helps staff. Staff may ask on behalf of a guest, for example whether an opened bag of house coffee can be returned. Each lesson adds one idea from the book. From tutorial 2 on, a notebook imports the earlier helpers it uses, so you can run any notebook by itself.
 
 This folder carries its own OpenAI client (`common/client.py`), shop policy and FAQ (`docs/`), path jail (`common/tools.py`), and autonomy gate (`common/autonomy.py`). The shelf rows are seeded in `common/shelf.py`. Nothing here imports a file outside `tutorial/`. Runtime helpers live in `common/`.
 

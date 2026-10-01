@@ -2,7 +2,7 @@
 
 ## Motivation
 
-By the end of tutorial 4 the agent can read the shop’s documents and the shelf, take several steps inside a loop, and load a staff note only when the question needs it. The message list can feel like memory, because the model can quote what was just said. Close that list and the sentences are gone. A guest who cannot eat almonds will be back next week, and the concierge has to remember the constraint after the chat has ended. What the agent still cannot do is save a fact that outlives the conversation, or find it again from a fresh list of messages. Copying the whole shop policy into that same store would mix a personal constraint with rules that already live in the documents. We add a small memory file now, after you have a budget for what enters a turn, and before the written procedures that will depend on this guest’s constraint.
+By the end of tutorial 4 the agent can read the shop’s documents and the shelf, take several steps inside a loop, and load a staff note only when the question needs it. The message list can feel like memory, because the model can quote what was just said. Close that list and the sentences are gone. Priya, a guest, cannot eat almonds and will be back next week. Staff need the agent to remember that constraint after the chat has ended. What the agent still cannot do is save a fact that outlives the conversation, or find it again from a fresh list of messages. Copying the whole shop policy into that same store would mix a personal constraint with rules that already live in the documents. We add a small memory file now, after you have a budget for what enters a turn, and before the written procedures that will depend on this guest’s constraint.
 
 ## What this tutorial is about
 
@@ -12,7 +12,7 @@ In this lesson the fact is a guest constraint. Priya, a regular guest, has an al
 
 ## How you will get there
 
-The notebook adds two actions. One writes a memory, and one searches the file. In the first turn the agent stores Priya’s allergy while the conversation is still open, and you can read the saved row in the file afterward. In the second turn the notebook builds a new message list, so nothing from the first chat is still in front of the model. The agent searches the file, and the answer in that second turn comes from the row that survived the fresh start.
+The notebook adds two actions. One writes a memory, and one searches the file. In the first turn staff ask the agent to store Priya’s allergy while the conversation is still open, and you can read the saved row in the file afterward. In the second turn the notebook builds a new message list, so nothing from the first chat is still in front of the model. Staff ask what constraint the counter has for Priya before they recommend a pastry. The agent searches the file, and the answer in that second turn comes from the row that survived the fresh start.
 
 ## Additional things
 

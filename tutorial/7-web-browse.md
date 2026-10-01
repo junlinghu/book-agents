@@ -12,7 +12,7 @@ You will learn to allow only that one address, so that any other address comes b
 
 ## How you will get there
 
-The notebook adds a fetch action for that one address. You ask what wholesale oat-milk price the page claims, and you ask that the claim stay separate from the shelf. The agent fetches the page and reads the shelf. The printed answer quotes the price and marks the page as untrusted. The record of the run shows the fetch and the shelf reading, and it does not show a charge. You can hold the answer next to the page and see which sentence was a price and which sentences were orders the agent left alone.
+The notebook adds a fetch action for that one address. Staff ask what wholesale oat-milk price the page claims, and they ask that the claim stay separate from the shelf. The agent fetches the page and reads the shelf. The printed answer quotes the price and marks the page as untrusted. The record of the run shows the fetch and the shelf reading, and it does not show a charge. You can hold the answer next to the page and see which sentence was a price and which sentences were orders the agent left alone.
 
 ## Additional things
 

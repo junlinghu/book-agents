@@ -12,7 +12,7 @@ You will load one skill, the recommendation procedure, and then follow it. The p
 
 ## How you will get there
 
-The notebook registers a tool that returns the text of a named skill. You ask for a pastry recommendation for Priya. The agent loads the procedure, searches memory, and reads the menu. The reply follows those steps. You read the skill text and the answer side by side. The food itself is described from the menu, and the allergy comes from the memory file. The procedure told the agent where to look. It did not become a second copy of the menu.
+The notebook registers a tool that returns the text of a named skill. Staff ask what pastry they should recommend for Priya, a guest at the counter. The agent loads the procedure, searches memory, and reads the menu. The reply follows those steps. You read the skill text and the answer side by side. The food itself is described from the menu, and the allergy comes from the memory file. The procedure told the agent where to look. It did not become a second copy of the menu.
 
 ## Additional things
 

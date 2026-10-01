@@ -12,7 +12,7 @@ You will learn to keep that catalog in the prompt and to load a note body only w
 
 ## How you will get there
 
-The notebook adds a small catalog of staff notes. Titles sit in the brief. Bodies come back through a tool that reads one note. The picnic note is long on purpose. Asking for it returns a refusal, and the run that answers the morning question leaves it unread. The question that matters asks how many oat-milk cartons were on hand and how many cardamom buns were baked on Thursday, and it asks the agent to check the shelf for oat milk. The agent reads the short oat-milk note and the Thursday bun note, and it reads the shelf. The answer uses those readings. The picnic stays on disk, where a question about the picnic could still find it later.
+The notebook adds a small catalog of staff notes. Titles sit in the brief. Bodies come back through a tool that reads one note. The picnic note is long on purpose. Asking for it returns a refusal, and the run that answers the morning question leaves it unread. Staff ask how many oat-milk cartons were on hand and how many cardamom buns were baked on Thursday, and they ask the agent to check the shelf for oat milk. The agent reads the short oat-milk note and the Thursday bun note, and it reads the shelf. The answer uses those readings. The picnic stays on disk, where a question about the picnic could still find it later.
 
 ## Additional things
 
