@@ -1,7 +1,8 @@
 """OpenAI settings for the tutorial notebooks.
 
-Put `OPENAI_API_KEY` in the repository-root `.env`.
-`MODEL` is optional. Temperature and max tokens live here, not in `.env`.
+Put `OPENAI_API_KEY` in the repository-root `.env`, or in a Colab secret
+of the same name. `MODEL` is optional. Temperature and max tokens live
+here, not in `.env`.
 """
 
 import os
@@ -17,6 +18,13 @@ MAX_TOKENS = 800
 # gpt-4.1-mini supports tool calling.
 # https://developers.openai.com/api/docs/models/gpt-4.1-mini
 DEFAULT_MODEL = "gpt-4.1-mini"
+
+MISSING_KEY = (
+    "OPENAI_API_KEY is empty. Copy .env.example to .env and paste a key "
+    "from https://platform.openai.com/api-keys. On Colab, add a secret named "
+    "OPENAI_API_KEY (the key icon) and rerun the Colab setup cell. "
+    "Never commit .env."
+)
 
 
 def repo_root():
@@ -56,10 +64,7 @@ def require_settings():
     """Like `load_settings`, but exit if the API key is blank."""
     api_key, model = load_settings()
     if not api_key:
-        raise SystemExit(
-            "OPENAI_API_KEY is empty. Copy .env.example to .env and paste a key "
-            "from https://platform.openai.com/api-keys. Never commit .env."
-        )
+        raise SystemExit(MISSING_KEY)
     if not model:
         raise SystemExit("MODEL is empty. Leave it unset to use " + DEFAULT_MODEL + ".")
     return api_key, model

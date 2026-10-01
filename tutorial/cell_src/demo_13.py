@@ -1,7 +1,6 @@
 reset_db()
 result = run_agent(
     "Which products are at or below their reorder point, and may we ship oat milk?",
-    "13-trace",
     system_text(),
     trace_id="trace-low-stock",
 )

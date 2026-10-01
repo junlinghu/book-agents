@@ -1,14 +1,10 @@
-"""Chat Completions for the tutorial, live or scripted.
+"""Chat Completions for the tutorial.
 
-Notebooks call :func:`chat`. ``DEMO_MODE`` in the notebook or in the
-environment chooses the path:
-
-- ``True`` / ``1``: scripted model, real tools. No network.
-- ``False`` / ``0``: OpenAI Chat Completions. Requires ``OPENAI_API_KEY``.
-- unset: scripted when the key is missing, live when it is set.
-
-The key is read from the repository-root ``.env`` by
-``tutorial.common.client``. This module never prints the key.
+Notebooks call :func:`chat`. Every turn goes to the OpenAI Chat Completions
+API through :mod:`tutorial.common.client`. ``OPENAI_API_KEY`` is required.
+The key is read from the repository-root ``.env``, or from the process
+environment (including a Colab secret the setup cell copied in). This
+module never prints the key.
 """
 
 from __future__ import annotations
@@ -18,80 +14,30 @@ import time
 
 from tutorial.common.client import (
     MAX_TOKENS,
+    MISSING_KEY,
     TEMPERATURE,
-    describe_runtime,
     load_settings,
     make_client,
     redact,
 )
 
 
-def using_demo(flag):
-    """Return True when this run should use the scripted model.
-
-    ``flag`` is the notebook's ``DEMO_MODE`` value. ``None`` means
-    "follow the environment, then whether a key is present."
-    """
-    if flag is True:
-        return True
-    if flag is False:
-        return False
-    return _env_wants_demo()
+def require_key():
+    """Return ``(api_key, model)``. Raise if the key is missing."""
+    api_key, model = load_settings()
+    if not api_key:
+        raise RuntimeError(MISSING_KEY)
+    return api_key, model
 
 
-def _env_wants_demo():
-    import os
-
-    raw = os.environ.get("DEMO_MODE", "").strip().lower()
-    if raw in {"1", "true", "yes", "on"}:
-        return True
-    if raw in {"0", "false", "no", "off"}:
-        return False
-    api_key, _model = load_settings()
-    return not bool(api_key)
-
-
-def describe_mode(flag):
-    """One banner: lesson mode, model name, key present or missing."""
-    if using_demo(flag):
-        mode = "demo (scripted model, real tools, no API call)"
-    else:
-        mode = "live (OpenAI Chat Completions)"
-    return "mode: " + mode + "\n" + describe_runtime()
-
-
-def chat(messages, tools, *, lesson, demo):
+def chat(messages, tools):
     """Return one assistant turn as a plain dict.
 
     ``tool_calls`` is a list of ``{id, name, arguments, raw}``.
     ``arguments`` is a dict when the JSON parsed. ``usage`` is token
-    counts. In demo mode the counts are a character estimate so the
-    cost lesson has numbers without a bill.
+    counts from the API response.
     """
-    if using_demo(demo):
-        from tutorial.demo_model import scripted_turn
-
-        _api_key, model = load_settings()
-        started = time.perf_counter()
-        turned = scripted_turn(messages, tools, lesson)
-        elapsed = (time.perf_counter() - started) * 1000
-        usage = _estimate_usage(messages, turned)
-        return {
-            "content": turned["content"],
-            "tool_calls": turned["tool_calls"],
-            "usage": usage,
-            "latency_ms": round(max(elapsed, 0.1), 3),
-            "model": model,
-            "mode": "demo",
-        }
-
-    api_key, model = load_settings()
-    if not api_key:
-        raise RuntimeError(
-            "OPENAI_API_KEY is empty. Copy .env.example to .env and paste a key "
-            "from https://platform.openai.com/api-keys, or set DEMO_MODE=1 "
-            "to run the scripted lesson. Never commit .env."
-        )
+    api_key, model = require_key()
     client = make_client()
     kwargs = {
         "model": model,
@@ -114,7 +60,6 @@ def chat(messages, tools, *, lesson, demo):
             "usage": {"prompt_tokens": 0, "completion_tokens": 0},
             "latency_ms": round(elapsed, 3),
             "model": model,
-            "mode": "live",
         }
     message = response.choices[0].message
     usage_obj = getattr(response, "usage", None)
@@ -131,7 +76,6 @@ def chat(messages, tools, *, lesson, demo):
         "usage": usage,
         "latency_ms": round(elapsed, 3),
         "model": model,
-        "mode": "live",
     }
 
 
@@ -156,15 +100,3 @@ def _normalize_calls(calls):
             "raw": raw,
         })
     return normalized
-
-
-def _estimate_usage(messages, turned):
-    """Rough tokens for the scripted path. Not an invoice."""
-    prompt_chars = len(json.dumps(messages, default=str))
-    completion = turned["content"] or ""
-    if turned["tool_calls"]:
-        completion += json.dumps(turned["tool_calls"], default=str)
-    return {
-        "prompt_tokens": max(1, prompt_chars // 4),
-        "completion_tokens": max(1, len(completion) // 4),
-    }

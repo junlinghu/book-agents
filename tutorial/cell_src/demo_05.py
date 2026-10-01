@@ -5,7 +5,6 @@ print(MEMORY_PATH.read_text(encoding="utf-8"))
 print("=== turn 1: save during this session ===")
 saved = run_agent(
     "Remember that Priya is allergic to almonds.",
-    "5-memory-save",
     system_text(),
 )
 print("ANSWER:", saved["text"])
@@ -18,7 +17,6 @@ check("almond" in stored.lower(), "the JSON file holds the constraint")
 print("=== turn 2: new message list, same file ===")
 recalled = run_agent(
     "What constraint do we have for Priya before I recommend a pastry?",
-    "5-memory-recall",
     system_text(),
 )
 print("ANSWER:", recalled["text"])

@@ -30,7 +30,7 @@ Every row in the table is ready. Run the notebooks in order, or open any one on 
 
 - Python 3.10 or newer
 - A virtualenv and the repo requirements
-- For a live model call: an OpenAI API key
+- An OpenAI API key in `OPENAI_API_KEY`. Every model turn calls the Chat Completions API.
 
 From the repository root:
 
@@ -89,34 +89,25 @@ The same cell runs in local Jupyter and VS Code and skips the clone and the inst
 
 Edits you make in Colab stay in the Colab session. They do not push to GitHub.
 
-`DEMO_MODE` still runs the scripted lesson when `OPENAI_API_KEY` is unset. For a live call, add a Colab secret named `OPENAI_API_KEY` (the key icon), or set `os.environ["OPENAI_API_KEY"]` in a cell before the lesson setup cell that assigns `DEMO_MODE`. The notebooks do not print the key.
+An API key is required on every run. On Colab, add a secret named `OPENAI_API_KEY` (the key icon), or set `os.environ["OPENAI_API_KEY"]` in a cell before the lesson setup cell. Locally, put the key in the repository-root `.env`. The notebooks do not print the key. A missing key stops the run with a clear error.
 
-## DEMO_MODE and the live API
+## The API
 
-The first code cell of each notebook sets `DEMO_MODE`.
-
-| Value | What runs |
-|---|---|
-| `None` (the default in the notebook) | If the environment variable `DEMO_MODE` is `1`, `true`, `yes`, or `on`, the scripted demo runs. If it is `0`, `false`, `no`, or `off`, the notebook calls the API. If the variable is unset, a missing `OPENAI_API_KEY` selects the demo and a present key selects the API. |
-| `True` | Scripted demo, even when a key is set. No network call. |
-| `False` | Chat Completions API. The run stops with a clear error if the key is empty. |
+Every model turn uses the OpenAI Chat Completions API through `tutorial/common/client.py`. Temperature and max tokens live in that file.
 
 ```bash
-DEMO_MODE=1 jupyter nbconvert --to notebook --execute tutorial/1-using-tool.ipynb --output /tmp/1-using-tool-out.ipynb
+jupyter nbconvert --to notebook --execute tutorial/1-using-tool.ipynb --output /tmp/1-using-tool-out.ipynb
 ```
 
-`DEMO_MODE=0` is the live path. Temperature and max tokens come from `tutorial/common/client.py`.
+That command calls the API. A live model can phrase an answer differently from one run to the next. Lesson checks print a warning when the wording differs, and the notebook continues.
 
-In demo mode the tools, the loop, the checker, and the gates are the real functions. Only the model turn is scripted, so the printed trace is stable without an API key. A live model can phrase the answer differently. Demo checks raise when the scripted trace drifts. Live runs print a warning and continue.
-
-The script does not print the API key.
+The notebook does not print the API key.
 
 ## Shared pieces
 
 | Path | Role |
 |---|---|
-| `runtime.py` | Loads the repository-root `.env` through `common/client.py` and exposes `chat`. |
-| `demo_model.py` | Scripted tool-calling turns for `DEMO_MODE`. |
+| `runtime.py` | Loads the repository-root `.env` through `common/client.py` and exposes `chat`. Requires `OPENAI_API_KEY`. |
 | `docs/` | `policy.md` and `faq.md`. The only shop documents `read_shop_file` may open. |
 | `data/` | Notes, skills, the supplier page, the supplier note, and a fake canary. Not shop secrets. |
 | `cell_src/` | Authoring copy of the cells. Notebooks inline this code so each file still runs alone. |
@@ -133,7 +124,7 @@ From the repo root, after editing `cell_src/`:
 
 ```bash
 python tutorial/build_series.py
-DEMO_MODE=1 python tutorial/build_series.py --check
+python tutorial/build_series.py --check
 ```
 
-`--check` executes every notebook's code cells in the scripted demo. It does not call the API.
+`--check` rewrites the notebooks, compiles every code cell, and fails if a demo flag is still in the tree. It does not call the API. Running a notebook does.

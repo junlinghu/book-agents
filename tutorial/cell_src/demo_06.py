@@ -8,7 +8,6 @@ print(memory_set({
 }))
 result = run_agent(
     "Recommend a pastry for Priya.",
-    "6-skills",
     system_text(),
 )
 print("ANSWER:", result["text"])

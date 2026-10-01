@@ -6,7 +6,7 @@ Tutorial 7 taught the agent to fetch one supplier page and to mark the text as u
 
 ## What this tutorial is about
 
-The name for this failure is prompt injection: instructions that arrive inside something the agent was only supposed to read. The untrusted text can sit in the conversation. It does not edit the list of tools, and it does not grant an action the program has refused. You will see the scripted model report the wholesale price and leave the demanded actions uncalled. You will then see the same proposals run through the folder boundary and the gate with no model in the path, because the boundary has to hold when the model is wrong.
+The name for this failure is prompt injection: instructions that arrive inside something the agent was only supposed to read. The untrusted text can sit in the conversation. It does not edit the list of tools, and it does not grant an action the program has refused. You will see the model report the wholesale price and leave the demanded actions uncalled. You will then see the same proposals run through the folder boundary and the gate with no model in the path, because the boundary has to hold when the model is wrong.
 
 A planted fake secret sits in a local practice file. People sometimes call that kind of marker a canary, because its appearance in the output would show that private text leaked. It must not appear in the tool output. Mail to the counter waits for a person. Mail to any other address is refused. A path that climbs out of the shop documents, or that names a file other than the policy and the frequently asked questions, comes back as an error the model can read.
 

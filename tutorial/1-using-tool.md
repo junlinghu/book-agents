@@ -16,7 +16,7 @@ By the time you finish the notebook, you should be able to keep three moments se
 
 The notebook registers that one tool and asks the return question. On the first call, the model requests the lookup. The program reads the returns section of the shop policy and sends the text back. On the second call, the model writes the answer from what came back. You run the notebook from top to bottom and read the printed result beside the policy, so the rule and the answer are visibly the same passage.
 
-The hands-on steps, including how to run the scripted demonstration or a live model, are in the notebook and in the series guide. This note stays with the idea the notebook is there to make visible.
+The hands-on steps are in the notebook and in the series guide. The notebook calls the Chat Completions API, so `OPENAI_API_KEY` has to be set (a repository-root `.env` locally, or a Colab secret of the same name). This note stays with the idea the notebook is there to make visible.
 
 ## Additional things
 

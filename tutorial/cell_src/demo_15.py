@@ -19,7 +19,6 @@ question = (
 print("=== plan, check, and wait ===")
 pending = run_agent(
     question,
-    "15-shop-manager",
     system_text(),
     max_steps=8,
     trace_id="restock-tuesday",
@@ -74,7 +73,6 @@ show_injection_boundaries()
 print("=== confirmed tickets ===")
 done = run_agent(
     question,
-    "15-shop-manager",
     system_text(),
     max_steps=8,
     confirmed_tokens=tokens,

@@ -4,7 +4,6 @@ reset_tickets()
 print("=== unconfirmed ticket ===")
 result = run_agent(
     "Write a restock ticket for oat milk. Do not charge a card.",
-    "10-ticket",
     system_text(),
 )
 print("ANSWER:", result["text"])
@@ -25,7 +24,6 @@ check(charge["decision"] == "denied", "never-tier ignores the token")
 print("=== same ticket, token supplied ===")
 confirmed = run_agent(
     "Write a restock ticket for oat milk. Do not charge a card.",
-    "10-ticket",
     system_text(),
     confirmed_tokens=tokens,
 )

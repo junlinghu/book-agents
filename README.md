@@ -152,7 +152,7 @@ The through-line is a Local Shop Concierge for a fictional café. Early chapters
 
 - `chapters/` — manuscript. Chapters 1–18, 21–23, and 26–27 are full prose. Chapters 19–20, 24–25, and the appendices are still outlines.
 - `labs/` — Chapters 1–6 and 16–18 are runnable scripts. Chapters 4–15 and 21–23 are assignment labs with starter files and no solution notes. Chapters 16–18 do not need a model for their required traces. Chapters 21–23 tests do not need a model server. The other labs are stubs. Shared setup is [labs/README.md](labs/README.md).
-- `tutorial/` — fifteen self-contained notebooks that grow one Local Shop Concierge from a single tool call into a shop manager. Start at [tutorial/README.md](tutorial/README.md). Each notebook runs in `DEMO_MODE` without an API key.
+- `tutorial/` — fifteen self-contained notebooks that grow one Local Shop Concierge from a single tool call into a shop manager. Start at [tutorial/README.md](tutorial/README.md). Each notebook calls the OpenAI Chat Completions API and requires `OPENAI_API_KEY`.
 
 ## Running the labs
 

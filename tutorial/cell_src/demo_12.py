@@ -1,7 +1,6 @@
 reset_db()
 result = run_agent(
     "Pull the house blend shelf row and the supplier note so the stocker and checker can hand off.",
-    "12-handoff",
     system_text(),
 )
 print("ANSWER:", result["text"])
