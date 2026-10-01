@@ -17,11 +17,10 @@ check(json.loads(good)["status"] == "accepted", "the shelf gap passes the checke
 print("=== the agent may propose; the checker decides ===")
 result = run_agent(
     "Propose an oat milk restock and have the checker score it. Do not ship it.",
-    "8-verify",
     system_text(),
 )
 print("ANSWER:", result["text"])
-check(result["stopped"] == "final", "verify demo finished")
+check(result["stopped"] == "final", "verify run finished")
 check("query_inventory" in "\n".join(result["tool_log"]), "the proposal looked at the shelf")
 check("verify_proposal" in "\n".join(result["tool_log"]), "a separate checker ran")
 check("accepted" in result["text"].lower(), "the reported proposal is the one the checker accepted")

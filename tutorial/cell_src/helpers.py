@@ -58,13 +58,15 @@ def assistant_message(turned):
 
 
 def check(condition, message):
-    """Fail the demo when the scripted path drifts. Warn, and continue, on a live model."""
+    """Print whether a lesson expectation held. A miss warns and continues.
+
+    A live model can phrase an answer differently. The warning names the
+    miss without stopping the notebook.
+    """
     if condition:
         print("check ok:", message)
         return
-    if USING_DEMO:
-        raise AssertionError(message)
-    print("check warning (live model):", message)
+    print("check warning:", message)
 
 
 def base_rules():

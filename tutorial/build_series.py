@@ -11,7 +11,7 @@ earlier code instead of pointing at it.
 From the repo root:
 
     python tutorial/build_series.py
-    DEMO_MODE=1 python tutorial/build_series.py --check
+    python tutorial/build_series.py --check
 """
 
 from __future__ import annotations
@@ -31,7 +31,7 @@ OUT = Path(__file__).resolve().parent
 
 FRAGMENTS = [
     (1, "Shared helpers", "helpers.py",
-     "Schema, message copying, and the demo check used by every later cell."),
+     "Schema, message copying, and the check used by every later cell."),
     (1, "Tutorial 1 — one tool", "facts.py",
      "`get_shop_fact` opens the shop document. The model only sees the string you return."),
     (2, "Tutorial 2 — files and the shelf", "shelf.py",
@@ -91,7 +91,7 @@ You are building the counter concierge for Hearth Lane Café. This notebook is t
 
 The model must not invent the return rule. It asks for `get_shop_fact`. This process reads `docs/policy.md` and returns the Returns section. The second model call writes the answer from that string.
 
-Later notebooks keep this tool and add more. Run this file from top to bottom. Set `DEMO_MODE` in the next cell if you want to force the scripted model or the live API.
+Later notebooks keep this tool and add more. Run this file from top to bottom. The model calls need `OPENAI_API_KEY`.
 """,
     },
     {
@@ -121,7 +121,7 @@ Tutorial 1 returned one policy section. This notebook keeps that tool and adds t
 
 `read_shop_file` reads `policy.md` or `faq.md` from `tutorial/docs`. The path check is `tutorial.common.tools.read_file`. `query_inventory` reads the shelf seeded in this notebook from SQLite. The model passes a filter, not a SQL string.
 
-The demo asks which items are low and whether oat milk can ship. Both answers have to come from tools.
+The run asks which items are low and whether oat milk can ship. Both answers have to come from tools.
 """,
     },
     {
@@ -149,7 +149,7 @@ The demo asks which items are low and whether oat milk can ship. Both answers ha
 
 Tutorials 1 and 2 ran one exchange by hand: model, tools, model. A real question can need several of those exchanges.
 
-`run_agent` is that exchange inside a `for` loop. It stops when the model answers, when the step cap hits, or when the same call repeats. The shelf tool and the file tool from tutorial 2 are still registered. This notebook does not point you at the previous file. The functions are in the cells above the demo.
+`run_agent` is that exchange inside a `for` loop. It stops when the model answers, when the step cap hits, or when the same call repeats. The shelf tool and the file tool from tutorial 2 are still registered. This notebook does not point you at the previous file. The functions are in the cells above the run.
 """,
     },
     {
@@ -176,7 +176,7 @@ Tutorials 1 and 2 ran one exchange by hand: model, tools, model. A real question
 
 The loop from tutorial 3 will read whatever you stuff into the prompt. Stuffing is how a Tuesday huddle turns into context rot.
 
-This notebook adds a note catalog. Titles go in the system prompt. Bodies come back through `read_note`. One note is over the cap so you can see the refusal. The picnic note is long and useless for a carton count. The demo should not load it.
+This notebook adds a note catalog. Titles go in the system prompt. Bodies come back through `read_note`. One note is over the cap so you can see the refusal. The picnic note is long and useless for a carton count. The run should not load it.
 
 Inventory and the policy tools are still here. The oat-milk count is checked against the shelf, not only against the note.
 """,
@@ -232,7 +232,7 @@ This notebook adds `memory_set` and `memory_search`. They read and write `tutori
 
 A system prompt that contains every procedure gets long and stale. A skill is a procedure you load when the question matches.
 
-`load_skill` reads `data/skills/recommend.md`. The demo then searches Priya's memory and reads `faq.md`. The skill tells the agent those steps. It does not list a price. Prices and allergens stay in the FAQ. The loop, the shelf, the notes, and memory are still part of this notebook.
+`load_skill` reads `data/skills/recommend.md`. The run then searches Priya's memory and reads `faq.md`. The skill tells the agent those steps. It does not list a price. Prices and allergens stay in the FAQ. The loop, the shelf, the notes, and memory are still part of this notebook.
 """,
     },
     {
@@ -259,7 +259,7 @@ A system prompt that contains every procedure gets long and stale. A skill is a 
 
 A supplier page is not a shop policy. This notebook adds `fetch_page` for one URL, served from a local HTML file so the lesson does not depend on the public internet.
 
-The result starts with `UNTRUSTED PAGE TEXT`. The demo asks for the oat-milk case price and also reads the shelf. Quote the page as a claim. Do not let it change a Hearth Lane price or start a charge. Tutorial 11 hardens that boundary. The tools from tutorials 1 through 6 are already registered above.
+The result starts with `UNTRUSTED PAGE TEXT`. The run asks for the oat-milk case price and also reads the shelf. Quote the page as a claim. Do not let it change a Hearth Lane price or start a charge. Tutorial 11 hardens that boundary. The tools from tutorials 1 through 6 are already registered above.
 """,
     },
     {
@@ -286,7 +286,7 @@ The result starts with `UNTRUSTED PAGE TEXT`. The demo asks for the oat-milk cas
 
 The loop can sound sure and still be wrong. A checker is a second function with the rules written in code.
 
-`verify_proposal` loads the shelf row itself. Quantity must be the gap. Shipping dairy fails. An empty citation fails. The demo runs a bad proposal and a good one before the model is involved, then lets the agent call the checker. Fetch, skills, memory, notes, and the loop are in the cells above.
+`verify_proposal` loads the shelf row itself. Quantity must be the gap. Shipping dairy fails. An empty citation fails. The notebook runs a bad proposal and a good one before the model is involved, then lets the agent call the checker. Fetch, skills, memory, notes, and the loop are in the cells above.
 """,
     },
     {
@@ -340,7 +340,7 @@ You already know two answers the concierge must get right, and one answer it onc
 
 A tool call is a proposal until the harness agrees. Reads can run. A restock ticket waits. A card charge does not run.
 
-`gate_call` returns allowed, confirm_required, or denied. Confirm uses `approval_token` from `tutorial.common.autonomy`, so a different quantity is a different token. The demo writes an oat-milk ticket only on the second run, after you pass the token from the first run. `charge_card` stays denied. The checker and the eval helpers are still above.
+`gate_call` returns allowed, confirm_required, or denied. Confirm uses `approval_token` from `tutorial.common.autonomy`, so a different quantity is a different token. The notebook writes an oat-milk ticket only on the second run, after you pass the token from the first run. `charge_card` stays denied. The checker and the eval helpers are still above.
 """,
     },
     {
@@ -350,7 +350,7 @@ A tool call is a proposal until the harness agrees. Reads can run. A restock tic
         "one_line": "Read a poisoned supplier page as data, and refuse the actions it demands.",
         "purpose": (
             "The Mill and Birch page asks the concierge to charge a card, read `.env`, and change the bun price. "
-            "The scripted model reports the wholesale price and does not call those tools. "
+            "The model is asked to report the wholesale price and not to call those tools. "
             "A second cell runs the bad proposals through the path jail and the autonomy gate anyway, "
             "because the boundary has to hold when the model is wrong."
         ),
@@ -484,7 +484,7 @@ This is the concierge with the earlier pieces working together. A manager asks f
 
 The loop loads the restock skill, reads the shelf, the policy, the oat-milk note, and shop memory, and fetches the supplier page as untrusted text. It verifies HB-12 and OM-32. Quantity is the gap on the shelf seed in this notebook: 14 bags of house blend (par 18, on hand 4) and 13 cartons of oat milk (par 16, on hand 3). Tickets wait for two approval tokens. The confirmed run writes the files. The checker still rejects a 1000-bag note. The page still cannot charge a card.
 
-Every tool from tutorials 1 through 14 is in the cells above. The demo at the bottom is the workflow.
+Every tool from tutorials 1 through 14 is in the cells above. The run at the bottom is the workflow.
 """,
     },
 ]
@@ -497,10 +497,6 @@ def read_src(name: str) -> str:
 def bootstrap(lesson: dict) -> str:
     return textwrap.dedent(
         f"""\
-        # None: use the API when OPENAI_API_KEY is set, otherwise the scripted demo.
-        # True: always the scripted demo. False: always the API (exits if the key is missing).
-        DEMO_MODE = None
-
         import sys
         from pathlib import Path
 
@@ -522,13 +518,14 @@ def bootstrap(lesson: dict) -> str:
         if str(ROOT) not in sys.path:
             sys.path.insert(0, str(ROOT))
 
-        from tutorial.runtime import chat, describe_mode, using_demo
+        from tutorial.common.client import describe_runtime
+        from tutorial.runtime import chat, require_key
 
         LESSON = {lesson["slug"]!r}
         LESSON_NUMBER = {lesson["n"]}
-        USING_DEMO = using_demo(DEMO_MODE)
+        require_key()
         print("tutorial:", LESSON)
-        print(describe_mode(DEMO_MODE))
+        print(describe_runtime())
         """
     )
 
@@ -600,13 +597,13 @@ def system_source(n: int) -> str:
 def loop_source(n: int) -> str:
     if n >= 13:
         signature = (
-            'def run_agent(user_text, lesson, system, max_steps=6, '
+            'def run_agent(user_text, system, max_steps=6, '
             'confirmed_tokens=None, trace_id="tutorial"):'
         )
     elif n >= 10:
-        signature = "def run_agent(user_text, lesson, system, max_steps=6, confirmed_tokens=None):"
+        signature = "def run_agent(user_text, system, max_steps=6, confirmed_tokens=None):"
     else:
-        signature = "def run_agent(user_text, lesson, system, max_steps=6):"
+        signature = "def run_agent(user_text, system, max_steps=6):"
     lines = [
         "MAX_IDENTICAL_CALLS = 2",
         "REPEAT_NOTE = (",
@@ -640,7 +637,7 @@ def loop_source(n: int) -> str:
             '            print("route: task=" + routed["task"] + " model=" + routed["model"] + " (" + routed["reason"] + ")")',
         ]
     lines += [
-        "        turned = chat(messages, TOOLS, lesson=lesson, demo=DEMO_MODE)",
+        "        turned = chat(messages, TOOLS)",
     ]
     if n >= 14:
         lines += [
@@ -762,11 +759,12 @@ def colab_markdown(slug: str) -> str:
         + "Run the next cell first on Google Colab. "
         + "It sparse-checkouts this public repo and installs packages only when the kernel is Colab. "
         + "Local Jupyter and VS Code skip that work.\n\n"
-        + "For a live model, set `OPENAI_API_KEY` in Colab secrets "
+        + "An API key is required. Set `OPENAI_API_KEY` in Colab secrets "
         + "(the key icon, secret name `OPENAI_API_KEY`) or in an environment cell: "
         + '`os.environ["OPENAI_API_KEY"] = "sk-..."`. '
-        + "Do that before the lesson setup cell, which is the one that sets `DEMO_MODE`. "
-        + "With no key, `DEMO_MODE` still runs the scripted demo. The key is not printed.\n\n"
+        + "Do that before the lesson setup cell. "
+        + "Locally, put the same name in the repository-root `.env`. "
+        + "A missing key stops the notebook. The key is not printed.\n\n"
         + "Edits you make in Colab stay in that session. They do not push to GitHub."
     )
 
@@ -778,10 +776,10 @@ COLAB_SETUP_CODE = textwrap.dedent(
     # Colab setup. Run this cell before the other code cells.
     # Local Jupyter and VS Code skip the clone and the install.
     #
-    # On Google Colab, set OPENAI_API_KEY in one of these ways:
+    # An API key is required. On Google Colab, set OPENAI_API_KEY in one of these ways:
     #   * Secrets (the key icon): a secret named OPENAI_API_KEY
     #   * an environment cell: os.environ["OPENAI_API_KEY"] = "sk-..."
-    # Leave the key unset to run DEMO_MODE (scripted model, no API call).
+    # Locally, put the key in the repository-root .env.
     # Do not commit a key. This cell does not print the value.
     # Edits you make in Colab stay in the session. They do not push to GitHub.
 
@@ -859,10 +857,13 @@ COLAB_SETUP_CODE = textwrap.dedent(
             if secret and str(secret).strip():
                 os.environ["OPENAI_API_KEY"] = str(secret).strip()
 
-        if os.environ.get("OPENAI_API_KEY", "").strip():
-            print("Colab: tutorial/ is ready. OPENAI_API_KEY is set (value hidden).")
-        else:
-            print("Colab: tutorial/ is ready. OPENAI_API_KEY is unset, so DEMO_MODE can run.")
+        if not os.environ.get("OPENAI_API_KEY", "").strip():
+            raise RuntimeError(
+                "OPENAI_API_KEY is empty. On Colab, add a secret named OPENAI_API_KEY "
+                "(the key icon) and rerun this cell. Locally, copy .env.example to .env "
+                "and paste a key from https://platform.openai.com/api-keys. Never commit .env."
+            )
+        print("Colab: tutorial/ is ready. OPENAI_API_KEY is set (value hidden).")
     """
 )
 
@@ -890,10 +891,10 @@ def notebook_for(lesson: dict):
         new_markdown_cell(textwrap.dedent(lesson["intro"]).strip() + "\n\n" + carried_forward(n)),
         new_markdown_cell(
             "## Setup\n\n"
-            "`DEMO_MODE = None` follows the environment variable of the same name. "
-            "If that variable is unset, a missing `OPENAI_API_KEY` selects the scripted demo "
-            "and a present key selects the Chat Completions API. "
-            "The key is loaded from the repository-root `.env` by `tutorial/common/client.py`. The value is not printed.\n\n"
+            "This notebook calls the OpenAI Chat Completions API. `OPENAI_API_KEY` is required. "
+            "Locally the key is loaded from the repository-root `.env` by `tutorial/common/client.py`. "
+            "On Colab, the setup cell above reads a secret of the same name. "
+            "The value is not printed. A missing key stops the run.\n\n"
             "Companion notes: `" + lesson["slug"] + ".md`."
         ),
         new_code_cell(bootstrap(lesson)),
@@ -917,9 +918,9 @@ def notebook_for(lesson: dict):
         ))
         cells.append(new_code_cell(loop_source(n)))
     cells.append(new_markdown_cell(
-        "## Demo\n\n"
-        "Run this cell after the ones above. In demo mode the checks raise if the trace drifts. "
-        "A live model prints a warning instead, because the wording can vary."
+        "## Run\n\n"
+        "Run this cell after the ones above. Each model turn calls the Chat Completions API. "
+        "A check prints a warning when the wording differs from the expected trace, and the notebook continues."
     ))
     demo_name = "demo_" + f"{n:02d}" + ".py"
     cells.append(new_code_cell(read_src(demo_name)))
@@ -948,33 +949,75 @@ def write_series() -> None:
         print("wrote", path.relative_to(ROOT))
 
 
+FORBIDDEN = (
+    "DEMO_MODE",
+    "USING_DEMO",
+    "using_demo",
+    "describe_mode",
+    "demo_model",
+    "scripted_turn",
+    "scripted demo",
+    "scripted model",
+    "scripted lesson",
+    "scripted demonstration",
+    "scripted run",
+)
+
+
 def check_series() -> None:
-    """Execute each notebook's code cells in-process under the scripted demo."""
+    """Compile notebook code and fail if a demo flag remains. Does not call the API."""
     import os
 
-    os.environ["DEMO_MODE"] = "1"
-    os.chdir(ROOT)
+    leftovers = []
+    for path in sorted(OUT.rglob("*")):
+        if path.suffix not in {".py", ".md", ".ipynb"}:
+            continue
+        # This file names the tokens it searches for.
+        if path.name == "build_series.py":
+            continue
+        text = path.read_text(encoding="utf-8")
+        for token in FORBIDDEN:
+            if token in text:
+                leftovers.append(str(path.relative_to(ROOT)) + ": " + token)
+    if leftovers:
+        raise SystemExit("demo flags remain:\n" + "\n".join(leftovers))
+
     if str(ROOT) not in sys.path:
         sys.path.insert(0, str(ROOT))
     for lesson in LESSONS:
         path = OUT / (lesson["slug"] + ".ipynb")
         notebook = nbformat.read(path, as_version=4)
-        namespace = {"__name__": "__notebook__"}
-        print("\n===== check", lesson["slug"], "=====")
+        print("compile", lesson["slug"])
         for index, cell in enumerate(notebook.cells):
             if cell.cell_type != "code":
                 continue
             try:
-                exec(compile(cell.source, f"{lesson['slug']}#{index}", "exec"), namespace)
-            except Exception:
+                compile(cell.source, f"{lesson['slug']}#{index}", "exec")
+            except SyntaxError:
                 print("FAILED cell", index, "in", lesson["slug"])
                 raise
-        print("ok", lesson["slug"])
+
+    os.environ["OPENAI_API_KEY"] = ""
+    from tutorial.runtime import chat, require_key
+
+    for fn in (require_key, lambda: chat([{"role": "user", "content": "hi"}], [])):
+        try:
+            fn()
+        except RuntimeError as error:
+            if "OPENAI_API_KEY" not in str(error):
+                raise
+        else:
+            raise SystemExit("a missing OPENAI_API_KEY did not raise")
+    print("ok: notebooks compile, demo flags are gone, a missing key raises")
 
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Build the Local Shop Concierge tutorial notebooks.")
-    parser.add_argument("--check", action="store_true", help="Rebuild, then exec every notebook in demo mode.")
+    parser.add_argument(
+        "--check",
+        action="store_true",
+        help="Rebuild, compile every notebook code cell, and fail if a demo flag remains. Does not call the API.",
+    )
     args = parser.parse_args(argv)
     write_series()
     if args.check:

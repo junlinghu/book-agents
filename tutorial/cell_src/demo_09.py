@@ -2,7 +2,6 @@ reset_db()
 cases = [
     {
         "id": "opened-return",
-        "lesson": "9-return",
         "question": "I opened the house coffee. Can I return it?",
         "contains": ["final sale"],
         "excludes": ["full cash refund"],
@@ -10,7 +9,6 @@ cases = [
     },
     {
         "id": "ship-milk",
-        "lesson": "9-ship",
         "question": "Please ship a gallon of whole milk to Ohio.",
         "contains": ["does not ship"],
         "excludes": ["tracking number"],
@@ -20,7 +18,7 @@ cases = [
 passed = 0
 for case in cases:
     print("===", case["id"], "===")
-    result = run_agent(case["question"], case["lesson"], system_text())
+    result = run_agent(case["question"], system_text())
     print("ANSWER:", result["text"])
     failures = grade_answer(
         result["text"],

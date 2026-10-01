@@ -2,7 +2,7 @@ reset_db()
 reset_cache()
 question = "What are the café hours?"
 print("route preview:", json.dumps(route_task(question)))
-result = run_agent(question, "14-cost", system_text(), trace_id="hours-cached")
+result = run_agent(question, system_text(), trace_id="hours-cached")
 print("ANSWER:", result["text"])
 summary = cost_summary(result["usage"])
 print("ledger:", json.dumps(summary))

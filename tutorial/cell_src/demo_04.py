@@ -17,10 +17,10 @@ question = (
     "and how many cardamom buns did we bake on Thursday? Check the shelf for OM-32. "
     "Do not load the picnic note."
 )
-result = run_agent(question, "4-context", system_text())
+result = run_agent(question, system_text())
 print("ANSWER:", result["text"])
 joined = "\n".join(result["tool_log"])
-check(result["stopped"] == "final", "context demo finished")
+check(result["stopped"] == "final", "context run finished")
 check("oat-milk.md" in joined and "thursday-buns.md" in joined, "the relevant notes were read")
 check("picnic.md" not in joined, "the picnic note was not loaded into the loop")
 check("3" in result["text"] and "24" in result["text"], "both counts are in the answer")

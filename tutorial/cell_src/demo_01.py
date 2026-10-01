@@ -10,11 +10,11 @@ print("QUESTION:", question)
 print()
 
 # The model proposes a tool call. This process executes it. The model does not open the file.
-first = chat(messages, TOOLS, lesson="1-using-tool", demo=DEMO_MODE)
+first = chat(messages, TOOLS)
 messages.append(assistant_message(first))
 names = [call["name"] for call in first["tool_calls"]]
 print("tool_calls:", names)
-check(names == ["get_shop_fact"] or (names and not USING_DEMO), "demo asks for get_shop_fact")
+check("get_shop_fact" in names, "the model asks for get_shop_fact")
 
 if not first["tool_calls"]:
     print("ANSWER:", first["content"])
@@ -31,7 +31,7 @@ else:
             "tool_call_id": call["id"],
             "content": result,
         })
-    second = chat(messages, TOOLS, lesson="1-using-tool", demo=DEMO_MODE)
+    second = chat(messages, TOOLS)
     print("ANSWER:", second["content"])
     print("stop: final")
     check(not second["tool_calls"], "the second turn is a final answer")
