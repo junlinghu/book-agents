@@ -6,11 +6,11 @@ The agent can hand work from a stocker to a checker, refuse a charge, and keep u
 
 ## What this tutorial is about
 
-A trace is the record of one turn. A span is one step inside it. Identity is a field on that span, and the three actors are different people or programs: the user, the agent, and the tool. In this lesson the user is the counter lead and the agent is the shop concierge. A tool has its own actor, so a shelf reading is not silently attributed to the concierge. A confirmation, a refusal, or an error is a status you can see on the span. Secrets, the body of a supplier page, and raw credentials do not belong there. The customer’s answer is still grounded in the shelf and the policy. The trace explains the run. It does not replace the documents.
+A trace is the record of one turn. A span is one step inside it. Identity is a field on that span, and the three actors are different people or programs: the user, the agent, and the tool. In this lesson the user is shop staff, recorded as the counter lead, and the agent is the shop concierge. A tool has its own actor, so a shelf reading is not silently attributed to the concierge. A confirmation, a refusal, or an error is a status you can see on the span. Secrets, the body of a supplier page, and raw credentials do not belong there. The reply for staff is still grounded in the shelf and the policy. The trace explains the run. It does not replace the documents.
 
 ## How you will get there
 
-The notebook asks the same low-stock question as tutorial 3: which products are at or below their reorder point, and whether oat milk may be shipped. The loop runs as before, and it now prints the spans. You read them and check that every span names the counter lead and the shop concierge, that a tool has its own actor, and that the answer still comes from the shelf and the policy. You also check that the trace does not carry an API key or the supplier’s planted secret from tutorial 11. The handoff roles and the gate are still in the notebook, so the new record sits on top of work you have already seen.
+The notebook asks the same low-stock question as tutorial 3: staff ask which products are at or below their reorder point, and whether oat milk may be shipped to a guest. The loop runs as before, and it now prints the spans. You read them and check that every span names the counter lead and the shop concierge, that a tool has its own actor, and that the answer still comes from the shelf and the policy. You also check that the trace does not carry an API key or the supplier’s planted secret from tutorial 11. The handoff roles and the gate are still in the notebook, so the new record sits on top of work you have already seen.
 
 ## Additional things
 

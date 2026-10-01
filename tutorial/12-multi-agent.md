@@ -10,7 +10,7 @@ The two roles are ordinary functions with a contract, not a crowd of agents free
 
 ## How you will get there
 
-The notebook asks the agent to pull the house-blend shelf row and the supplier note so the two roles can hand off. You then watch a bad handoff, built by copying the note’s quantity, fail the checker. You watch the stocker’s own handoff pass. The note is still attached, and it still asks for a thousand bags, and the checker accepts the handoff because the quantity came from the shelf. The note remains in the record as data the checker was not allowed to treat as an order.
+The notebook asks the agent to pull the house-blend shelf row and the supplier note so the two roles can hand off. Shop staff are the ones asking. You then watch a bad handoff, built by copying the note’s quantity, fail the checker. You watch the stocker’s own handoff pass. The note is still attached, and it still asks for a thousand bags, and the checker accepts the handoff because the quantity came from the shelf. The note remains in the record as data the checker was not allowed to treat as an order.
 
 ## Additional things
 

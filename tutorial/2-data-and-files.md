@@ -2,7 +2,7 @@
 
 ## Motivation
 
-Tutorial 1 gave the agent one capability. It can request a single shop rule and answer from the text that comes back, so a customer can be told that opened coffee is final sale and that sentence has a source. What the agent still cannot do is answer the questions that actually run a counter. Someone asks which items are running low. Someone else asks whether a carton of milk can be shipped. The policy lookup from the first tutorial does not hold a shelf count, and a count does not hold the shipping rule. We add the shop’s documents and the shelf now, while the agent still takes one exchange at a time, so that later lessons have real shop facts to loop over, check, and record.
+Tutorial 1 gave the agent one capability. It can request a single shop rule and answer from the text that comes back, so staff can tell a guest that opened coffee is final sale and that sentence has a source. What the agent still cannot do is answer the questions that actually run a counter. Staff ask which items are running low. Staff ask whether a guest’s carton of milk can be shipped. The policy lookup from the first tutorial does not hold a shelf count, and a count does not hold the shipping rule. We add the shop’s documents and the shelf now, while the agent still takes one exchange at a time, so that later lessons have real shop facts to loop over, check, and record.
 
 ## What this tutorial is about
 
@@ -12,7 +12,7 @@ Three habits in this notebook stay with the series. The document tool remains in
 
 ## How you will get there
 
-The notebook keeps the return-rule tool and registers the document tool and the shelf tool. You ask which items are low, and whether oat milk can ship. The model requests the tools. The program reads the allowed file and the shelf, and the model writes an answer from those results. Oat milk is on the shelf. The policy says the café does not ship milk, or anything that needs refrigeration, so the shipping sentence has a document behind it and the count has a shelf row behind it.
+The notebook keeps the return-rule tool and registers the document tool and the shelf tool. Staff ask which items are low, and whether oat milk can ship to a guest. The model requests the tools. The program reads the allowed file and the shelf, and the model writes an answer from those results. Oat milk is on the shelf. The policy says the café does not ship milk, or anything that needs refrigeration, so the shipping sentence has a document behind it and the count has a shelf row behind it.
 
 You compare the printed answer with the document and the shelf, so a number or a shipping rule has a source you can point to. The return question from tutorial 1 still runs at the end of the notebook, which lets you see the first tool survive the addition.
 

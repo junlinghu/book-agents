@@ -12,7 +12,7 @@ A cache keeps the result of a read-only tool, keyed by the tool together with it
 
 ## How you will get there
 
-The notebook asks for the café’s hours. The route for that question is recorded as a short lookup on the model named in `common/client.py`. The agent reads the frequently asked questions, and the run reads that file a second time inside the same loop. You should see a miss and then a hit, a ledger with totals and an illustrative cost, and the hours taken from the document, including the day the café is closed. The spans from tutorial 13 are still on the run, so cost and identity share one record.
+The notebook is staff looking up the café’s hours for a guest at the counter. The route for that question is recorded as a short lookup on the model named in `common/client.py`. The agent reads the frequently asked questions, and the run reads that file a second time inside the same loop. You should see a miss and then a hit, a ledger with totals and an illustrative cost, and the hours taken from the document, including the day the café is closed. The spans from tutorial 13 are still on the run, so cost and identity share one record.
 
 ## Additional things
 

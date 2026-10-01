@@ -10,7 +10,7 @@ This tutorial splits proposing from checking. The checker is a second step, with
 
 ## How you will get there
 
-The notebook first scores two oat-milk proposals with no model in the path. One orders a thousand cartons, asks to ship them, and cites nothing. The checker rejects it, and the findings name both the shipping rule and the missing citation. One uses the shelf gap, does not ask to ship, and cites the inventory. The checker accepts it. The agent then proposes an oat-milk restock and calls the checker. The printed answer is the proposal the checker accepted. The record shows that the shelf was read, and that the checker ran as its own step.
+The notebook first scores two oat-milk proposals with no model in the path. One orders a thousand cartons, asks to ship them, and cites nothing. The checker rejects it, and the findings name both the shipping rule and the missing citation. One uses the shelf gap, does not ask to ship, and cites the inventory. The checker accepts it. Shop staff then ask the agent to propose an oat-milk restock and call the checker. The printed answer is the proposal the checker accepted. The record shows that the shelf was read, and that the checker ran as its own step.
 
 ## Additional things
 
