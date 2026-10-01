@@ -6,7 +6,7 @@ Do this setup once from the repo root. Then open the lab you are on and follow t
 
 ## Tutorial series
 
-[labs/tutorial/](tutorial/README.md) is a progressive notebook path: fifteen lessons that grow one Local Shop Concierge from a single tool call into a shop manager. Each notebook runs in `DEMO_MODE` without an API key, or against the Chat Completions API when `OPENAI_API_KEY` is set. Start at [labs/tutorial/README.md](tutorial/README.md).
+[tutorial/](../tutorial/README.md) is a progressive notebook path: fifteen lessons that grow one Local Shop Concierge from a single tool call into a shop manager. Each notebook runs in `DEMO_MODE` without an API key, or against the Chat Completions API when `OPENAI_API_KEY` is set. Start at [tutorial/README.md](../tutorial/README.md).
 
 ## Labs
 

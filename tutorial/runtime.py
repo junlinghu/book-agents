@@ -8,7 +8,7 @@ environment chooses the path:
 - unset: scripted when the key is missing, live when it is set.
 
 The key is read from the repository-root ``.env`` by
-``labs.tutorial.common.client``. This module never prints the key.
+``tutorial.common.client``. This module never prints the key.
 """
 
 from __future__ import annotations
@@ -16,7 +16,7 @@ from __future__ import annotations
 import json
 import time
 
-from labs.tutorial.common.client import (
+from tutorial.common.client import (
     MAX_TOKENS,
     TEMPERATURE,
     describe_runtime,
@@ -69,7 +69,7 @@ def chat(messages, tools, *, lesson, demo):
     cost lesson has numbers without a bill.
     """
     if using_demo(demo):
-        from labs.tutorial.demo_model import scripted_turn
+        from tutorial.demo_model import scripted_turn
 
         _api_key, model = load_settings()
         started = time.perf_counter()

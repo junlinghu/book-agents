@@ -8,6 +8,7 @@ __pycache__/
 .DS_Store
 *.db
 labs/**/var/
+tutorial/var/
 labs/ch05-context-engineering/notes/
 labs/ch06-memory/memory/
 labs/ch10-runtime-for-long-running-agents/ledger.jsonl

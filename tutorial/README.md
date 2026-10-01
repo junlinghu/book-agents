@@ -2,7 +2,7 @@
 
 Fifteen notebooks that build one shop agent for the fictional Hearth Lane Café. Each lesson keeps the previous agent's code, then adds one idea from the book. You can run a notebook by itself.
 
-This folder carries its own OpenAI client (`common/client.py`), shop policy and FAQ (`docs/`), path jail (`common/tools.py`), and autonomy gate (`common/autonomy.py`). The shelf rows are seeded in `cell_src/shelf.py`. Nothing here imports a file outside `labs/tutorial/`.
+This folder carries its own OpenAI client (`common/client.py`), shop policy and FAQ (`docs/`), path jail (`common/tools.py`), and autonomy gate (`common/autonomy.py`). The shelf rows are seeded in `cell_src/shelf.py`. Nothing here imports a file outside `tutorial/`.
 
 ## Status
 
@@ -59,10 +59,10 @@ Put the key in `OPENAI_API_KEY` inside the repo-root `.env`. `MODEL` is optional
 Start Jupyter from the repo root, or open the `.ipynb` in VS Code or Cursor and choose Run All.
 
 ```bash
-jupyter notebook labs/tutorial/1-using-tool.ipynb
+jupyter notebook tutorial/1-using-tool.ipynb
 ```
 
-The setup cell looks for `labs/tutorial/common/client.py` in the current directory and its parents. The kernel can start in the repo root or in `labs/tutorial/`.
+The setup cell looks for `tutorial/common/client.py` in the current directory and its parents. The kernel can start in the repo root or in `tutorial/`.
 
 Each lesson has a companion note, `N-slug.md`, that places the lesson on the path from a single tool to the shop manager and points to the matching chapter. How to run a notebook is in the sections above.
 
@@ -77,10 +77,10 @@ The first code cell of each notebook sets `DEMO_MODE`.
 | `False` | Chat Completions API. The run stops with a clear error if the key is empty. |
 
 ```bash
-DEMO_MODE=1 jupyter nbconvert --to notebook --execute labs/tutorial/1-using-tool.ipynb --output /tmp/1-using-tool-out.ipynb
+DEMO_MODE=1 jupyter nbconvert --to notebook --execute tutorial/1-using-tool.ipynb --output /tmp/1-using-tool-out.ipynb
 ```
 
-`DEMO_MODE=0` is the live path. Temperature and max tokens come from `labs/tutorial/common/client.py`.
+`DEMO_MODE=0` is the live path. Temperature and max tokens come from `tutorial/common/client.py`.
 
 In demo mode the tools, the loop, the checker, and the gates are the real functions. Only the model turn is scripted, so the printed trace is stable without an API key. A live model can phrase the answer differently. Demo checks raise when the scripted trace drifts. Live runs print a warning and continue.
 
@@ -100,15 +100,15 @@ The script does not print the API key.
 | `common/tools.py` | Path jail used by `read_shop_file`. |
 | `common/autonomy.py` | Confirm tokens, and the never-tier for cards and outside mail. |
 
-Runtime files under `labs/tutorial/var/` (memory JSON and tickets) are gitignored.
+Runtime files under `tutorial/var/` (memory JSON and tickets) are gitignored.
 
 ## Rebuild
 
 From the repo root, after editing `cell_src/`:
 
 ```bash
-python labs/tutorial/build_series.py
-DEMO_MODE=1 python labs/tutorial/build_series.py --check
+python tutorial/build_series.py
+DEMO_MODE=1 python tutorial/build_series.py --check
 ```
 
 `--check` executes every notebook's code cells in the scripted demo. It does not call the API.
