@@ -1,6 +1,6 @@
-"""Spans that name the user, the agent, and the tool."""
+"""Spans that name the customer, the agent, and the tool."""
 
-from tutorial.common.harness import set_hook
+from tutorial.common.hooks import set_hook
 
 
 def span_status(result):
@@ -18,12 +18,12 @@ def make_span(trace_id, step, name, result):
     return {
         "trace_id": trace_id,
         "span_id": trace_id + "-" + str(step) + "-" + name,
-        "service": "hearth-lane-concierge",
+        "service": "harbor-jar",
         "name": "tool." + name,
         "status": span_status(result),
         "step": step,
-        "user": {"kind": "user", "id": "counter-lead"},
-        "agent": {"kind": "agent", "id": "shop-concierge"},
+        "user": {"kind": "user", "id": "customer"},
+        "agent": {"kind": "agent", "id": "harbor-jar-concierge"},
         "actor": {"kind": "tool", "id": name},
     }
 
@@ -32,12 +32,12 @@ def root_span(trace_id):
     return {
         "trace_id": trace_id,
         "span_id": trace_id + "-turn",
-        "service": "hearth-lane-concierge",
+        "service": "harbor-jar",
         "name": "concierge.turn",
         "status": "ok",
-        "user": {"kind": "user", "id": "counter-lead"},
-        "agent": {"kind": "agent", "id": "shop-concierge"},
-        "actor": {"kind": "agent", "id": "shop-concierge"},
+        "user": {"kind": "user", "id": "customer"},
+        "agent": {"kind": "agent", "id": "harbor-jar-concierge"},
+        "actor": {"kind": "agent", "id": "harbor-jar-concierge"},
     }
 
 

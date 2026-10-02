@@ -2,7 +2,7 @@
 
 import json
 
-from tutorial.common.harness import set_hook
+from tutorial.common.hooks import set_hook
 from tutorial.common.tools import call_tool
 
 # Illustrative rates for this lab's ledger, in USD per million tokens.
@@ -11,14 +11,14 @@ INPUT_USD_PER_MILLION = 0.40
 OUTPUT_USD_PER_MILLION = 1.60
 
 CACHEABLE = {
-    "get_shop_fact",
-    "query_inventory",
-    "list_notes",
-    "read_note",
+    "get_store_fact",
+    "query_catalog",
+    "list_help_articles",
+    "read_help_article",
     "load_skill",
     "fetch_page",
     "get_preference",
-    "read_supplier_note",
+    "read_origin_note",
 }
 CACHE = {}
 CACHE_EVENTS = []
@@ -32,14 +32,14 @@ def reset_cache():
 def route_task(user_text):
     """Pick a model class. This lab still calls one model; the log shows the decision."""
     text = user_text.lower()
-    if any(word in text for word in ("restock", "ticket", "verify")):
+    if any(word in text for word in ("cart", "verify", "discount", "order note", "charge")):
         return {
-            "task": "shop-decision",
+            "task": "guided-purchase",
             "model": "gpt-4.1-mini",
-            "reason": "needs tools and a policy check",
+            "reason": "needs tools and a check before any side effect",
         }
     return {
-        "task": "counter-question",
+        "task": "customer-question",
         "model": "gpt-4.1-mini",
         "reason": "short lookup on the default tool-calling model",
     }

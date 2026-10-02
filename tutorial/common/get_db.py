@@ -1,28 +1,29 @@
-"""Create and open the tutorial shelf database.
+"""Create and open the Harbor Jar catalog.
 
 The model never writes SQL. Reads live in ``tutorial.common.read_db``.
-The inventory tool is registered from ``tutorial.common.shelf``.
+The catalog tool is registered from ``tutorial.common.catalog``.
 """
 
 import sqlite3
 
-# Shelf seed for this tutorial. The model never writes the SQL.
-# sku, name, category, unit, reorder_point, on_hand, par.
+# sku, name, category, price_cents, stock, shippable (1 or 0).
+# Practice rows for a fictional shop. The model never writes the SQL.
 SEED_ROWS = (
-    ("HB-12", "House blend 12oz", "coffee", "bag", 6, 4, 18),
-    ("HB-2LB", "House blend 2lb", "coffee", "bag", 4, 9, 10),
-    ("ES-1KG", "Espresso beans 1kg", "coffee", "bag", 5, 5, 12),
-    ("OM-32", "Oat milk 32oz", "dairy", "carton", 8, 3, 16),
-    ("MLK-1", "Whole milk gallon", "dairy", "gallon", 4, 11, 12),
-    ("ALM-1", "Almond meal", "bakery", "bag", 2, 1, 4),
-    ("FL-01", "Paper filters", "supply", "box", 2, 7, 8),
+    ("HJ-CHI", "Calabrian chili oil", "oils", 1800, 14, 1),
+    ("HJ-OLV", "Ligurian olive oil", "oils", 2400, 8, 1),
+    ("HJ-FIG", "Fig and thyme jam", "preserves", 1200, 6, 1),
+    ("HJ-APR", "Apricot preserve", "preserves", 1100, 11, 1),
+    ("HJ-HAR", "Harissa spice blend", "spices", 900, 2, 1),
+    ("HJ-SES", "Sesame crunch", "spices", 800, 9, 1),
+    ("HJ-BOX", "Harbor gift box", "gifts", 4800, 5, 1),
+    ("HJ-LAB", "Fresh labneh", "fresh", 1600, 4, 0),
 )
 
 STATE = {"conn": None}
 
 
 def reset_db():
-    """Drop the in-memory shelf and seed it again."""
+    """Drop the in-memory catalog and seed it again."""
     if STATE["conn"] is not None:
         STATE["conn"].close()
     conn = sqlite3.connect(":memory:")
@@ -33,24 +34,17 @@ def reset_db():
             sku TEXT PRIMARY KEY,
             name TEXT NOT NULL,
             category TEXT NOT NULL,
-            unit TEXT NOT NULL,
-            reorder_point INTEGER NOT NULL
-        );
-        CREATE TABLE inventory (
-            sku TEXT PRIMARY KEY,
-            on_hand INTEGER NOT NULL,
-            par INTEGER NOT NULL
+            price_cents INTEGER NOT NULL,
+            stock INTEGER NOT NULL,
+            shippable INTEGER NOT NULL
         );
         """
     )
-    for sku, name, category, unit, reorder_point, on_hand, par in SEED_ROWS:
+    for sku, name, category, price_cents, stock, shippable in SEED_ROWS:
         conn.execute(
-            "INSERT INTO products (sku, name, category, unit, reorder_point) VALUES (?, ?, ?, ?, ?)",
-            (sku, name, category, unit, reorder_point),
-        )
-        conn.execute(
-            "INSERT INTO inventory (sku, on_hand, par) VALUES (?, ?, ?)",
-            (sku, on_hand, par),
+            "INSERT INTO products (sku, name, category, price_cents, stock, shippable) "
+            "VALUES (?, ?, ?, ?, ?, ?)",
+            (sku, name, category, price_cents, stock, shippable),
         )
     conn.commit()
     STATE["conn"] = conn
@@ -58,7 +52,7 @@ def reset_db():
 
 
 def connection():
-    """The in-memory shelf. The first call seeds it."""
+    """The in-memory catalog. The first call seeds it."""
     if STATE["conn"] is None:
         reset_db()
     return STATE["conn"]

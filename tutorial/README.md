@@ -1,28 +1,28 @@
-# Local Shop Concierge tutorial
+# Harbor Jar tutorial
 
-Fifteen notebooks that build one shop agent for the fictional Hearth Lane Café. The person in the chat is shop staff. The agent helps staff. Staff may ask on behalf of a guest, for example whether an opened bag of house coffee can be returned. Each lesson adds one idea from the book. From tutorial 2 on, a notebook imports the earlier helpers it uses, so you can run any notebook by itself.
+Fifteen notebooks that build one seller for the fictional Harbor Jar, a small-batch shop of preserves, olive oils, spice blends, and gift boxes. The person in the chat is a customer on the store website. The agent is the seller: it answers support questions and walks a customer through a guarded purchase. Each lesson adds one idea. From tutorial 2 on, a notebook imports the earlier helpers it uses, so you can run any notebook by itself.
 
-This folder carries its own OpenAI client (`common/client.py`), shop policy and FAQ (`docs/`), path jail (`common/read_file.py`), shelf database (`common/get_db.py` and `common/read_db.py`), tool registry (`common/tools.py`), and autonomy gate (`common/autonomy.py`). Nothing here imports a file outside `tutorial/`. Runtime helpers live in `common/`.
+This folder carries its own OpenAI client (`common/client.py`), store policy and FAQ (`docs/`), path jail (`common/read_file.py`), catalog database (`common/get_db.py` and `common/read_db.py`), tool registry (`common/tools.py`), and autonomy gate (`common/autonomy.py` and `common/gate.py`). Nothing here imports a file outside `tutorial/`. Runtime helpers live in `common/`.
 
 ## Status
 
 | # | Notebook | Summary | Status |
 |---|---|---|---|
-| 1 | [1-using-tool](1-using-tool.ipynb) | Define a tool, let the model request it, run it, and send the result back. | Ready |
-| 2 | [2-data-and-files](2-data-and-files.ipynb) | The SQLite shelf, beside a topic lookup for the shipping rule. | Ready |
-| 3 | [3-agent-loop](3-agent-loop.ipynb) | Perceive–reason–act–observe, with step and repeat stops. | Ready |
-| 4 | [4-context-engineering](4-context-engineering.ipynb) | Note titles in the prompt; bodies loaded on purpose. | Ready |
-| 5 | [5-memory](5-memory.ipynb) | Session messages versus one shared customer preference file. | Ready |
-| 6 | [6-skills](6-skills.ipynb) | A procedure file, separate from the system prompt and the tools. | Ready |
-| 7 | [7-web-browse](7-web-browse.ipynb) | One supplier page, treated as an untrusted sensor. | Ready |
-| 8 | [8-verification](8-verification.ipynb) | A checker that does not trust the proposed quantity. | Ready |
-| 9 | [9-evals](9-evals.ipynb) | A tiny grader, including one canned failure. | Ready |
-| 10 | [10-autonomy-policy](10-autonomy-policy.ipynb) | Auto, confirm, and never gates. | Ready |
-| 11 | [11-prompt-injection](11-prompt-injection.ipynb) | Untrusted page text cannot grant tools or reveal a canary. | Ready |
-| 12 | [12-multi-agent](12-multi-agent.ipynb) | A stocker and a checker hand off a shelf gap, not a note's quantity. | Ready |
-| 13 | [13-observability](13-observability.ipynb) | Spans that name the user, the agent, and the tool. | Ready |
-| 14 | [14-cost-latency](14-cost-latency.ipynb) | Token, cost, and latency ledger, plus a read cache. | Ready |
-| 15 | [15-shop-manager](15-shop-manager.ipynb) | Tuesday restock: plan, check, confirm, write tickets. | Ready |
+| 1 | [1-using-tool](1-using-tool.ipynb) | Define a tool, let the model request it, run it, and send the result back. Opened jar. | Ready |
+| 2 | [2-tools-and-loop](2-tools-and-loop.ipynb) | Catalog in SQLite plus the perceive–reason–act–observe loop. Chili oil to Ohio. | Ready |
+| 3 | [3-context-engineering](3-context-engineering.ipynb) | Help-article titles in the prompt; bodies loaded on purpose. Mega-guide refused. | Ready |
+| 4 | [4-memory](4-memory.ipynb) | Session messages versus one shared customer preference file. Maya in a fresh session. | Ready |
+| 5 | [5-skills](5-skills.ipynb) | A procedure file, separate from the system prompt and the tools. Recommend for Maya. | Ready |
+| 6 | [6-web-browse](6-web-browse.ipynb) | One origin page, treated as an untrusted sensor. | Ready |
+| 7 | [7-verification](7-verification.ipynb) | A checker that does not trust the proposed quantity, ship flag, or citation. | Ready |
+| 8 | [8-evals](8-evals.ipynb) | A graded set of support and buy cases, including one canned failure. | Ready |
+| 9 | [9-autonomy-policy](9-autonomy-policy.ipynb) | Auto, confirm, and never gates. | Ready |
+| 10 | [10-prompt-injection](10-prompt-injection.ipynb) | Untrusted page text cannot grant tools or reveal a canary. | Ready |
+| 11 | [11-multi-agent](11-multi-agent.ipynb) | An advisor and a fulfillment checker. Quantity comes from the catalog. | Ready |
+| 12 | [12-observability](12-observability.ipynb) | Spans that name the customer, the agent, and the tool. | Ready |
+| 13 | [13-cost-latency](13-cost-latency.ipynb) | Token, cost, and latency ledger, plus a read cache. | Ready |
+| 14 | [14-planning](14-planning.ipynb) | An explicit plan, then the loop acts. | Ready |
+| 15 | [15-guided-purchase](15-guided-purchase.ipynb) | Recommend, cart, verify, gate, and an order note. No silent charge. | Ready |
 
 Every row in the table is ready. Run the notebooks in order, or open any one on its own. From tutorial 2 on, each notebook imports the earlier helpers it uses.
 
@@ -66,7 +66,7 @@ The setup cell looks for `tutorial/common/client.py` in the current directory an
 
 To run a notebook on Google Colab instead, use the **Open in Colab** badge at the top of the file. See [Open in Colab](#open-in-colab).
 
-Each lesson has a companion note, `N-slug.md`, that places the lesson on the path from a single tool to the shop manager and points to the matching chapter. How to run a notebook is in the sections above.
+Each lesson has a companion note, `N-slug.md`, that places the lesson on the path from a single tool to a guided purchase and points at the matching helpers. How to run a notebook is in the sections above.
 
 ## Open in Colab
 
@@ -109,21 +109,21 @@ The notebook does not print the API key.
 | Path | Role |
 |---|---|
 | `runtime.py` | Loads the repository-root `.env` through `common/client.py` and exposes `chat`. Requires `OPENAI_API_KEY`. |
-| `docs/` | `policy.md` and `faq.md`. `get_shop_fact` maps a topic onto a section in these files. The model does not pass a path. |
-| `data/` | Notes, the shared customer preference file, skills, the supplier page, the supplier note, and a fake canary. Not shop secrets. |
+| `docs/` | `policy.md` and `faq.md`. `get_store_fact` maps a topic onto a section in these files. The model does not pass a path. |
+| `data/` | Help articles, the shared customer preference file, skills, the origin page, the origin note, and a fake canary. Not store secrets. |
 | `common/colab.py` | Shared Colab clone, package install, and secret copy. Notebooks point at `setup_colab` here. |
 | `common/client.py` | API key, model, temperature, max tokens. |
-| `common/tools.py` | Chat Completions registry: schemas, `register`, and `call_tool`. Model-facing tools such as `get_shop_fact` and `query_inventory` register here. |
+| `common/tools.py` | Chat Completions registry: schemas, `register`, and `call_tool`. Leaf modules register tools here. The loop does not import those leaves. |
 | `common/read_file.py` | Path jail and document reading. Not a Chat Completions tool. The topic lookup calls it with a path the program chose. |
-| `common/get_db.py` | Shelf seed, `reset_db`, and the database connection. |
-| `common/read_db.py` | Shelf reads: `gap_for`, `row_for`, and the inventory query. The SQL stays here. |
-| `common/autonomy.py` | Confirm tokens, and the never-tier for cards and outside mail. |
+| `common/get_db.py` | Catalog seed, `reset_db`, and the database connection. |
+| `common/read_db.py` | Catalog reads: `row_for` and `catalog_rows`. The SQL stays here. |
+| `common/autonomy.py` | Confirm tokens, and the never-tier for cards, cancellations, and customer email. |
 | `common/harness.py` | Paths, `system_text`, and checks. Notebooks import this instead of copying earlier cells. |
-| `common/loop.py` | `run_agent`. A gate, spans, and a cache turn on when those lessons are imported. |
-| `common/facts.py`, `shelf.py`, `notes.py`, `memory.py`, `skills.py`, `web.py`, `verify.py`, `evals.py`, `gate.py`, `injection.py`, `roles.py`, `trace.py`, `cost.py` | Lesson helpers. `facts.py` registers the topic lookup. `shelf.py` registers the inventory tool. Later notebooks import these. |
+| `common/loop.py` | `run_agent`. A plan, a gate, spans, and a cache turn on when those lessons are imported. |
+| `common/facts.py`, `catalog.py`, `articles.py`, `memory.py`, `skills.py`, `web.py`, `verify.py`, `evals.py`, `gate.py`, `injection.py`, `roles.py`, `trace.py`, `cost.py`, `plan.py` | Lesson helpers. Later notebooks import these. |
 
-Runtime files under `tutorial/var/` (tickets) are gitignored. Guest preferences live in `data/customer_preference.md`.
+Runtime files under `tutorial/var/` (order notes) are gitignored. Customer preferences live in `data/customer_preference.md`.
 
 ## Editing
 
-Edit the notebooks and the modules in `common/` directly. The notebook that introduces a helper shows that code in the notebook. Later notebooks import it from `common/`. Companion notes (`N-slug.md`) are edited by hand.
+Edit the notebooks and the modules in `common/` directly. Supporting functions live in `common/`. A notebook shows only that lesson's new step. Companion notes (`N-slug.md`) are edited by hand.

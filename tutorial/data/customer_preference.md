@@ -1,19 +1,19 @@
 # Customer preferences
 
-One shared file for the counter. Each heading is one guest. Every entry uses the same fields. Look up a name. Do not paste this whole file into a turn.
+One shared file for the store. Each heading is one customer. Every entry uses the same fields: Name, Allergy, Favorite, Last order, Notes. Look up a name. Do not paste this whole file into a turn.
 
-## Priya
+## Maya
 
-- Name: Priya
-- Allergy: almonds
-- Preferred drink or pastry: pour-over with oat milk
-- Last order: 2026-09-24
-- Notes: Thursday regular. Skip the cardamom bun.
+- Name: Maya
+- Allergy: sesame
+- Favorite: Calabrian chili oil
+- Last order: 2026-09-12, one Calabrian chili oil
+- Notes: Returning customer. Skip anything with sesame.
 
-## Marcus
+## Jonah
 
-- Name: Marcus
+- Name: Jonah
 - Allergy: none
-- Preferred drink or pastry: cardamom bun
-- Last order: 2026-09-18
-- Notes: Takes the bun to go.
+- Favorite: fig and thyme jam
+- Last order: 2026-08-30, Harbor gift box
+- Notes: Buys the gift box for his sister.

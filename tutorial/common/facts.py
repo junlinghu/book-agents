@@ -1,12 +1,13 @@
-"""The tutorial 1 shop-fact tool, importable by later lessons.
+"""Store-fact tool. The model passes a topic, never a filename.
 
-The model passes a topic. This module maps that topic to a file and a
-section. The path never appears in the tool schema. The path jail is
-``tutorial.common.read_file``, which is not itself a tool.
+This module maps the topic to a file and a heading. The path never
+appears in the tool schema. The path jail is ``tutorial.common.read_file``,
+which is not itself a tool.
 """
 
-from tutorial.common.harness import DOCS
+from tutorial.common.paths import DOCS
 from tutorial.common.read_file import read_file
+from tutorial.common.sections import section_body
 from tutorial.common.tools import register
 
 # topic -> (filename under tutorial/docs, markdown heading)
@@ -14,11 +15,10 @@ TOPICS = {
     "returns": ("policy.md", "Returns"),
     "shipping": ("policy.md", "Shipping"),
     "damage": ("policy.md", "Damage in transit"),
-    "delivery": ("policy.md", "Local delivery"),
-    "hours": ("faq.md", "Where and when"),
-    "menu": ("faq.md", "Counter menu (dine-in and takeaway)"),
+    "discounts": ("policy.md", "Discounts"),
+    "hours": ("faq.md", "Hours and pickup"),
     "allergens": ("faq.md", "Allergens"),
-    "wifi": ("faq.md", "Wi-Fi and payment"),
+    "gifts": ("faq.md", "Gift boxes"),
 }
 
 
@@ -27,25 +27,7 @@ def topic_list():
     return ", ".join(TOPICS)
 
 
-def _section(markdown, heading):
-    lines = markdown.splitlines()
-    start = None
-    prefix = "## " + heading
-    for index, line in enumerate(lines):
-        if line.strip() == prefix:
-            start = index + 1
-            break
-    if start is None:
-        return ""
-    body = []
-    for line in lines[start:]:
-        if line.startswith("## "):
-            break
-        body.append(line)
-    return "\n".join(body).strip()
-
-
-def get_shop_fact(args):
+def get_store_fact(args):
     """Return one policy or FAQ section. The model names a topic; this function opens the file."""
     topic = str(args.get("topic", "")).strip().lower()
     if topic not in TOPICS:
@@ -54,17 +36,19 @@ def get_shop_fact(args):
     document = read_file(str(DOCS), path)
     if document.startswith("ERROR:"):
         return document
-    body = _section(document, heading)
+    # read_file prefixes "PATH: ...". The section parser needs the markdown only.
+    markdown = document.split("\n\n", 1)[1] if document.startswith("PATH:") else document
+    body = section_body(markdown, heading)
     if not body:
-        return "ERROR: " + heading + " is missing from the shop documents."
+        return "ERROR: " + heading + " is missing from the store documents."
     return "TOPIC: " + topic + "\nSOURCE: docs/" + path + "\n\n" + body
 
 
 register(
-    "get_shop_fact",
-    "Look up one Hearth Lane rule. Pass a topic, not a filename. "
+    "get_store_fact",
+    "Look up one Harbor Jar rule for a customer. Pass a topic, not a filename. "
     "topic is one of: " + topic_list() + ". "
-    "The result is the shop's text for that topic.",
+    "The result is the store's text for that topic.",
     {
         "topic": {
             "type": "string",
@@ -72,11 +56,11 @@ register(
         }
     },
     ["topic"],
-    get_shop_fact,
+    get_store_fact,
 )
 
 __all__ = [
     "TOPICS",
-    "get_shop_fact",
+    "get_store_fact",
     "topic_list",
 ]

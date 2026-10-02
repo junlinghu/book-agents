@@ -1,1 +1,1 @@
-"""Client, document reader, shelf database, tool registry, and lesson helpers."""
+"""Client, document reader, catalog database, tool registry, and lesson helpers."""
