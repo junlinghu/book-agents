@@ -14,7 +14,7 @@ The customer is Maya. She asks for a jar she can eat and whether it can ship to 
 
 ## Additional things
 
-A plan the model writes can be wrong. The loop is allowed to skip a step that does not apply, and it is not allowed to obey a step that invents a tool. If the plan and the catalog disagree, the catalog wins, just as it did for skills. Tutorial 15 turns this hook on for the full purchase, so the recommend–cart–verify–note path starts from a list.
+A plan the model writes can be wrong. The loop is allowed to skip a step that does not apply, and it is not allowed to obey a step that invents a tool. If the plan and the catalog disagree, the catalog wins, just as it did for skills. Tutorial 15 turns this hook on for the purchase chat, so the recommend–cart–verify–note path starts from a list and stays on that thread while the customer answers.
 
 The store and Maya's entry are practice data.
 

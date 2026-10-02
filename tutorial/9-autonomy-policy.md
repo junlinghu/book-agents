@@ -14,7 +14,7 @@ The notebook prints the five decisions with no model in the path: hours are auto
 
 ## Additional things
 
-A gate that treats a polite request as permission will confirm whatever the model was persuaded to ask. Tutorial 10 is the case that makes this concrete. The origin page demands a charge and a look at a secret file. The gate refuses the charge. Tutorial 15 files an order note, and that note needs its own approval, because confirmation is per call.
+A gate that treats a polite request as permission will confirm whatever the model was persuaded to ask. Tutorial 10 is the case that makes this concrete. The origin page demands a charge and a look at a secret file. The gate refuses the charge. Tutorial 15 files an order note during the customer's visit. The note needs its own approval, because confirmation is per call. The customer's next message grants it.
 
 The store in these files is fictional. Leave private files alone.
 

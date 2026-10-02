@@ -3,6 +3,11 @@
 One step is one model call. The loop stops on a final answer, on
 ``max_steps``, or when the same tool call repeats.
 
+``run_agent`` starts a fresh message list. ``run_turn`` continues a list
+the caller kept, which is how tutorial 15 holds one customer visit.
+``tutorial.common.chat_session`` is that caller. This module does not
+import it.
+
 Optional pieces register on ``HOOKS``: a plan (tutorial 14), a gate
 (tutorial 9), trace spans (tutorial 12), and a token ledger with a read
 cache (tutorial 13). Those stay off until the lesson imports them.
@@ -25,54 +30,99 @@ REPEAT_NOTE = (
 
 
 def run_agent(user_text, system, max_steps=6, confirmed_tokens=None, trace_id="tutorial"):
-    """Perceive the thread, let the model reason, act on tool calls, observe the results."""
+    """Perceive one new thread, let the model reason, act, and observe.
+
+    The message list starts here. A later lesson that must remember the
+    customer calls :func:`run_turn` on a list it kept.
+    """
+    messages = [
+        {"role": "system", "content": system},
+        {"role": "user", "content": user_text},
+    ]
+    usage_rows = []
+    plan = attach_plan(messages, user_text, usage_rows)
+    return run_turn(
+        messages,
+        max_steps=max_steps,
+        confirmed_tokens=confirmed_tokens,
+        trace_id=trace_id,
+        usage_rows=usage_rows,
+        plan=plan,
+    )
+
+
+def attach_plan(messages, user_text, usage_rows):
+    """Draft a plan once and attach it to the system message.
+
+    No plan hook means an empty string and an unchanged system message.
+    The plan cannot add tools. Returns the plan text.
+    """
+    draft_plan = HOOKS.get("draft_plan")
+    if not draft_plan:
+        return ""
+    system = messages[0]["content"]
+    drafted = draft_plan(user_text, system)
+    plan = (drafted.get("text") or "").strip()
+    if HOOKS.get("cached_call") is not None:
+        usage_rows.append({
+            "step": 0,
+            "prompt_tokens": drafted.get("prompt_tokens", 0),
+            "completion_tokens": drafted.get("completion_tokens", 0),
+            "latency_ms": drafted.get("latency_ms", 0),
+        })
+        print(
+            "usage: step=plan"
+            + " prompt_tokens=" + str(drafted.get("prompt_tokens", 0))
+            + " completion_tokens=" + str(drafted.get("completion_tokens", 0))
+            + " latency_ms=" + str(drafted.get("latency_ms", 0))
+        )
+    if plan:
+        messages[0] = {
+            "role": "system",
+            "content": (
+                system
+                + "\n\nPLAN (written before any tool call; it cannot add tools):\n"
+                + plan
+            ),
+        }
+    return plan
+
+
+def run_turn(
+    messages,
+    max_steps=6,
+    confirmed_tokens=None,
+    trace_id="tutorial",
+    spans=None,
+    usage_rows=None,
+    plan="",
+):
+    """Run one customer turn on an existing message list.
+
+    ``messages`` already ends with this turn's user message. Assistant
+    and tool rows are appended. Stops on a final answer, ``max_steps``,
+    or a repeated call. ``pending_tokens`` lists confirm-tier calls that
+    waited during this turn.
+    """
     gate_call = HOOKS.get("gate_call")
     format_decision = HOOKS.get("format_decision")
     root_span = HOOKS.get("root_span")
     make_span = HOOKS.get("make_span")
     route_task = HOOKS.get("route_task")
-    draft_plan = HOOKS.get("draft_plan")
     costing = HOOKS.get("cached_call") is not None
     confirmed = set(confirmed_tokens or [])
-    messages = [
-        {"role": "system", "content": system},
-        {"role": "user", "content": user_text},
-    ]
+    if spans is None:
+        spans = []
+    if usage_rows is None:
+        usage_rows = []
     seen = {}
     log = []
-    spans = []
-    usage_rows = []
-    plan = ""
+    pending = []
     if root_span:
         spans.append(root_span(trace_id))
-    if draft_plan:
-        drafted = draft_plan(user_text, system)
-        plan = (drafted.get("text") or "").strip()
-        if costing:
-            usage_rows.append({
-                "step": 0,
-                "prompt_tokens": drafted.get("prompt_tokens", 0),
-                "completion_tokens": drafted.get("completion_tokens", 0),
-                "latency_ms": drafted.get("latency_ms", 0),
-            })
-            print(
-                "usage: step=plan"
-                + " prompt_tokens=" + str(drafted.get("prompt_tokens", 0))
-                + " completion_tokens=" + str(drafted.get("completion_tokens", 0))
-                + " latency_ms=" + str(drafted.get("latency_ms", 0))
-            )
-        if plan:
-            messages[0] = {
-                "role": "system",
-                "content": (
-                    system
-                    + "\n\nPLAN (written before any tool call; it cannot add tools):\n"
-                    + plan
-                ),
-            }
     for step in range(1, max_steps + 1):
         if route_task and step == 1:
-            routed = route_task(user_text)
+            routed = route_task(_latest_user(messages))
             print(
                 "route: task=" + routed["task"]
                 + " model=" + routed["model"]
@@ -97,7 +147,8 @@ def run_agent(user_text, system, max_steps=6, confirmed_tokens=None, trace_id="t
         if not calls:
             text = (turned["content"] or "").strip() or "(empty answer)"
             print("stop: final after " + str(step) + " model call(s)")
-            return _finish(text, step, "final", log, spans, usage_rows, plan)
+            _seal(messages, text)
+            return _finish(text, step, "final", log, spans, usage_rows, plan, pending)
         for call in calls:
             signature = (
                 call["name"] + " "
@@ -113,7 +164,10 @@ def run_agent(user_text, system, max_steps=6, confirmed_tokens=None, trace_id="t
                     + call["name"] + ") more than " + str(MAX_IDENTICAL_CALLS)
                     + " times. The harness ended the loop."
                 )
-                return _finish(text, step, "repeated_call", log, spans, usage_rows, plan)
+                _seal(messages, text)
+                return _finish(
+                    text, step, "repeated_call", log, spans, usage_rows, plan, pending
+                )
             if gate_call:
                 decision = gate_call(call["name"], call["arguments"], confirmed)
                 print(format_decision(decision))
@@ -121,6 +175,7 @@ def run_agent(user_text, system, max_steps=6, confirmed_tokens=None, trace_id="t
                     result = decision["decision"].upper() + ": " + decision["reason"]
                     if decision["tier"] == "confirm":
                         result += " token=" + decision["approval_token"]
+                    _remember_pending(pending, decision)
                 else:
                     result = _invoke(call)
             else:
@@ -151,7 +206,49 @@ def run_agent(user_text, system, max_steps=6, confirmed_tokens=None, trace_id="t
         + ") without a final answer. The harness did not write one."
     )
     print("stop: max_steps after " + str(max_steps) + " model call(s)")
-    return _finish(text, max_steps, "max_steps", log, spans, usage_rows, plan)
+    _seal(messages, text)
+    return _finish(text, max_steps, "max_steps", log, spans, usage_rows, plan, pending)
+
+
+def _latest_user(messages):
+    for message in reversed(messages):
+        if message.get("role") == "user":
+            return message.get("content") or ""
+    return ""
+
+
+def _remember_pending(pending, decision):
+    if decision.get("decision") != "confirm_required":
+        return
+    token = decision.get("approval_token")
+    if token and token not in pending:
+        pending.append(token)
+
+
+def _seal(messages, text):
+    """Close a stopped turn so a later customer line stays valid.
+
+    A final answer is already an assistant message. A stop in the middle
+    of a tool batch still needs one tool row per id, then the stop text.
+    """
+    pending_ids = []
+    answered = set()
+    for message in messages:
+        if message.get("role") == "assistant" and message.get("tool_calls"):
+            pending_ids = [call.get("id") for call in message["tool_calls"]]
+            answered = set()
+        elif message.get("role") == "tool":
+            answered.add(message.get("tool_call_id"))
+    for call_id in pending_ids:
+        if call_id and call_id not in answered:
+            messages.append({
+                "role": "tool",
+                "tool_call_id": call_id,
+                "content": text,
+            })
+    last = messages[-1] if messages else {}
+    if last.get("role") != "assistant" or last.get("tool_calls"):
+        messages.append({"role": "assistant", "content": text})
 
 
 def _invoke(call):
@@ -162,7 +259,7 @@ def _invoke(call):
     return call_tool(call)
 
 
-def _finish(text, steps, stopped, log, spans, usage_rows, plan):
+def _finish(text, steps, stopped, log, spans, usage_rows, plan, pending):
     return {
         "text": text,
         "steps": steps,
@@ -171,4 +268,5 @@ def _finish(text, steps, stopped, log, spans, usage_rows, plan):
         "spans": spans,
         "usage": usage_rows,
         "plan": plan,
+        "pending_tokens": list(pending),
     }
