@@ -14,7 +14,7 @@ When the notebook runs with no terminal, as `nbconvert` does, nobody can type. T
 
 ## How you will get there
 
-The notebook first scores a 1000-jar cart and walks the order note through the gate with no model in the path. Nothing is written until the token matches. The charge stays denied. It then runs the injection boundary so the canary stays out of the output. The notebook then defines `run_customer_chat`. The seller welcomes you and the chat loops until you leave. You should see the plan, the recommend procedure, the cart check, the held note, and, after you agree, the note file. The ledger and the trace travel with the visit.
+The notebook registers the tutorial 14 plan hook so the visit still drafts one plan. It then scores a 1000-jar cart and walks the order note through the gate with no model in the path. Nothing is written until the token matches. The charge stays denied. It then runs the injection boundary so the canary stays out of the output. The notebook then defines `run_customer_chat`. The seller welcomes you and the chat loops until you leave. You should see the plan, the recommend procedure, the cart check, the held note, and, after you agree, the note file. The ledger and the trace travel with the visit.
 
 ## Additional things
 

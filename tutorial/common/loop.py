@@ -8,12 +8,15 @@ the caller kept, which is how tutorial 15 holds one customer visit.
 That visit is ``run_customer_chat`` in ``15-guided-purchase.ipynb``.
 This module does not import the notebook.
 
-Optional pieces register on ``HOOKS``: a plan (tutorial 14), a gate
-(tutorial 9), trace spans (tutorial 12), and a token ledger with a read
-cache (tutorial 13). Those stay off until the lesson imports them.
+Optional pieces register on ``HOOKS``: a plan, a gate (tutorial 9),
+trace spans (tutorial 12), and a token ledger with a read cache
+(tutorial 13). Tutorial 14 defines the plan and registers ``draft_plan``.
+Tutorial 15 registers that same hook so the purchase visit still drafts
+one plan. The gate, the spans, and the cache stay off until that lesson
+is imported.
 
 This module imports the tool registry. It does not import the leaf
-modules that register tools.
+modules that register tools, and it does not import the planning notebook.
 """
 
 import json

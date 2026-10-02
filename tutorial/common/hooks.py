@@ -1,8 +1,9 @@
 """Optional loop behavior.
 
-Leaf modules register a gate, a trace, a cache, or a plan here.
-``tutorial.common.loop`` reads this dict. This module imports nothing
-else from the tutorial, so those leaves do not import the loop.
+A gate, a trace, or a cache registers here from its lesson module.
+Tutorial 14 and tutorial 15 register a plan here. ``tutorial.common.loop``
+reads this dict. This module imports nothing else from the tutorial, so
+those registrations do not import the loop.
 """
 
 HOOKS = {}

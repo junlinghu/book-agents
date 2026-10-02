@@ -10,15 +10,15 @@ Planning, in this lesson, is one model call that happens before any tool runs. T
 
 ## How you will get there
 
-The customer is Maya. She asks for a jar she can eat and whether it can ship to Ohio. You read the numbered plan first, then the tool log. The plan should have more than one step. The log should show store data being read after the plan was printed. Preference is part of the work, either as a step in the plan or as a `get_preference` call. The plan text should not name `charge_card`.
+The notebook defines `plan_steps`, then `draft_plan`, and registers the hook before the run. The customer is Maya. She asks for a jar she can eat and whether it can ship to Ohio. You read the numbered plan first, then the tool log. The plan should have more than one step. The log should show store data being read after the plan was printed. Preference is part of the work, either as a step in the plan or as a `get_preference` call. The plan text should not name `charge_card`.
 
 ## Additional things
 
-A plan the model writes can be wrong. The loop is allowed to skip a step that does not apply, and it is not allowed to obey a step that invents a tool. If the plan and the catalog disagree, the catalog wins, just as it did for skills. Tutorial 15 turns this hook on for the purchase chat, so the recommend–cart–verify–note path starts from a list and stays on that thread while the customer answers.
+A plan the model writes can be wrong. The loop is allowed to skip a step that does not apply, and it is not allowed to obey a step that invents a tool. If the plan and the catalog disagree, the catalog wins, just as it did for skills. Tutorial 15 registers this same hook for the purchase chat, so the recommend–cart–verify–note path starts from a list and stays on that thread while the customer answers.
 
 The store and Maya's entry are practice data.
 
 ## Sources and references
 
-- The plan step is [common/plan.py](common/plan.py). The loop that runs it is [common/loop.py](common/loop.py).
+- `plan_steps` and `draft_plan` are defined in [14-planning.ipynb](14-planning.ipynb). `draft_plan` is registered on `HOOKS` there. The loop that attaches the plan is [common/loop.py](common/loop.py). Tutorial 15 registers the same hook in [15-guided-purchase.ipynb](15-guided-purchase.ipynb).
 - The previous lecture is [13-cost-latency.md](13-cost-latency.md). The notebook is [14-planning.ipynb](14-planning.ipynb). The series map is in [README.md](README.md).
