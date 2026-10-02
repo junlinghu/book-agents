@@ -21,7 +21,7 @@ ALLOWED = "allowed"
 CONFIRM_REQUIRED = "confirm_required"
 DENIED = "denied"
 
-SHOP_EMAIL_DOMAIN = "hearthlane.example"
+SHOP_EMAIL_DOMAIN = "harborjar.example"
 
 # Tools whose tier does not depend on arguments. Unknown names are never.
 _FIXED = {
@@ -33,6 +33,8 @@ _FIXED = {
     "place_order": CONFIRM,
     "checkout": CONFIRM,
     "charge_card": NEVER,
+    "cancel_order": NEVER,
+    "send_customer_email": NEVER,
 }
 
 _MAIL_TOOLS = {"send_email", "send_draft"}
@@ -67,7 +69,7 @@ def _recipient(arguments: dict) -> str:
 
 
 def is_shop_address(address: str) -> bool:
-    """True only for a plain address at the café's own domain."""
+    """True only for a plain address at the store's own domain."""
     text = address.strip()
     if not _ADDRESS.fullmatch(text):
         return False
@@ -83,8 +85,8 @@ def tier_for(
 ) -> str:
     """Return ``auto``, ``confirm``, or ``never``.
 
-    ``allow_external_mail`` is a staff switch. The customer concierge leaves
-    it false, so mail outside the shop domain stays ``never``. Either way,
+    ``allow_external_mail`` is an operator switch. The customer concierge leaves
+    it false, so mail outside the store domain stays ``never``. Either way,
     sending still requires a matching token.
     A missing or malformed address stays ``never``.
     """
@@ -137,6 +139,16 @@ def _never_reason(name: str, arguments: dict) -> str:
         return (
             "DENIED: charge_card is never available. "
             "This concierge does not charge cards."
+        )
+    if name == "cancel_order":
+        return (
+            "DENIED: cancel_order never runs in this chat. "
+            "A person at the store handles cancellations."
+        )
+    if name == "send_customer_email":
+        return (
+            "DENIED: emailing a customer would send personal details. "
+            "This concierge never does that."
         )
     if name in _MAIL_TOOLS:
         recipient = _recipient(arguments) or "(missing)"

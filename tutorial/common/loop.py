@@ -1,16 +1,20 @@
-"""Agent loop for tutorials 3 through 15.
+"""Agent loop for tutorial 2 onward.
 
 One step is one model call. The loop stops on a final answer, on
 ``max_steps``, or when the same tool call repeats.
 
-Later lessons register optional pieces on ``HOOKS``: a gate (tutorial 10),
-trace spans (tutorial 13), and a token ledger with a read cache (tutorial 14).
-Those stay off until the lesson imports them.
+Optional pieces register on ``HOOKS``: a plan (tutorial 14), a gate
+(tutorial 9), trace spans (tutorial 12), and a token ledger with a read
+cache (tutorial 13). Those stay off until the lesson imports them.
+
+This module imports the tool registry. It does not import the leaf
+modules that register tools.
 """
 
 import json
 
-from tutorial.common.harness import HOOKS, assistant_message, preview
+from tutorial.common.hooks import HOOKS
+from tutorial.common.messages import assistant_message, preview
 from tutorial.common.tools import TOOLS, call_tool
 from tutorial.runtime import chat
 
@@ -27,6 +31,7 @@ def run_agent(user_text, system, max_steps=6, confirmed_tokens=None, trace_id="t
     root_span = HOOKS.get("root_span")
     make_span = HOOKS.get("make_span")
     route_task = HOOKS.get("route_task")
+    draft_plan = HOOKS.get("draft_plan")
     costing = HOOKS.get("cached_call") is not None
     confirmed = set(confirmed_tokens or [])
     messages = [
@@ -37,8 +42,34 @@ def run_agent(user_text, system, max_steps=6, confirmed_tokens=None, trace_id="t
     log = []
     spans = []
     usage_rows = []
+    plan = ""
     if root_span:
         spans.append(root_span(trace_id))
+    if draft_plan:
+        drafted = draft_plan(user_text, system)
+        plan = (drafted.get("text") or "").strip()
+        if costing:
+            usage_rows.append({
+                "step": 0,
+                "prompt_tokens": drafted.get("prompt_tokens", 0),
+                "completion_tokens": drafted.get("completion_tokens", 0),
+                "latency_ms": drafted.get("latency_ms", 0),
+            })
+            print(
+                "usage: step=plan"
+                + " prompt_tokens=" + str(drafted.get("prompt_tokens", 0))
+                + " completion_tokens=" + str(drafted.get("completion_tokens", 0))
+                + " latency_ms=" + str(drafted.get("latency_ms", 0))
+            )
+        if plan:
+            messages[0] = {
+                "role": "system",
+                "content": (
+                    system
+                    + "\n\nPLAN (written before any tool call; it cannot add tools):\n"
+                    + plan
+                ),
+            }
     for step in range(1, max_steps + 1):
         if route_task and step == 1:
             routed = route_task(user_text)
@@ -66,7 +97,7 @@ def run_agent(user_text, system, max_steps=6, confirmed_tokens=None, trace_id="t
         if not calls:
             text = (turned["content"] or "").strip() or "(empty answer)"
             print("stop: final after " + str(step) + " model call(s)")
-            return _finish(text, step, "final", log, spans, usage_rows)
+            return _finish(text, step, "final", log, spans, usage_rows, plan)
         for call in calls:
             signature = (
                 call["name"] + " "
@@ -82,7 +113,7 @@ def run_agent(user_text, system, max_steps=6, confirmed_tokens=None, trace_id="t
                     + call["name"] + ") more than " + str(MAX_IDENTICAL_CALLS)
                     + " times. The harness ended the loop."
                 )
-                return _finish(text, step, "repeated_call", log, spans, usage_rows)
+                return _finish(text, step, "repeated_call", log, spans, usage_rows, plan)
             if gate_call:
                 decision = gate_call(call["name"], call["arguments"], confirmed)
                 print(format_decision(decision))
@@ -120,7 +151,7 @@ def run_agent(user_text, system, max_steps=6, confirmed_tokens=None, trace_id="t
         + ") without a final answer. The harness did not write one."
     )
     print("stop: max_steps after " + str(max_steps) + " model call(s)")
-    return _finish(text, max_steps, "max_steps", log, spans, usage_rows)
+    return _finish(text, max_steps, "max_steps", log, spans, usage_rows, plan)
 
 
 def _invoke(call):
@@ -131,7 +162,7 @@ def _invoke(call):
     return call_tool(call)
 
 
-def _finish(text, steps, stopped, log, spans, usage_rows):
+def _finish(text, steps, stopped, log, spans, usage_rows, plan):
     return {
         "text": text,
         "steps": steps,
@@ -139,4 +170,5 @@ def _finish(text, steps, stopped, log, spans, usage_rows):
         "tool_log": log,
         "spans": spans,
         "usage": usage_rows,
+        "plan": plan,
     }

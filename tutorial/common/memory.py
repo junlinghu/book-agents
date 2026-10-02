@@ -1,70 +1,47 @@
-"""Durable guest preferences in tutorial/data/customer_preference.md.
+"""Durable customer preferences in tutorial/data/customer_preference.md.
 
-The model passes a guest name. This module returns that heading's section.
-The path never appears in the tool schema.
+The model passes a customer name. This module returns that heading's
+section. The path never appears in the tool schema. Both sample
+customers use the same fields.
 """
 
-from tutorial.common.harness import DATA
+from tutorial.common.paths import DATA
+from tutorial.common.sections import heading_names, section_body
 from tutorial.common.tools import register
 
 PREFERENCE_PATH = DATA / "customer_preference.md"
+FIELDS = ("Name", "Allergy", "Favorite", "Last order", "Notes")
 
 
-def _headings(markdown):
-    names = []
-    for line in markdown.splitlines():
-        if line.startswith("## "):
-            names.append(line[3:].strip())
-    return names
-
-
-def _section(markdown, heading):
-    lines = markdown.splitlines()
-    start = None
-    prefix = "## " + heading
-    for index, line in enumerate(lines):
-        if line.strip() == prefix:
-            start = index + 1
-            break
-    if start is None:
-        return ""
-    body = []
-    for line in lines[start:]:
-        if line.startswith("## "):
-            break
-        body.append(line)
-    return "\n".join(body).strip()
-
-
-def guest_list():
-    """Comma-separated guest names, in file order."""
+def customer_list():
+    """Comma-separated customer names, in file order."""
     if not PREFERENCE_PATH.is_file():
         return "(none)"
-    names = _headings(PREFERENCE_PATH.read_text(encoding="utf-8"))
+    names = heading_names(PREFERENCE_PATH.read_text(encoding="utf-8"))
     if not names:
         return "(none)"
     return ", ".join(names)
 
 
 def get_preference(args):
-    """Return one guest's entry. The model names the guest; this function opens the file."""
+    """Return one customer's entry. The model names the customer; this function opens the file."""
     name = str(args.get("name", "")).strip()
     if not name:
-        return "ERROR: name is required. Example: Priya."
+        return "ERROR: name is required. Example: Maya."
     if not PREFERENCE_PATH.is_file():
         return "ERROR: customer_preference.md is missing."
     document = PREFERENCE_PATH.read_text(encoding="utf-8")
     match = None
-    for heading in _headings(document):
+    for heading in heading_names(document):
         if heading.lower() == name.lower():
             match = heading
             break
     if match is None:
         return (
             "ERROR: no preference entry for " + name
-            + ". Known guests: " + guest_list() + "."
+            + ". Known customers: " + customer_list() + "."
         )
-    body = _section(document, match)
+    body = section_body(document, match)
     if not body:
         return "ERROR: " + match + " has an empty entry."
     return "CUSTOMER: " + match + "\nSOURCE: data/customer_preference.md\n\n" + body
@@ -72,13 +49,13 @@ def get_preference(args):
 
 register(
     "get_preference",
-    "Look up one guest in the shared preference file. Pass a name, not a filename. "
-    "name is one of: " + guest_list() + ". "
-    "The result is that guest's entry only.",
+    "Look up one customer in the shared preference file. Pass a name, not a filename. "
+    "Known customers: " + customer_list() + ". "
+    "The result is that customer's entry only. The chat transcript is not this file.",
     {
         "name": {
             "type": "string",
-            "description": "One guest name: " + guest_list() + ".",
+            "description": "One customer name: " + customer_list() + ".",
         }
     },
     ["name"],
@@ -86,7 +63,8 @@ register(
 )
 
 __all__ = [
+    "FIELDS",
     "PREFERENCE_PATH",
+    "customer_list",
     "get_preference",
-    "guest_list",
 ]

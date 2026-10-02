@@ -1,6 +1,6 @@
 """Path jail and document reading. Not a Chat Completions tool.
 
-``get_shop_fact`` maps a topic to a section and calls this function with
+``get_store_fact`` maps a topic to a section and calls this function with
 a path the program chose. The model does not see this name and does not
 choose the path.
 """

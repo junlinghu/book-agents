@@ -1,11 +1,12 @@
 """Schemas, registration, and call dispatch for Chat Completions tools.
 
-Lesson modules register model-facing tools here. ``get_shop_fact`` is
-registered from ``tutorial.common.facts``. ``query_inventory`` is
-registered from ``tutorial.common.shelf``.
+Lesson modules register model-facing tools here. ``get_store_fact`` is
+registered from ``tutorial.common.facts``. ``query_catalog`` is
+registered from ``tutorial.common.catalog``.
 
-Reading a document and opening the shelf are not tools. Those live in
-``read_file``, ``get_db``, and ``read_db``.
+Reading a document and opening the catalog are not tools. Those live in
+``read_file``, ``get_db``, and ``read_db``. This module does not import
+the loop.
 """
 
 HANDLERS = {}

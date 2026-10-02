@@ -1,61 +1,64 @@
-"""Read the shelf. These functions are not Chat Completions tools.
+"""Read the catalog. These functions are not Chat Completions tools.
 
-``query_inventory`` is the model-facing tool. It calls ``inventory_rows``.
-Checkers call ``row_for`` and ``gap_for``. The SQL stays in this file.
+``query_catalog`` is the model-facing tool. It calls ``catalog_rows``.
+The checker calls ``row_for``. The SQL stays in this file.
 """
 
 from tutorial.common.get_db import connection
 
 
-def gap_for(row):
-    """Cartons or bags to buy to reach par. The supplier note does not get a vote."""
-    return int(row["par"]) - int(row["on_hand"])
-
-
-def row_for(sku):
-    """One shelf row, or None when the sku is not on the shelf."""
-    found = connection().execute(
-        """
-        SELECT p.sku, p.name, p.category, p.unit, p.reorder_point, i.on_hand, i.par
-        FROM products p
-        JOIN inventory i ON p.sku = i.sku
-        WHERE p.sku = ?
-        """,
-        (sku,),
-    ).fetchone()
-    if found is None:
-        return None
+def _as_row(found):
     item = dict(found)
-    item["gap"] = gap_for(item)
+    item["shippable"] = bool(item["shippable"])
+    cents = int(item["price_cents"])
+    item["price"] = "$" + format(cents / 100, ".2f")
     return item
 
 
-def inventory_rows(only_low=False, sku=None):
-    """Shelf rows for a filter. Callers pass filters, not a SQL statement."""
-    sql = (
-        "SELECT p.sku, p.name, p.category, p.unit, p.reorder_point, i.on_hand, i.par "
-        "FROM products p JOIN inventory i ON p.sku = i.sku"
-    )
+def row_for(sku):
+    """One catalog row, or None when the sku is not in the catalog."""
+    if not isinstance(sku, str) or not sku.strip():
+        return None
+    found = connection().execute(
+        """
+        SELECT sku, name, category, price_cents, stock, shippable
+        FROM products
+        WHERE sku = ?
+        """,
+        (sku.strip(),),
+    ).fetchone()
+    if found is None:
+        return None
+    return _as_row(found)
+
+
+def catalog_rows(sku=None, name=None, category=None, only_in_stock=False):
+    """Catalog rows for a filter. Callers pass filters, not a SQL statement."""
+    sql = "SELECT sku, name, category, price_cents, stock, shippable FROM products"
     params = []
     where = []
     if isinstance(sku, str) and sku.strip():
-        where.append("p.sku = ?")
+        where.append("sku = ?")
         params.append(sku.strip())
-    if only_low:
-        where.append("i.on_hand <= p.reorder_point")
+    if isinstance(name, str) and name.strip():
+        cleaned = name.strip().lower().replace("%", "").replace("_", "")
+        where.append("lower(name) LIKE ?")
+        params.append("%" + cleaned + "%")
+    if isinstance(category, str) and category.strip():
+        where.append("lower(category) = ?")
+        params.append(category.strip().lower())
+    if only_in_stock:
+        where.append("stock > 0")
     if where:
         sql += " WHERE " + " AND ".join(where)
-    sql += " ORDER BY p.sku"
+    sql += " ORDER BY sku"
     rows = []
     for found in connection().execute(sql, params):
-        item = dict(found)
-        item["gap"] = gap_for(item)
-        rows.append(item)
+        rows.append(_as_row(found))
     return rows
 
 
 __all__ = [
-    "gap_for",
-    "inventory_rows",
+    "catalog_rows",
     "row_for",
 ]

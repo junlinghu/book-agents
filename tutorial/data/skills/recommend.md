@@ -1,19 +1,20 @@
-# Recommend a menu item
+# Recommend a jar
 
 ## When to use
 
-A guest asks what to drink or eat, especially with an allergy or a budget.
+A customer asks what to buy, especially with an allergy or a favorite already on file.
 
 ## Steps
 
-1. Load this skill. Do not paste the whole FAQ into the system prompt first.
-2. Call get_preference with that guest's name before you name an item. One name returns one entry. Do not pass a filename.
-3. Call get_shop_fact for the menu topic and the allergens topic. Those results are the source. This skill is not a second menu. Do not pass a filename.
-4. Apply an allergy the guest actually has on file. Almonds rule out the cardamom bun.
-5. If the FAQ lists no safe pastry, say so. Do not invent a muffin.
+1. Load this skill. Do not paste the catalog into the system prompt.
+2. Call get_preference with that customer's name before you name a jar. One name returns one entry. Do not pass a filename.
+3. Call get_store_fact for the allergens topic. That result is the source for what a jar contains. Do not pass a filename.
+4. Call query_catalog for the jar you are about to name. Stock and price come from that row. This skill is not a catalog. Do not pass SQL.
+5. Apply an allergy the customer actually has on file. Use the allergens topic to decide which jars to skip. Do not skip a jar that topic does not mention.
+6. If the catalog has no jar that fits, say so. Do not invent a product.
 
 ## Refuse
 
-Do not promise a nut-free order. There is no nut-free prep area.
-Do not invent a Wi-Fi password.
-Do not offer to refund, charge, or ship.
+Do not promise a sesame-free kitchen.
+Do not invent a discount code.
+Do not charge a card, cancel an order, or email the customer.
