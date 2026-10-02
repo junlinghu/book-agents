@@ -10,13 +10,13 @@ Each span has a trace id, a status, and three identities. The user is the custom
 
 ## How you will get there
 
-The notebook runs the Ohio question again with a trace id. You read the spans. Every span names the customer and the seller. At least one span has a tool actor. The answer is still grounded in the catalog and the shipping topic. The canary string is absent.
+The notebook defines `span_status`, then `make_span`, then `root_span`, and registers the two hooks before the run. The Ohio question runs again with a trace id. You read the spans. Every span names the customer and the seller. At least one span has a tool actor. The answer is still grounded in the catalog and the shipping topic. The canary string is absent.
 
 ## Additional things
 
-A span is a record of what the harness did, not a new permission. Tutorial 13 hangs a token ledger on the same loop, so cost and identity share one run. The store in these files is fictional. Do not put a real address or a real card into a span.
+A span is a record of what the harness did, not a new permission. Tutorial 13 hangs a token ledger on the same loop, so cost and identity share one run. Tutorials 13 and 15 register these same hooks so a standalone run still records who acted. The store in these files is fictional. Do not put a real address or a real card into a span.
 
 ## Sources and references
 
-- The spans are in [common/trace.py](common/trace.py).
+- `span_status`, `make_span`, and `root_span` are defined in [12-observability.ipynb](12-observability.ipynb). `make_span` and `root_span` are registered on `HOOKS` there. The loop that records them is [common/loop.py](common/loop.py). Tutorials 13 and 15 register the same hooks in their notebooks.
 - The previous lecture is [11-multi-agent.md](11-multi-agent.md). The notebook is [12-observability.ipynb](12-observability.ipynb). The series map is in [README.md](README.md).

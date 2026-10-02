@@ -1,6 +1,7 @@
 """Optional loop behavior.
 
-A gate, a trace, or a cache registers here from its lesson module.
+A gate or a cache registers here from its lesson module.
+Tutorials 12, 13, and 15 register trace spans here.
 Tutorial 14 and tutorial 15 register a plan here. ``tutorial.common.loop``
 reads this dict. This module imports nothing else from the tutorial, so
 those registrations do not import the loop.
