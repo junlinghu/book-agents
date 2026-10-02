@@ -14,7 +14,7 @@ When the notebook runs with no terminal, as `nbconvert` does, nobody can type. T
 
 ## How you will get there
 
-The notebook registers the tutorial 14 plan hook so the visit still drafts one plan. It then scores a 1000-jar cart and walks the order note through the gate with no model in the path. Nothing is written until the token matches. The charge stays denied. It then runs the injection boundary so the canary stays out of the output. The notebook then defines `run_customer_chat`. The seller welcomes you and the chat loops until you leave. You should see the plan, the recommend procedure, the cart check, the held note, and, after you agree, the note file. The ledger and the trace travel with the visit.
+The notebook registers the tutorial 14 plan hook so the visit still drafts one plan. It registers the tutorial 12 span hooks so the visit still records who acted. It then scores a 1000-jar cart and walks the order note through the gate with no model in the path. Nothing is written until the token matches. The charge stays denied. It then runs the injection boundary so the canary stays out of the output. The notebook then defines `run_customer_chat`. The seller welcomes you and the chat loops until you leave. You should see the plan, the recommend procedure, the cart check, the held note, and, after you agree, the note file. The ledger and the trace travel with the visit.
 
 ## Additional things
 
@@ -26,5 +26,5 @@ The store is fictional. Prices, hours, and the catalog live in this folder. Leav
 
 ## Sources and references
 
-- The purchase workflow is [15-guided-purchase.ipynb](15-guided-purchase.ipynb). `run_customer_chat` is defined in that notebook. It keeps one message list and calls [common/loop.py](common/loop.py) once per customer line. The gate is [common/gate.py](common/gate.py). Documents are in [docs](docs), fixtures in [data](data).
+- The purchase workflow is [15-guided-purchase.ipynb](15-guided-purchase.ipynb). `run_customer_chat` is defined in that notebook. It keeps one message list and calls [common/loop.py](common/loop.py) once per customer line. The visit registers `draft_plan` from tutorial 14 and `root_span` and `make_span` from [12-observability.ipynb](12-observability.ipynb). The gate is [common/gate.py](common/gate.py). Documents are in [docs](docs), fixtures in [data](data).
 - The previous lectures are [1-using-tool.md](1-using-tool.md) through [14-planning.md](14-planning.md). The series map is in [README.md](README.md).

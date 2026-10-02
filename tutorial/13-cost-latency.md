@@ -12,7 +12,7 @@ Every model call appends prompt tokens, completion tokens, and latency. A short 
 
 ## How you will get there
 
-The customer asks for pickup hours and asks for the hours topic twice. You should see a miss and then a hit, a ledger with totals and an illustrative cost, and the spans from tutorial 12 still on the run.
+The notebook registers the tutorial 12 span hooks so the hours run still records who acted. The customer asks for pickup hours and asks for the hours topic twice. You should see a miss and then a hit, a ledger with totals and an illustrative cost, and the spans from tutorial 12 still on the run.
 
 ## Additional things
 
@@ -22,5 +22,5 @@ The store in these files is fictional.
 
 ## Sources and references
 
-- The ledger and the cache are in [common/cost.py](common/cost.py).
+- The ledger and the cache are in [common/cost.py](common/cost.py). The span hooks registered in this notebook are the ones defined in [12-observability.ipynb](12-observability.ipynb).
 - The previous lecture is [12-observability.md](12-observability.md). The notebook is [13-cost-latency.ipynb](13-cost-latency.ipynb). The series map is in [README.md](README.md).
