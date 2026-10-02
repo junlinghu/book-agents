@@ -120,10 +120,9 @@ The notebook does not print the API key.
 | `common/autonomy.py` | Confirm tokens, and the never-tier for cards, cancellations, and customer email. |
 | `common/harness.py` | Paths, `system_text`, and checks. Notebooks import this instead of copying earlier cells. |
 | `common/loop.py` | `run_agent` starts a fresh list. `run_turn` continues a list the caller kept. A plan, a gate, spans, and a cache turn on when those lessons are imported. |
-| `common/chat_session.py` | `run_customer_chat`. One visit until the customer says bye. A headless run replays demo lines. |
 | `common/facts.py`, `catalog.py`, `articles.py`, `memory.py`, `skills.py`, `web.py`, `verify.py`, `evals.py`, `gate.py`, `injection.py`, `roles.py`, `trace.py`, `cost.py`, `plan.py` | Lesson helpers. Later notebooks import these. |
 
-Runtime files under `tutorial/var/` (order notes) are gitignored. Customer preferences live in `data/customer_preference.md`.
+Runtime files under `tutorial/var/` (order notes) are gitignored. Customer preferences live in `data/customer_preference.md`. Tutorial 15 defines `run_customer_chat` in `15-guided-purchase.ipynb`, not under `common/`. That function is one visit until the customer says bye. A headless run replays demo lines.
 
 ## Editing
 

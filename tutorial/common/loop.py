@@ -5,8 +5,8 @@ One step is one model call. The loop stops on a final answer, on
 
 ``run_agent`` starts a fresh message list. ``run_turn`` continues a list
 the caller kept, which is how tutorial 15 holds one customer visit.
-``tutorial.common.chat_session`` is that caller. This module does not
-import it.
+That visit is ``run_customer_chat`` in ``15-guided-purchase.ipynb``.
+This module does not import the notebook.
 
 Optional pieces register on ``HOOKS``: a plan (tutorial 14), a gate
 (tutorial 9), trace spans (tutorial 12), and a token ledger with a read
